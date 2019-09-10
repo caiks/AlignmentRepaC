@@ -26,7 +26,7 @@ using namespace std;
 
 void main()
 {
-    if (true)
+    if (false)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -43,5 +43,60 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
 
     }
+
+    if (true)
+    {
+	auto regcart = histogramRegularCartesian_u;
+	auto regsing = histogramRegularUnitSingleton_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	auto sys = histogramsSystemImplied;
+	auto aarr = systemsHistogramsHistogramRepa_u;
+
+	auto aa = regdiag(2, 2);
+	cout << "aa = regdiag(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	auto ar = aarr(*sys(*aa),*aa);
+	cout << "ar = aarr(sys(aa),aa)" << endl;
+	cout << "ar.vectorVar" << endl
+	    << ar->vectorVar << endl << endl;
+	cout << "ar.shape" << endl
+	    << ar->shape << endl << endl;
+	cout << "ar.arr" << endl
+	    << ar->arr << endl << endl;
+
+	aa = regcart(2, 2);
+	cout << "aa = regcart(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	ar = aarr(*sys(*aa), *aa);
+	cout << "ar = aarr(sys(aa),aa)" << endl;
+	cout << "ar.vectorVar" << endl
+	    << ar->vectorVar << endl << endl;
+	cout << "ar.shape" << endl
+	    << ar->shape << endl << endl;
+	cout << "ar.arr" << endl
+	    << ar->arr << endl << endl;
+
+	aa = regsing(2, 2);
+	cout << "aa = regsing(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	ar = aarr(*sys(*aa), *aa);
+	cout << "ar = aarr(sys(aa),aa)" << endl;
+	cout << "ar.vectorVar" << endl
+	    << ar->vectorVar << endl << endl;
+	cout << "ar.shape" << endl
+	    << ar->shape << endl << endl;
+	cout << "ar.arr" << endl
+	    << ar->arr << endl << endl;
+
+
+
+    }
+
 
 }

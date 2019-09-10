@@ -10,6 +10,7 @@
 namespace Alignment
 {
     typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
+    typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<double> DoubleList;
 
@@ -29,6 +30,11 @@ namespace Alignment
 
 	DoubleList arr;
     };
+
+    // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa
+    std::unique_ptr<HistogramRepa> systemsHistogramsHistogramRepa_u(const System&,const Histogram&);
+
+
 
 }
 
