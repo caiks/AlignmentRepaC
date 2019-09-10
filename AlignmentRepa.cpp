@@ -54,3 +54,47 @@ std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const
     }
     return ar;
 }
+
+// systemsHistogramRepasHistogram_u :: System -> HistogramRepa -> Maybe Histogram
+std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const System& uu, const HistogramRepa& ar)
+{
+    auto& vv = ar.vectorVar;
+    auto n = vv.size();
+    auto& sh = ar.shape;
+    auto& rr = ar.arr;
+    auto sz = rr.size();
+    std::vector<ValList> mm(n);
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto& xx = uu.map_u()[vv[i]];
+	auto s = xx.size();
+	auto& yy = mm[i];
+	yy.reserve(s);
+	for (auto& w : xx)
+	    yy.push_back(w);
+    }
+    auto aa = std::make_unique<Histogram>();
+    auto& am = aa->map_u();
+    am.reserve(sz);
+    SizeList ii(n);
+    for (std::size_t j = 0; j < sz; j++)
+    {
+	std::vector<VarValPair> ss;
+	ss.reserve(n);
+	for (std::size_t i = 0; i < n; i++)
+	    ss.push_back(VarValPair(vv[i], mm[i][ii[i]]));
+	am.insert_or_assign(State(ss), Rational(rr[j]));
+	for (std::size_t k = n - 1; k >= 0; k--)
+	{
+	    std::size_t y = ii[k] + 1;
+	    if (y == sh[k])
+		ii[k] = 0;
+	    else
+	    {
+		ii[k] = y;
+		break;
+	    }
+	}
+    }
+    return aa;
+}

@@ -32,7 +32,10 @@ namespace Alignment
     };
 
     // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa
-    std::unique_ptr<HistogramRepa> systemsHistogramsHistogramRepa_u(const System&,const Histogram&);
+    std::unique_ptr<HistogramRepa> systemsHistogramsHistogramRepa_u(const System&, const Histogram&);
+
+    // systemsHistogramRepasHistogram_u :: System -> HistogramRepa -> Maybe Histogram
+    std::unique_ptr<Histogram> systemsHistogramRepasHistogram_u(const System&, const HistogramRepa&);
 
 
 
