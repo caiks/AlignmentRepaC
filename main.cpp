@@ -28,6 +28,19 @@ void main()
 {
     if (true)
     {
+	auto suit = Variable("suit");
+	auto rank = Variable("rank");
+
+	auto vv = VarList{ suit,rank };
+
+	HistogramRepa hr;
+	hr.vectorVar = vv;
+
+	cout << "hr.vectorVar" << endl
+	    << hr.vectorVar << endl << endl;
+
+	cout << "hr.mapVarInt()" << endl
+	    << hr.mapVarInt() << endl << endl;
 
     }
 
