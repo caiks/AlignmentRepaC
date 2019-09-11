@@ -23,7 +23,7 @@ namespace Alignment
     {
 	VarList vectorVar;
 
-	VarSizeUMap& mapVarInt();
+	VarSizeUMap& mapVarInt() const;
 	std::unique_ptr<VarSizeUMap> _mapVarInt;
 
 	SizeList shape;
@@ -36,6 +36,9 @@ namespace Alignment
 
     // systemsHistogramRepasHistogram_u :: System -> HistogramRepa -> Maybe Histogram
     std::unique_ptr<Histogram> systemsHistogramRepasHistogram_u(const System&, const HistogramRepa&);
+
+    // setVarsHistogramRepasReduce_u :: Set.Set Variable -> HistogramRepa -> HistogramRepa
+    std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(const VarList&, const HistogramRepa&);
 
 
 

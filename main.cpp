@@ -41,7 +41,6 @@ void main()
 
 	cout << "hr.mapVarInt()" << endl
 	    << hr.mapVarInt() << endl << endl;
-
     }
 
     if (true)
@@ -52,6 +51,10 @@ void main()
 	auto sys = histogramsSystemImplied;
 	auto aarr = systemsHistogramsHistogramRepa_u;
 	auto rraa = systemsHistogramRepasHistogram_u;
+	auto arred = [](const HistogramRepa& aa, const VarList& vv)
+	{
+	    return setVarsHistogramRepasReduce_u(vv, aa);
+	};
 
 	auto aa = regdiag(2, 2);
 	cout << "aa = regdiag(2, 2)" << endl;
@@ -69,6 +72,31 @@ void main()
 	cout << "rraa(sys(aa),ar)" << endl
 	    << *rraa(*sys(*aa), *ar) << endl << endl;
 
+	auto br = arred(*ar, VarList{ Variable(2),Variable(1) });
+	cout << "br = arred(ar, VarList{ Variable(2),Variable(1) })" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	br = arred(*ar, VarList{ Variable(2) });
+	cout << "br = arred(ar, VarList{ Variable(2)})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	br = arred(*ar, VarList{});
+	cout << "br = arred(ar, VarList{})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+
 	aa = regcart(2, 2);
 	cout << "aa = regcart(2, 2)" << endl;
 	cout << "aa" << endl
@@ -84,6 +112,31 @@ void main()
 	    << ar->arr << endl << endl;
 	cout << "rraa(sys(aa),ar)" << endl
 	    << *rraa(*sys(*aa), *ar) << endl << endl;
+
+	br = arred(*ar, VarList{ Variable(2),Variable(1) });
+	cout << "br = arred(ar, VarList{ Variable(2),Variable(1) })" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	br = arred(*ar, VarList{ Variable(2) });
+	cout << "br = arred(ar, VarList{ Variable(2)})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	br = arred(*ar, VarList{});
+	cout << "br = arred(ar, VarList{})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
 
 	aa = regsing(2, 2);
 	cout << "aa = regsing(2, 2)" << endl;
@@ -101,6 +154,30 @@ void main()
 	cout << "rraa(sys(aa),ar)" << endl
 	    << *rraa(*sys(*aa), *ar) << endl << endl;
 
+	br = arred(*ar, VarList{ Variable(2),Variable(1) });
+	cout << "br = arred(ar, VarList{ Variable(2),Variable(1) })" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	br = arred(*ar, VarList{ Variable(2) });
+	cout << "br = arred(ar, VarList{ Variable(2)})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	br = arred(*ar, VarList{});
+	cout << "br = arred(ar, VarList{})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
     }
 
     if (true)
@@ -148,6 +225,10 @@ void main()
 	auto ind = histogramsIndependent;
 	auto aarr = systemsHistogramsHistogramRepa_u;
 	auto rraa = systemsHistogramRepasHistogram_u;
+	auto arred = [](const HistogramRepa& aa, const VarList& vv)
+	{
+	    return setVarsHistogramRepasReduce_u(vv, aa);
+	};
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -202,6 +283,57 @@ void main()
 
 	cout << "rpln(aall(trim(rraa(uu,ar))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ar))))); cout << endl;
+
+	auto br = arred(*ar, VarList{ pressure, rain, cloud, wind });
+	cout << "br = arred(ar, VarList{ pressure, rain, cloud, wind })" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
+	br = arred(*ar, VarList{ wind, cloud, rain });
+	cout << "br = arred(ar, VarList{ wind, cloud, rain})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
+	br = arred(*ar, VarList{ rain, wind  });
+	cout << "br = arred(ar, VarList{ rain, wind})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
+	br = arred(*ar, VarList{ rain });
+	cout << "br = arred(ar, VarList{ rain})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
+	br = arred(*ar, VarList{});
+	cout << "br = arred(ar, VarList{})" << endl;
+	cout << "br.vectorVar" << endl
+	    << br->vectorVar << endl << endl;
+	cout << "br.shape" << endl
+	    << br->shape << endl << endl;
+	cout << "br.arr" << endl
+	    << br->arr << endl << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
 
     }
 
