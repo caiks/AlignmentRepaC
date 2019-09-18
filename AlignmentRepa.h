@@ -13,9 +13,13 @@ namespace Alignment
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<double> DoubleList;
+    typedef std::vector<std::vector<double>> DoubleListList;
+}
 
+namespace Alignment
+{
     // data HistogramRepa = HistogramRepa {
-    //  histogramRepasVectorVar :: !(V.Vector Variable),
+    //   histogramRepasVectorVar :: !(V.Vector Variable),
     //   histogramRepasMapVarInt::Map.Map Variable Int,
     //   histogramRepasArray :: !(Array U VShape Double)
 
@@ -39,11 +43,29 @@ namespace Alignment
 
     // setVarsHistogramRepasReduce_u :: Set.Set Variable -> HistogramRepa -> HistogramRepa
     std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(const VarList&, const HistogramRepa&);
-
-
-
 }
 
+namespace Alignment
+{
+    // data HistogramRepaVec = HistogramRepaVec {
+    //   histogramRepaVecsVectorVar :: !(V.Vector Variable),
+    //   histogramRepaVecsMapVarInt::Map.Map Variable Int,
+    //   histogramRepaVecsSize :: !Double,
+    //   histogramRepaVecsShape :: !VShape,
+    //   histogramRepaVecsArray :: !(V.Vector(UV.Vector Double))
+
+    struct HistogramRepaVec
+    {
+	VarList vectorVar;
+
+	VarSizeUMap& mapVarInt() const;
+	std::unique_ptr<VarSizeUMap> _mapVarInt;
+
+	SizeList shape;
+
+	DoubleListList arr;
+    };
+}
 
 
 

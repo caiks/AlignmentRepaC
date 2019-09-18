@@ -43,7 +43,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -180,7 +180,7 @@ void main()
 	    << br->arr << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -335,6 +335,23 @@ void main()
 	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
 
+    }
+
+    if (true)
+    {
+	auto suit = Variable("suit");
+	auto rank = Variable("rank");
+
+	auto vv = VarList{ suit,rank };
+
+	HistogramRepaVec hr;
+	hr.vectorVar = vv;
+
+	cout << "hr.vectorVar" << endl
+	    << hr.vectorVar << endl << endl;
+
+	cout << "hr.mapVarInt()" << endl
+	    << hr.mapVarInt() << endl << endl;
     }
 
 }

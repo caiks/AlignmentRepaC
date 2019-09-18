@@ -153,3 +153,14 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(const Va
 }
 
 
+VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
+{
+    if (!_mapVarInt)
+    {
+	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
+	mm = std::move(std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size())));
+	for (std::size_t i = 0; i < vectorVar.size(); i++)
+	    mm->insert_or_assign(vectorVar[i], i);
+    }
+    return *_mapVarInt;
+}
