@@ -25,8 +25,7 @@ std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const
     auto n = ww->size();
     auto& vv = ar->vectorVar;
     vv.reserve(n);
-    for (auto& v : *ww)
-	vv.push_back(v);
+    vv.insert(vv.end(), ww->begin(), ww->end());
     auto& sh = ar->shape;
     sh.reserve(n);
     std::vector<ValSizeUMap> mm(n);
@@ -164,3 +163,91 @@ VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
     }
     return *_mapVarInt;
 }
+
+VarSizeUMap& Alignment::HistoryRepa::mapVarInt() const
+{
+    if (!_mapVarInt)
+    {
+	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
+	mm = std::move(std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size())));
+	for (std::size_t i = 0; i < vectorVar.size(); i++)
+	    mm->insert_or_assign(vectorVar[i], i);
+    }
+    return *_mapVarInt;
+}
+
+// systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const System& uu, const History& hh)
+{
+    auto sat = statesVarsValue;
+
+    auto hr = std::make_unique<HistoryRepa>();
+    auto ww = historiesSetVar(hh);
+    auto n = ww->size();
+    auto& vv = hr->vectorVar;
+    vv.reserve(n);
+    vv.insert(vv.end(), ww->begin(), ww->end());
+    auto& sh = hr->shape;
+    sh.reserve(n);
+    std::vector<ValSizeUMap> mm(n);
+    hr->size = hh.map_u().size();
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto& xx = uu.map_u()[vv[i]];
+	auto s = xx.size();
+	sh.push_back(s);
+	auto& yy = mm[i];
+	yy.reserve(s);
+	std::size_t j = 0;
+	for (auto& w : xx)
+	    yy.insert_or_assign(w, j++);
+    }
+    auto& rr = hr->arr;
+    rr.reserve(hr->size * n);
+    unsigned char ucmax = std::numeric_limits<unsigned char>::max();
+    for (auto& is : hh.map_u())
+    {
+	auto& sm = is.second.map_u();
+	for (std::size_t i = 0; i < n; i++)
+	{
+	    std::size_t k = mm[i][sm.find(vv[i])->second];
+	    if (k >= ucmax)
+		throw std::out_of_range::out_of_range("systemsHistoriesHistoryRepa_u");
+	    rr.push_back(k);
+	}
+    }
+    return hr;
+}
+
+// systemsHistoryRepasHistory_u :: System -> HistoryRepa -> Maybe History
+std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& uu, const HistoryRepa& hr)
+{
+    auto& vv = hr.vectorVar;
+    auto n = vv.size();
+    auto& sh = hr.shape;
+    auto& rr = hr.arr;
+    auto z = hr.size;
+    std::vector<ValList> mm(n);
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto& xx = uu.map_u()[vv[i]];
+	auto s = xx.size();
+	auto& yy = mm[i];
+	yy.reserve(s);
+	for (auto& w : xx)
+	    yy.push_back(w);
+    }
+    auto hh = std::make_unique<History>();
+    auto& hm = hh->map_u();
+    hm.reserve(z);
+    for (std::size_t j = 0; j < z; j++)
+    {
+	std::vector<VarValPair> ss;
+	ss.reserve(n);
+	for (std::size_t i = 0; i < n; i++)
+	    ss.push_back(VarValPair(vv[i], mm[i][rr[j*n+i]]));
+	hm.insert_or_assign(Id(j+1), State(ss));
+    }
+    return hh;
+}
+

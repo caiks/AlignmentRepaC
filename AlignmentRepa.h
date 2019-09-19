@@ -14,6 +14,7 @@ namespace Alignment
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
+    typedef std::vector<unsigned char> ByteList;
 }
 
 namespace Alignment
@@ -61,12 +62,43 @@ namespace Alignment
 	VarSizeUMap& mapVarInt() const;
 	std::unique_ptr<VarSizeUMap> _mapVarInt;
 
+	double size;
+
 	SizeList shape;
 
 	DoubleListList arr;
     };
 }
 
+namespace Alignment
+{
+    // data HistoryRepa = HistoryRepa {
+    //   historyRepasVectorVar :: !(V.Vector Variable),
+    //   historyRepasMapVarInt::Map.Map Variable Int,
+    //   historyRepasShape :: !VShape,
+    //   historyRepasArray :: !(Array U DIM2 Int)
+
+    struct HistoryRepa
+    {
+	VarList vectorVar;
+
+	VarSizeUMap& mapVarInt() const;
+	std::unique_ptr<VarSizeUMap> _mapVarInt;
+
+	std::size_t size;
+
+	SizeList shape;
+
+	ByteList arr;
+    };
+
+    // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
+    std::unique_ptr<HistoryRepa> systemsHistoriesHistoryRepa_u(const System&, const History&);
+
+    // systemsHistoryRepasHistory_u :: System -> HistoryRepa -> Maybe History
+    std::unique_ptr<History> systemsHistoryRepasHistory_u(const System&, const HistoryRepa&);
+
+}
 
 
 

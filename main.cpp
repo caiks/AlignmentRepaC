@@ -337,7 +337,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -353,5 +353,78 @@ void main()
 	cout << "hr.mapVarInt()" << endl
 	    << hr.mapVarInt() << endl << endl;
     }
+
+    if (true)
+    {
+	auto regcart = histogramRegularCartesian_u;
+	auto regsing = histogramRegularUnitSingleton_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	auto sys = histogramsSystemImplied;
+	auto hhaa = historiesHistogram;
+	auto aahr = [](const System& uu, const Histogram& aa)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, *histogramsHistory_u(aa));
+	};
+	auto hraa = [](const System& uu, const HistoryRepa& hr)
+	{
+	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu,hr));
+	};
+
+	auto aa = regdiag(2, 2);
+	cout << "aa = regdiag(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	auto hr = aahr(*sys(*aa), *aa);
+	cout << "hr = aahr(sys(aa),aa)" << endl;
+	cout << "hr.vectorVar" << endl
+	    << hr->vectorVar << endl << endl;
+	cout << "hr.size" << endl
+	    << hr->size << endl << endl;
+	cout << "hr.shape" << endl
+	    << hr->shape << endl << endl;
+	cout << "hr.arr" << endl
+	    << hr->arr << endl << endl;
+	cout << "hraa(sys(aa),hr)" << endl
+	    << *hraa(*sys(*aa), *hr) << endl << endl;
+
+	aa = regcart(2, 2);
+	cout << "aa = regcart(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	hr = aahr(*sys(*aa), *aa);
+	cout << "hr = aahr(sys(aa),aa)" << endl;
+	cout << "hr.vectorVar" << endl
+	    << hr->vectorVar << endl << endl;
+	cout << "hr.size" << endl
+	    << hr->size << endl << endl;
+	cout << "hr.shape" << endl
+	    << hr->shape << endl << endl;
+	cout << "hr.arr" << endl
+	    << hr->arr << endl << endl;
+	cout << "hraa(sys(aa),hr)" << endl
+	    << *hraa(*sys(*aa), *hr) << endl << endl;
+
+	aa = regsing(2, 2);
+	cout << "aa = regsing(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	hr = aahr(*sys(*aa), *aa);
+	cout << "hr = aahr(sys(aa),aa)" << endl;
+	cout << "hr.vectorVar" << endl
+	    << hr->vectorVar << endl << endl;
+	cout << "hr.size" << endl
+	    << hr->size << endl << endl;
+	cout << "hr.shape" << endl
+	    << hr->shape << endl << endl;
+	cout << "hr.arr" << endl
+	    << hr->arr << endl << endl;
+	cout << "hraa(sys(aa),hr)" << endl
+	    << *hraa(*sys(*aa), *hr) << endl << endl;
+
+    }
+
 
 }
