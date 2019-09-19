@@ -18,8 +18,6 @@ VarSizeUMap& Alignment::HistogramRepa::mapVarInt() const
 // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa
 std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const System& uu, const Histogram& aa)
 {
-    auto sat = statesVarsValue;
-
     auto ar = std::make_unique<HistogramRepa>();
     auto ww = histogramsSetVar(aa);
     auto n = ww->size();
@@ -179,8 +177,6 @@ VarSizeUMap& Alignment::HistoryRepa::mapVarInt() const
 // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const System& uu, const History& hh)
 {
-    auto sat = statesVarsValue;
-
     auto hr = std::make_unique<HistoryRepa>();
     auto ww = historiesSetVar(hh);
     auto n = ww->size();
@@ -249,5 +245,25 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
 	hm.insert_or_assign(Id(j+1), State(ss));
     }
     return hh;
+}
+
+// eventsHistoryRepasHistoryRepaSelection_u :: [Int] -> HistoryRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u(const SizeList& ll, const HistoryRepa& hr)
+{
+    auto hr1 = std::make_unique<HistoryRepa>();
+    hr1->vectorVar = hr.vectorVar;
+    hr1->size = ll.size();
+    hr1->shape = hr.shape;
+    auto n = hr.vectorVar.size();
+    auto& rr = hr.arr;
+    auto& rr1 = hr1->arr;
+    rr1.reserve(hr1->size * n);
+    for (auto j : ll)
+    {
+	std::size_t jn = j*n;
+	for (std::size_t i = 0; i < n; i++)
+	    rr1.push_back(rr[jn+i]);
+    }
+    return hr1;
 }
 

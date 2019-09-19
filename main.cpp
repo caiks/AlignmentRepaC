@@ -360,7 +360,6 @@ void main()
 	auto regsing = histogramRegularUnitSingleton_u;
 	auto regdiag = histogramRegularUnitDiagonal_u;
 	auto sys = histogramsSystemImplied;
-	auto hhaa = historiesHistogram;
 	auto aahr = [](const System& uu, const Histogram& aa)
 	{
 	    return systemsHistoriesHistoryRepa_u(uu, *histogramsHistory_u(aa));
@@ -368,6 +367,14 @@ void main()
 	auto hraa = [](const System& uu, const HistoryRepa& hr)
 	{
 	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu,hr));
+	};
+	auto hrhh = [](const System& uu, const HistoryRepa& hr)
+	{
+	    return systemsHistoryRepasHistory_u(uu, hr);
+	};
+	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
+	{
+	    return eventsHistoryRepasHistoryRepaSelection_u(ll, hr);
 	};
 
 	auto aa = regdiag(2, 2);
@@ -435,9 +442,22 @@ void main()
 	}
 	catch (const std::out_of_range& e)
 	{
-	    cout << "caught out_of_range: " << e.what() << endl;
+	    cout << "caught out_of_range: " << e.what() << endl << endl;
 	}
 
+	aa = regcart(3, 2);
+	cout << "aa = regcart(3, 2)" << endl;
+
+	hr = aahr(*sys(*aa), *aa);
+	cout << "hr = aahr(sys(aa),aa)" << endl;
+	cout << "hrhh(sys(aa),hr)" << endl
+	    << *hrhh(*sys(*aa), *hr) << endl << endl;
+	cout << "hrhh(sys(aa),hrsel(hr,SizeList{}))" << endl
+	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{})) << endl << endl;
+	cout << "hrhh(sys(aa),hrsel(hr,SizeList{0}))" << endl
+	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{0})) << endl << endl;
+	cout << "hrhh(sys(aa),hrsel(hr,SizeList{0,4,8}))" << endl
+	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
     }
 
 

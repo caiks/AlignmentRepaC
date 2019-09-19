@@ -98,6 +98,10 @@ namespace Alignment
     // systemsHistoryRepasHistory_u :: System -> HistoryRepa -> Maybe History
     std::unique_ptr<History> systemsHistoryRepasHistory_u(const System&, const HistoryRepa&);
 
+    // eventsHistoryRepasHistoryRepaSelection :: [Int] -> HistoryRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> eventsHistoryRepasHistoryRepaSelection_u(const SizeList&, const HistoryRepa&);
+
+
 }
 
 
