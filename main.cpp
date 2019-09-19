@@ -424,6 +424,20 @@ void main()
 	cout << "hraa(sys(aa),hr)" << endl
 	    << *hraa(*sys(*aa), *hr) << endl << endl;
 
+	aa = regcart(257,1);
+	cout << "aa = regcart(257,1)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	try
+	{
+	    hr = aahr(*sys(*aa), *aa);
+	}
+	catch (const std::out_of_range& e)
+	{
+	    cout << "caught out_of_range: " << e.what() << endl;
+	}
+
     }
 
 
