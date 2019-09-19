@@ -43,7 +43,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -360,6 +360,7 @@ void main()
 	auto regsing = histogramRegularUnitSingleton_u;
 	auto regdiag = histogramRegularUnitDiagonal_u;
 	auto sys = histogramsSystemImplied;
+	auto araa = systemsHistogramRepasHistogram_u;
 	auto aahr = [](const System& uu, const Histogram& aa)
 	{
 	    return systemsHistoriesHistoryRepa_u(uu, *histogramsHistory_u(aa));
@@ -375,6 +376,14 @@ void main()
 	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
 	{
 	    return eventsHistoryRepasHistoryRepaSelection_u(ll, hr);
+	};
+	auto hrhrred = [](const HistoryRepa& hr, const VarList& kk)
+	{
+	    return setVarsHistoryRepasHistoryRepaReduced_u(kk, hr);
+	};
+	auto hrred = [](const HistoryRepa& hr, const VarList& kk)
+	{
+	    return setVarsHistoryRepasReduce_u(1.0,kk, hr);
 	};
 
 	auto aa = regdiag(2, 2);
@@ -458,6 +467,21 @@ void main()
 	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{0})) << endl << endl;
 	cout << "hrhh(sys(aa),hrsel(hr,SizeList{0,4,8}))" << endl
 	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
+
+	cout << "hraa(sys(aa),hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
+	cout << "hraa(sys(aa),hrhrred(hr, VarList{ Variable(1) }))" << endl
+	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ Variable(1) })) << endl << endl;
+	cout << "hraa(sys(aa),hrhrred(hr, VarList{ }))" << endl
+	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ })) << endl << endl;
+
+	cout << "araa(sys(aa),hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	    << *araa(*sys(*aa), *hrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
+	cout << "araa(sys(aa),hrred(hr, VarList{ Variable(1) }))" << endl
+	    << *araa(*sys(*aa), *hrred(*hr, VarList{ Variable(1) })) << endl << endl;
+	cout << "araa(sys(aa),hrred(hr, VarList{  }))" << endl
+	    << *araa(*sys(*aa), *hrred(*hr, VarList{ })) << endl << endl;
+
     }
 
 

@@ -108,7 +108,7 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(const Va
     auto& svv = ar.shape;
     auto& mvv = ar.mapVarInt();
     auto& rvv = ar.arr;
-    auto zvv = rvv.size();
+    auto v = rvv.size();
     auto br = std::make_unique<HistogramRepa>();
     br->vectorVar = kk;
     auto& vkk = br->vectorVar;
@@ -118,30 +118,30 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(const Va
 	pkk[i] = mvv[vkk[i]];
     auto& skk = br->shape;
     skk.reserve(m);
-    std::size_t zkk = 1;
+    std::size_t w = 1;
     for (std::size_t i = 0; i < m; i++)
     {
 	auto s = svv[pkk[i]];
-	zkk *= s;
+	w *= s;
 	skk.push_back(s);
     }
     auto& rkk = br->arr;
-    rkk.resize(zkk);
+    rkk.resize(w);
     SizeList ivv(n);
-    for (std::size_t j = 0; j < zvv; j++)
+    for (std::size_t j = 0; j < v; j++)
     {
-	std::size_t i = 0;
-	for (std::size_t k = 0; k < m; k++)
-	    i = i*skk[k] + ivv[pkk[k]];
-	rkk[i] += rvv[j];
-	for (std::size_t k = n - 1; k >= 0; k--)
+	std::size_t k = 0;
+	for (std::size_t i = 0; i < m; i++)
+	    k = skk[i]*k + ivv[pkk[i]];
+	rkk[k] += rvv[j];
+	for (std::size_t i = n - 1; i >= 0; i--)
 	{
-	    std::size_t y = ivv[k] + 1;
-	    if (y == svv[k])
-		ivv[k] = 0;
+	    std::size_t y = ivv[i] + 1;
+	    if (y == svv[i])
+		ivv[i] = 0;
 	    else
 	    {
-		ivv[k] = y;
+		ivv[i] = y;
 		break;
 	    }
 	}
@@ -267,3 +267,71 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     return hr1;
 }
 
+// setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(const VarList& kk, const HistoryRepa& hr)
+{
+    auto n = hr.vectorVar.size();
+    auto& svv = hr.shape;
+    auto& mvv = hr.mapVarInt();
+    auto z = hr.size;
+    auto m = kk.size();
+    SizeList pkk(m);
+    for (std::size_t i = 0; i < m; i++)
+	pkk[i] = mvv[kk[i]];
+    auto hr1 = std::make_unique<HistoryRepa>();
+    hr1->vectorVar = kk;
+    hr1->size = z;
+    auto& skk = hr1->shape;
+    skk.reserve(m);
+    for (std::size_t i = 0; i < m; i++)
+	skk.push_back(svv[pkk[i]]);
+    auto& rr = hr.arr;
+    auto& rr1 = hr1->arr;
+    rr1.reserve(z*m);
+    for (std::size_t j = 0; j < z; j++)
+    {
+	std::size_t jn = j*n;
+	for (std::size_t i = 0; i < m; i++)
+	    rr1.push_back(rr[jn + pkk[i]]);
+    }
+    return hr1;
+}
+
+// setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
+std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, const VarList& kk, const HistoryRepa& hr)
+{
+    auto n = hr.vectorVar.size();
+    auto& svv = hr.shape;
+    auto& mvv = hr.mapVarInt();
+    auto z = hr.size;
+    auto m = kk.size();
+    SizeList pkk(m);
+    for (std::size_t i = 0; i < m; i++)
+	pkk[i] = mvv[kk[i]];
+    auto ar1 = std::make_unique<HistogramRepa>();
+    ar1->vectorVar = kk;
+    auto& skk = ar1->shape;
+    skk.reserve(m);
+    std::size_t w = 1;
+    for (std::size_t i = 0; i < m; i++)
+    {
+	auto s = svv[pkk[i]];
+	w *= s;
+	skk.push_back(s);
+    }
+    auto& rr = hr.arr;
+    auto& rr1 = ar1->arr;
+    rr1.resize(w);
+    if (m > 0)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    std::size_t k = rr[jn+pkk[0]];
+	    for (std::size_t i = 1; i < m; i++)
+		k = skk[i]*k + rr[jn+pkk[i]];
+	    rr1[k] += f;
+	}
+    else
+	rr1[0] = f*z;
+    return ar1;
+}
