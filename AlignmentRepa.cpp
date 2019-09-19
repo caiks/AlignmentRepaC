@@ -201,7 +201,8 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
     auto& rr = hr->arr;
     rr.reserve(hr->size * n);
     unsigned char ucmax = std::numeric_limits<unsigned char>::max();
-    for (auto& is : hh.map_u())
+    auto hm = sorted(hh.map_u());
+    for (auto& is : hm)
     {
 	auto& sm = is.second.map_u();
 	for (std::size_t i = 0; i < n; i++)
