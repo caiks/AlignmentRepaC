@@ -42,13 +42,14 @@ std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const
     }
     auto& rr = ar->arr;
     rr.resize(sz);
+    auto rrp = rr.data();
     for (auto& sc : aa.map_u())
     {
 	auto& sm = sc.first.map_u();
 	std::size_t j = 0;
 	for (std::size_t i = 0; i < n; i++)
 	    j = j*sh[i] + mm[i][sm.find(vv[i])->second];
-	rr[j] = sc.second.getDouble();
+	rrp[j] = sc.second.getDouble();
     }
     return ar;
 }
@@ -78,13 +79,14 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
     auto& am = aa->map_u();
     am.reserve(sz);
     SizeList ii(n);
+    auto rrp = rr.data();
     for (std::size_t j = 0; j < sz; j++)
     {
 	std::vector<VarValPair> ss;
 	ss.reserve(n);
 	for (std::size_t i = 0; i < n; i++)
 	    ss.push_back(VarValPair(vv[i], mm[i][ii[i]]));
-	am.insert_or_assign(State(ss), Rational(rr[j]));
+	am.insert_or_assign(State(ss), Rational(rrp[j]));
 	for (std::size_t k = n - 1; k >= 0; k--)
 	{
 	    std::size_t y = ii[k] + 1;
@@ -128,12 +130,14 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(const Va
     auto& rkk = br->arr;
     rkk.resize(w);
     SizeList ivv(n);
+    auto rvvp = rvv.data();
+    auto rkkp = rkk.data();
     for (std::size_t j = 0; j < v; j++)
     {
 	std::size_t k = 0;
 	for (std::size_t i = 0; i < m; i++)
 	    k = skk[i]*k + ivv[pkk[i]];
-	rkk[k] += rvv[j];
+	rkkp[k] += rvvp[j];
 	for (std::size_t i = n - 1; i >= 0; i--)
 	{
 	    std::size_t y = ivv[i] + 1;
@@ -237,12 +241,13 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
     auto hh = std::make_unique<History>();
     auto& hm = hh->map_u();
     hm.reserve(z);
+    auto rrp = rr.data();
     for (std::size_t j = 0; j < z; j++)
     {
 	std::vector<VarValPair> ss;
 	ss.reserve(n);
 	for (std::size_t i = 0; i < n; i++)
-	    ss.push_back(VarValPair(vv[i], mm[i][rr[j*n+i]]));
+	    ss.push_back(VarValPair(vv[i], mm[i][rrp[j*n+i]]));
 	hm.insert_or_assign(Id(j+1), State(ss));
     }
     return hh;
@@ -259,11 +264,12 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     auto& rr = hr.arr;
     auto& rr1 = hr1->arr;
     rr1.reserve(hr1->size * n);
+    auto rrp = rr.data();
     for (auto j : ll)
     {
 	std::size_t jn = j*n;
 	for (std::size_t i = 0; i < n; i++)
-	    rr1.push_back(rr[jn+i]);
+	    rr1.push_back(rrp[jn+i]);
     }
     return hr1;
 }
@@ -289,11 +295,12 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     auto& rr = hr.arr;
     auto& rr1 = hr1->arr;
     rr1.reserve(z*m);
+    auto rrp = rr.data();
     for (std::size_t j = 0; j < z; j++)
     {
 	std::size_t jn = j*n;
 	for (std::size_t i = 0; i < m; i++)
-	    rr1.push_back(rr[jn + pkk[i]]);
+	    rr1.push_back(rrp[jn + pkk[i]]);
     }
     return hr1;
 }
@@ -323,16 +330,18 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     auto& rr = hr.arr;
     auto& rr1 = ar1->arr;
     rr1.resize(w);
+    auto rrp = rr.data();
+    auto rr1p = rr1.data();
     if (m > 0)
 	for (std::size_t j = 0; j < z; j++)
 	{
 	    std::size_t jn = j*n;
-	    std::size_t k = rr[jn+pkk[0]];
+	    std::size_t k = rrp[jn+pkk[0]];
 	    for (std::size_t i = 1; i < m; i++)
-		k = skk[i]*k + rr[jn+pkk[i]];
-	    rr1[k] += f;
+		k = skk[i]*k + rrp[jn+pkk[i]];
+	    rr1p[k] += f;
 	}
     else
-	rr1[0] = f*z;
+	rr1p[0] = f*z;
     return ar1;
 }
