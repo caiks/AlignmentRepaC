@@ -14,7 +14,6 @@ namespace Alignment
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
-    typedef std::vector<unsigned char> UCharList;
 }
 
 namespace Alignment
@@ -84,7 +83,7 @@ namespace Alignment
 
 	std::size_t size;
 	SizeList shape;
-	UCharList arr;
+	std::unique_ptr<unsigned char[]> arr;
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
@@ -125,14 +124,32 @@ namespace Alignment
 	unsigned char valency;
 
 	SizeList shape;
-	UCharList arr;
+	std::unique_ptr<unsigned char[]> arr;
     };
 
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
     std::unique_ptr<TransformRepa> systemsTransformsTransformRepa_u(const System&, const Transform&);
+}
 
-    // historyRepasTransformRepasApply_u :: HistoryRepa -> TransformRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> historyRepasTransformRepasApply_u(const HistoryRepa&, const TransformRepa&);
+namespace Alignment
+{
+    typedef std::shared_ptr<TransformRepa> TransformRepaPtr;
+    typedef std::vector<TransformRepaPtr> TransformRepaPtrList;
+    typedef std::vector<TransformRepaPtrList> TransformRepaPtrListList;
+}
+
+namespace Alignment
+{
+    struct FudRepa
+    {
+	TransformRepaPtrListList layers;
+    };
+
+    // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
+    std::unique_ptr<FudRepa> setVariablesListTransformRepasFudRepa_u(const VarUSet&, const TransformRepaPtrList&);
+
+    // historyRepasFudRepasApply_u :: HistoryRepa -> FudRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> historyRepasFudRepasApply_u(const HistoryRepa&, const FudRepa&);
 }
 
 

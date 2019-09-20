@@ -354,7 +354,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -399,8 +399,8 @@ void main()
 	    << hr->size << endl << endl;
 	cout << "hr.shape" << endl
 	    << hr->shape << endl << endl;
-	cout << "hr.arr" << endl
-	    << hr->arr << endl << endl;
+//	cout << "hr.arr" << endl
+//	    << hr->arr << endl << endl;
 	cout << "hraa(sys(aa),hr)" << endl
 	    << *hraa(*sys(*aa), *hr) << endl << endl;
 
@@ -417,8 +417,8 @@ void main()
 	    << hr->size << endl << endl;
 	cout << "hr.shape" << endl
 	    << hr->shape << endl << endl;
-	cout << "hr.arr" << endl
-	    << hr->arr << endl << endl;
+//	cout << "hr.arr" << endl
+//	    << hr->arr << endl << endl;
 	cout << "hraa(sys(aa),hr)" << endl
 	    << *hraa(*sys(*aa), *hr) << endl << endl;
 
@@ -435,8 +435,8 @@ void main()
 	    << hr->size << endl << endl;
 	cout << "hr.shape" << endl
 	    << hr->shape << endl << endl;
-	cout << "hr.arr" << endl
-	    << hr->arr << endl << endl;
+//	cout << "hr.arr" << endl
+//	    << hr->arr << endl << endl;
 	cout << "hraa(sys(aa),hr)" << endl
 	    << *hraa(*sys(*aa), *hr) << endl << endl;
 
@@ -484,7 +484,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -776,8 +776,8 @@ void main()
 	    << (std::size_t)(tr->valency) << endl << endl;
 	cout << "tr.shape" << endl
 	    << tr->shape << endl << endl;
-	cout << "tr.arr" << endl
-	    << tr->arr << endl << endl;
+//	cout << "tr.arr" << endl
+//	    << tr->arr << endl << endl;
 
     }
 
