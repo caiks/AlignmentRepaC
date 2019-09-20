@@ -14,7 +14,7 @@ namespace Alignment
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
-    typedef std::vector<unsigned char> ByteList;
+    typedef std::vector<unsigned char> UCharList;
 }
 
 namespace Alignment
@@ -32,7 +32,6 @@ namespace Alignment
 	std::unique_ptr<VarSizeUMap> _mapVarInt;
 
 	SizeList shape;
-
 	DoubleList arr;
     };
 
@@ -63,9 +62,7 @@ namespace Alignment
 	std::unique_ptr<VarSizeUMap> _mapVarInt;
 
 	double size;
-
 	SizeList shape;
-
 	DoubleListList arr;
     };
 }
@@ -86,10 +83,8 @@ namespace Alignment
 	std::unique_ptr<VarSizeUMap> _mapVarInt;
 
 	std::size_t size;
-
 	SizeList shape;
-
-	ByteList arr;
+	UCharList arr;
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
@@ -108,6 +103,36 @@ namespace Alignment
     std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, const VarList&, const HistoryRepa&);
 
 
+}
+
+namespace Alignment
+{
+    // data TransformRepa = TransformRepa{
+    //   transformRepasVectorVar :: !(V.Vector Variable),
+    //   transformRepasMapVarInt::Map.Map Variable Int,
+    //   transformRepasVarDerived :: !Variable,
+    //   transformRepasValency :: !Int,
+    //   transformRepasArray :: !(Array U VShape Int) }
+
+    struct TransformRepa
+    {
+	VarList vectorVar;
+
+	VarSizeUMap& mapVarInt() const;
+	std::unique_ptr<VarSizeUMap> _mapVarInt;
+
+	std::unique_ptr<Variable> derived;
+	unsigned char valency;
+
+	SizeList shape;
+	UCharList arr;
+    };
+
+    // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
+    std::unique_ptr<TransformRepa> systemsTransformsTransformRepa_u(const System&, const Transform&);
+
+    // historyRepasTransformRepasApply_u :: HistoryRepa -> TransformRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> historyRepasTransformRepasApply_u(const HistoryRepa&, const TransformRepa&);
 }
 
 

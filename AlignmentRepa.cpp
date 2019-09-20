@@ -30,7 +30,7 @@ std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const
     std::size_t sz = 1;
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& xx = uu.map_u()[vv[i]];
+	auto xx = systemsVarsSetValue(uu,vv[i]);
 	auto s = xx.size();
 	sh.push_back(s);
 	sz *= s;
@@ -48,7 +48,7 @@ std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const
 	auto& sm = sc.first.map_u();
 	std::size_t j = 0;
 	for (std::size_t i = 0; i < n; i++)
-	    j = j*sh[i] + mm[i][sm.find(vv[i])->second];
+	    j = sh[i]*j + mm[i][sm.find(vv[i])->second];
 	rrp[j] = sc.second.getDouble();
     }
     return ar;
@@ -68,7 +68,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
     std::vector<ValList> mm(n);
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& xx = uu.map_u()[vv[i]];
+	auto xx = systemsVarsSetValue(uu,vv[i]);
 	auto s = xx.size();
 	auto& yy = mm[i];
 	yy.reserve(s);
@@ -193,7 +193,7 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
     hr->size = hh.map_u().size();
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& xx = uu.map_u()[vv[i]];
+	auto xx = systemsVarsSetValue(uu,vv[i]);
 	auto s = xx.size();
 	sh.push_back(s);
 	auto& yy = mm[i];
@@ -212,7 +212,7 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	for (std::size_t i = 0; i < n; i++)
 	{
 	    std::size_t k = mm[i][sm.find(vv[i])->second];
-	    if (k >= ucmax)
+	    if (k > ucmax)
 		throw std::out_of_range::out_of_range("systemsHistoriesHistoryRepa_u");
 	    rr.push_back(k);
 	}
@@ -231,7 +231,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
     std::vector<ValList> mm(n);
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& xx = uu.map_u()[vv[i]];
+	auto xx = systemsVarsSetValue(uu,vv[i]);
 	auto s = xx.size();
 	auto& yy = mm[i];
 	yy.reserve(s);
@@ -345,3 +345,56 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
 	rr1p[0] = f*z;
     return ar1;
 }
+
+// systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
+std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const System& uu, const Transform& tt)
+{
+    auto tr = std::make_unique<TransformRepa>();
+    auto ww = transformsDerived(tt);
+    if (!ww.size())
+	return tr;
+    tr->derived = std::make_unique<Variable>(*ww.begin());
+    auto zz = systemsVarsSetValue(uu,*tr->derived);
+    auto w = zz.size();
+    if (w > std::numeric_limits<unsigned char>::max())
+	throw std::out_of_range::out_of_range("systemsTransformsTransformRepa_u");
+    tr->valency = w;
+    ValSizeUMap nn;
+    std::size_t j = 0;
+    for (auto& x : zz)
+	nn.insert_or_assign(x, j++);
+    auto qq = transformsUnderlying(tt);
+    auto n = qq->size();
+    auto& vv = tr->vectorVar;
+    vv.reserve(n);
+    vv.insert(vv.end(), qq->begin(), qq->end());
+    auto& sh = tr->shape;
+    sh.reserve(n);
+    std::vector<ValSizeUMap> mm(n);
+    std::size_t sz = 1;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto xx = systemsVarsSetValue(uu,vv[i]);
+	auto s = xx.size();
+	sh.push_back(s);
+	sz *= s;
+	auto& yy = mm[i];
+	yy.reserve(s);
+	std::size_t j = 0;
+	for (auto& x : xx)
+	    yy.insert_or_assign(x, j++);
+    }
+    auto& rr = tr->arr;
+    rr.resize(sz);
+    auto rrp = rr.data();
+    for (auto& sc : tt.histogram_u().map_u())
+    {
+	auto& sm = sc.first.map_u();
+	std::size_t j = 0;
+	for (std::size_t i = 0; i < n; i++)
+	    j = sh[i]*j + mm[i][sm.find(vv[i])->second];
+	rrp[j] = nn[sm.find(*tr->derived)->second];
+    }
+    return tr;
+}
+
