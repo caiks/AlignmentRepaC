@@ -408,5 +408,45 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(const VarUSet& vv, const TransformRepaPtrList& ff)
 {
     auto fr = std::make_unique<FudRepa>();
+    VarUSet vv1;
+    vv1.reserve(vv.size() + ff.size());
+    vv1.insert(vv.begin(), vv.end());
+    TransformRepaPtrList ff1(ff);
+    bool found = true;
+    while (found)
+    {
+	found = false;
+	TransformRepaPtrList ff0;
+	VarUSet vv0;
+	vv0.reserve(ff1.size());
+	for (auto& tt : ff1)
+	{
+	    bool layer = true;
+	    for (auto& v : tt->vectorVar)
+	    {
+		auto it = vv1.find(v);
+		layer = it != vv1.end();
+		if (!layer)
+		    break;
+	    }
+	    if (layer)
+	    {
+		vv0.insert(*tt->derived);
+		if (!found)
+		{
+		    fr->layers.push_back(TransformRepaPtrList());
+		    found = true;
+		}
+		fr->layers.back().push_back(tt);
+	    }
+	    else
+		ff0.push_back(tt);
+	}
+	if (found)
+	{
+	    ff1 = ff0;
+	    vv1.insert(vv0.begin(), vv0.end());
+	}
+    }
     return fr;
 }
