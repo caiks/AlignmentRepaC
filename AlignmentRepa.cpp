@@ -403,8 +403,8 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
     return tr;
 }
 
-// listVariablesListTransformRepasSort :: V.Vector Variable -> V.Vector TransformRepa -> V.Vector
 // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
+// cf listVariablesListTransformRepasSort :: V.Vector Variable -> V.Vector TransformRepa -> V.Vector
 std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(const VarUSet& vv, const TransformRepaPtrList& ff)
 {
     auto fr = std::make_unique<FudRepa>();
@@ -450,3 +450,63 @@ std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(cons
     }
     return fr;
 }
+
+// historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
+// cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
+{
+    auto hr1 = std::make_unique<HistoryRepa>();
+    hr1->vectorVar = hr.vectorVar;
+    hr1->size = hr.size;
+    hr1->shape = hr.shape;
+    auto& kk = hr1->vectorVar;
+    auto& skk = hr1->shape;
+    auto z = hr.size;
+    auto n = hr.vectorVar.size();
+    auto p = n;
+    for (auto& ll : fr.layers)
+	for (auto& tr : ll)
+	{
+	    kk.push_back(*tr->derived);
+	    skk.push_back(tr->valency);
+	    p++;
+	}
+    auto& mkk = hr1->mapVarInt();
+    auto rr = hr.arr.get();
+    hr1->arr = std::unique_ptr<unsigned char[]>(new unsigned char[z*p]);
+    auto rr1 = hr1->arr.get();
+    for (std::size_t j = 0; j < z; j++)
+    {
+	std::size_t jn = j*n;
+	std::size_t jp = j*p;
+	for (std::size_t i = 0; i < n; i++)
+	    rr1[jp+i] = rr[jn+i];
+    }
+    auto q = n;
+    for (auto& ll : fr.layers)
+	for (auto& tr : ll)
+	{
+	    auto& vv = tr->vectorVar;
+	    auto& svv = tr->shape;
+	    auto m = vv.size();
+	    auto ar = tr->arr.get();
+	    SizeList pkk;
+	    for (auto& v : vv)
+		pkk.push_back(mkk[v]);
+	    if (m > 0)
+		for (std::size_t j = 0; j < z; j++)
+		{
+		    std::size_t jp = j*p;
+		    std::size_t k = rr1[jp + pkk[0]];
+		    for (std::size_t i = 1; i < m; i++)
+			k = svv[i] * k + rr1[jp + pkk[i]];
+		    rr1[jp+q] = ar[k];
+		}
+	    else
+		for (std::size_t j = 0; j < z; j++)
+		    rr1[j*p+q] = 0;
+	    q++;
+	}
+    return hr1;
+}
+

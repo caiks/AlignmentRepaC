@@ -148,8 +148,8 @@ namespace Alignment
     // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
     std::unique_ptr<FudRepa> setVariablesListTransformRepasFudRepa_u(const VarUSet&, const TransformRepaPtrList&);
 
-    // historyRepasFudRepasApply_u :: HistoryRepa -> FudRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> historyRepasFudRepasApply_u(const HistoryRepa&, const FudRepa&);
+    // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
 }
 
 

@@ -784,6 +784,7 @@ void main()
     if (true)
     {
 	auto uvars = systemsSetVar;
+	auto uunion = pairSystemsUnion;
 	auto cart = systemsSetVarsSetStateCartesian_u;
 	auto llss = listsState;
 	auto vol = systemsSetVarsVolume_u;
@@ -871,8 +872,21 @@ void main()
 	auto fftt = fudsTransform;
 	auto fsys = fudsSystemImplied;
 	auto dep = fudsSetVarsDepends_u;
+	auto hraa = [](const System& uu, const HistoryRepa& hr)
+	{
+	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu, hr));
+	};
+	auto hhhr = [](const System& uu, const History& hh)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, hh);
+	};
+	auto hrhh = [](const System& uu, const HistoryRepa& hr)
+	{
+	    return systemsHistoryRepasHistory_u(uu, hr);
+	};
 	auto tttr = systemsTransformsTransformRepa_u;
 	auto llfr = setVariablesListTransformRepasFudRepa_u;
+	auto frmul = historyRepasFudRepasMultiply_u;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -1013,6 +1027,19 @@ void main()
 		cout << " " << *fr->layers[i][j]->derived;
 	    cout << endl;
 	}
+
+	auto hr = hhhr(*uu, *hh);
+	cout << "hr = hhhr(uu,hh)" << endl;
+	cout << "hrhh(uu,hr)" << endl
+	    << *hrhh(*uu, *hr) << endl << endl;
+
+	auto uu2 = uunion(*uu, *uu1);
+	auto hr1 = frmul(*hr, *fr);
+	cout << "hr1 = frmul(hr,fr)" << endl;
+	cout << "hrhh(uu2,hr1)" << endl
+	    << *hrhh(*uu2,*hr1) << endl << endl;
+	cout << "rpln(aall(hraa(uu2,hr1)))" << endl;
+	rpln(cout, sorted(*aall(*hraa(*uu2,*hr1)))); cout << endl;
     }
 
 
