@@ -8,7 +8,7 @@ VarSizeUMap& Alignment::HistogramRepa::mapVarInt() const
     if (!_mapVarInt)
     {
 	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
-	mm = std::move(std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size())));
+	mm = std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size()));
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
 	    mm->insert_or_assign(vectorVar[i], i);
     }
@@ -159,7 +159,7 @@ VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
     if (!_mapVarInt)
     {
 	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
-	mm = std::move(std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size())));
+	mm = std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size()));
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
 	    mm->insert_or_assign(vectorVar[i], i);
     }
@@ -171,7 +171,7 @@ VarSizeUMap& Alignment::HistoryRepa::mapVarInt() const
     if (!_mapVarInt)
     {
 	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
-	mm = std::move(std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size())));
+	mm = std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size()));
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
 	    mm->insert_or_assign(vectorVar[i], i);
     }
