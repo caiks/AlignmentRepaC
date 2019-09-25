@@ -203,7 +203,7 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	    yy.insert_or_assign(w, j++);
     }
     hr->arr = std::unique_ptr<unsigned char[]>(new unsigned char[hr->size * n]);
-    auto& rr = hr->arr;
+    auto rr = hr->arr.get();
     unsigned char ucmax = std::numeric_limits<unsigned char>::max();
     auto hm = sorted(hh.map_u());
     std::size_t j = 0;
@@ -228,7 +228,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
     auto& vv = hr.vectorVar;
     auto n = vv.size();
     auto& sh = hr.shape;
-    auto& rr = hr.arr;
+    auto rr = hr.arr.get();
     auto z = hr.size;
     std::vector<ValList> mm(n);
     for (std::size_t i = 0; i < n; i++)
@@ -262,9 +262,9 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     hr1->size = ll.size();
     hr1->shape = hr.shape;
     auto n = hr.vectorVar.size();
-    auto& rr = hr.arr;
+    auto rr = hr.arr.get();
     hr1->arr = std::unique_ptr<unsigned char[]>(new unsigned char[hr1->size * n]);
-    auto& rr1 = hr1->arr;
+    auto rr1 = hr1->arr.get();
     std::size_t k = 0;
     for (auto j : ll)
     {
@@ -296,9 +296,9 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     skk.reserve(m);
     for (std::size_t i = 0; i < m; i++)
 	skk.push_back(svv[pkk[i]]);
-    auto& rr = hr.arr;
+    auto rr = hr.arr.get();
     hr1->arr = std::unique_ptr<unsigned char[]>(new unsigned char[z*m]);
-    auto& rr1 = hr1->arr;
+    auto rr1 = hr1->arr.get();
     std::size_t k = 0;
     for (std::size_t j = 0; j < z; j++)
     {
@@ -334,7 +334,7 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
 	w *= s;
 	skk.push_back(s);
     }
-    auto& rr = hr.arr;
+    auto rr = hr.arr.get();
     auto& rr1 = ar1->arr;
     rr1.resize(w);
     auto rr1p = rr1.data();
@@ -391,7 +391,7 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 	    yy.insert_or_assign(x, j++);
     }
     tr->arr = std::unique_ptr<unsigned char[]>(new unsigned char[sz]);
-    auto& rr = tr->arr;
+    auto rr = tr->arr.get();
     for (auto& sc : tt.histogram_u().map_u())
     {
 	auto& sm = sc.first.map_u();
