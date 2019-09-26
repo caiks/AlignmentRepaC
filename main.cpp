@@ -886,6 +886,7 @@ void main()
 	};
 	auto tttr = systemsTransformsTransformRepa_u;
 	auto llfr = setVariablesListTransformRepasFudRepa_u;
+	auto fffr = systemsFudsFudRepa_u;
 	auto frmul = historyRepasFudRepasMultiply_u;
 
 	auto pressure = Variable("pressure");
@@ -1002,11 +1003,8 @@ void main()
 	    << sorted(*und(*fftt(*gg))) << endl << endl;
 
 	auto uu1 = fsys(*gg);
-	TransformRepaPtrList xx;
-	for (auto& tt : ff->list_u())
-	    xx.push_back(std::move(tttr(*uu1, *tt)));
-	auto fr = llfr(*vv, xx);
-	cout << "fr = llfr(*vv, ff)" << endl;
+	auto fr = fffr(*uu1, *ff);
+	cout << "fr = fffr(uu1,ff)" << endl;
 	for (std::size_t i = 0; i < fr->layers.size(); i++)
 	{
 	    cout << "layer " << i << " :";
@@ -1014,12 +1012,8 @@ void main()
 		cout << " " << *fr->layers[i][j]->derived;
 	    cout << endl;
 	}
-
-	xx.clear();
-	for (auto& tt : gg->list_u())
-	    xx.push_back(std::move(tttr(*uu1, *tt)));
-	fr = llfr(*vv, xx);
-	cout << "fr = llfr(*vv, gg)" << endl;
+	fr = fffr(*uu1, *gg);
+	cout << "fr = fffr(uu1,gg)" << endl;
 	for (std::size_t i = 0; i < fr->layers.size(); i++)
 	{
 	    cout << "layer " << i << " :";

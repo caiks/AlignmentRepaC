@@ -412,14 +412,16 @@ std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(cons
     vv1.reserve(vv.size() + ff.size());
     vv1.insert(vv.begin(), vv.end());
     TransformRepaPtrList ff1(ff);
+    TransformRepaPtrList ff0;
+    TransformRepaPtrList* ffa = &ff0;
+    TransformRepaPtrList* ffb = &ff1;
     bool found = true;
     while (found)
     {
 	found = false;
-	TransformRepaPtrList ff0;
 	VarUSet vv0;
-	vv0.reserve(ff1.size());
-	for (auto& tt : ff1)
+	vv0.reserve(ffb->size());
+	for (auto& tt : *ffb)
 	{
 	    bool layer = true;
 	    for (auto& v : tt->vectorVar)
@@ -440,15 +442,32 @@ std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(cons
 		fr->layers.back().push_back(tt);
 	    }
 	    else
-		ff0.push_back(tt);
+		ffa->push_back(tt);
 	}
 	if (found)
 	{
-	    ff1 = ff0;
+	    TransformRepaPtrList* ffc = ffa;
+	    ffa = ffb;
+	    ffb = ffc;
+	    ffa->clear();
 	    vv1.insert(vv0.begin(), vv0.end());
 	}
     }
     return fr;
+}
+
+// systemsFudsFudRepa_u :: System -> Fud -> FudRepa
+std::unique_ptr<FudRepa> Alignment::systemsFudsFudRepa_u(const System& uu, const Fud& ff)
+{
+    auto fund = fudsUnderlying;
+    auto tttr = systemsTransformsTransformRepa_u;
+    auto llfr = setVariablesListTransformRepasFudRepa_u;
+
+    auto vv = fund(ff);
+    TransformRepaPtrList ll;
+    for (auto& tt : ff.list_u())
+	ll.push_back(std::move(tttr(uu,*tt)));
+    return llfr(*vv, ll);
 }
 
 // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
