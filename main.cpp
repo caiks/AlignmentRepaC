@@ -658,7 +658,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -705,6 +705,7 @@ void main()
 	    return transformsHistogramsApply(tt, aa);
 	};
 	auto tttr = systemsTransformsTransformRepa_u;
+	auto trtt = systemsTransformRepasTransform_u;
 
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -776,12 +777,12 @@ void main()
 	    << (std::size_t)(tr->valency) << endl << endl;
 	cout << "tr.shape" << endl
 	    << tr->shape << endl << endl;
-//	cout << "tr.arr" << endl
-//	    << tr->arr << endl << endl;
+	cout << "trtt(uu1,tr)" << endl
+	    << *trtt(*uu1,*tr) << endl << endl;
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -884,8 +885,6 @@ void main()
 	{
 	    return systemsHistoryRepasHistory_u(uu, hr);
 	};
-	auto tttr = systemsTransformsTransformRepa_u;
-	auto llfr = setVariablesListTransformRepasFudRepa_u;
 	auto fffr = systemsFudsFudRepa_u;
 	auto frmul = historyRepasFudRepasMultiply_u;
 

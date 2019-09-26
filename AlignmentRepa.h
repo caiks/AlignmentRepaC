@@ -129,6 +129,11 @@ namespace Alignment
 
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
     std::unique_ptr<TransformRepa> systemsTransformsTransformRepa_u(const System&, const Transform&);
+
+    // systemsTransformRepasTransform_u :: System -> TransformRepa -> Transform
+    std::unique_ptr<Transform> systemsTransformRepasTransform_u(const System&, const TransformRepa&);
+
+
 }
 
 namespace Alignment

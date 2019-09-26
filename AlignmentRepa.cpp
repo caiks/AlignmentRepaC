@@ -403,6 +403,64 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
     return tr;
 }
 
+// systemsTransformRepasTransform_u :: System -> TransformRepa -> Transform
+std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const System& uu, const TransformRepa& tr)
+{
+    auto& vv = tr.vectorVar;
+    auto n = vv.size();
+    auto& sh = tr.shape;
+    auto rr = tr.arr.get();
+    if (!tr.derived || !n)
+	return std::make_unique<Transform>();
+    auto& w = *tr.derived;
+    std::size_t sz = 1;
+    std::vector<ValList> mm(n+1);
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto xx = systemsVarsSetValue(uu, vv[i]);
+	auto s = xx.size();
+	sz *= s;
+	auto& yy = mm[i];
+	yy.reserve(s);
+	for (auto& w : xx)
+	    yy.push_back(w);
+    }
+    {
+	auto xx = systemsVarsSetValue(uu, w);
+	auto s = xx.size();
+	auto& yy = mm[n];
+	yy.reserve(s);
+	for (auto& w : xx)
+	    yy.push_back(w);
+    }
+    auto tt = std::make_unique<Transform>();
+    tt->derived_u().insert(w);
+    auto& am = tt->histogram_u().map_u();
+    am.reserve(sz);
+    SizeList ii(n);
+    for (std::size_t j = 0; j < sz; j++)
+    {
+	std::vector<VarValPair> ss;
+	ss.reserve(n+1);
+	for (std::size_t i = 0; i < n; i++)
+	    ss.push_back(VarValPair(vv[i], mm[i][ii[i]]));
+	ss.push_back(VarValPair(w, mm[n][rr[j]]));
+	am.insert_or_assign(State(ss), Rational(1));
+	for (std::size_t k = n - 1; k >= 0; k--)
+	{
+	    std::size_t y = ii[k] + 1;
+	    if (y == sh[k])
+		ii[k] = 0;
+	    else
+	    {
+		ii[k] = y;
+		break;
+	    }
+	}
+    }
+    return tt;
+}
+
 // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
 // cf listVariablesListTransformRepasSort :: V.Vector Variable -> V.Vector TransformRepa -> V.Vector
 std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(const VarUSet& vv, const TransformRepaPtrList& ff)
