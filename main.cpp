@@ -354,7 +354,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -376,6 +376,10 @@ void main()
 	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
 	{
 	    return eventsHistoryRepasHistoryRepaSelection_u(ll, hr);
+	};	
+	auto hrhrsel = [](const HistoryRepa& hr, const HistoryRepa& ss)
+	{
+	    return historyRepasHistoryRepasHistoryRepaSelection_u(ss, hr);
 	};
 	auto hrhrred = [](const HistoryRepa& hr, const VarList& kk)
 	{
@@ -468,6 +472,26 @@ void main()
 	cout << "hrhh(sys(aa),hrsel(hr,SizeList{0,4,8}))" << endl
 	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
 
+	auto bb = regcart(1,1);
+	cout << "bb = regcart(1,1)" << endl;
+	auto ss = aahr(*sys(*bb), *bb);
+	cout << "ss = aahr(sys(bb),bb)" << endl;
+	cout << "hrhh(sys(aa),hrhrsel(hr,ss))" << endl
+	    << *hrhh(*sys(*aa),*hrhrsel(*hr, *ss)) << endl << endl;
+	bb = regcart(2, 1);
+	cout << "bb = regcart(2,1)" << endl;
+	ss = aahr(*sys(*bb), *bb);
+	cout << "ss = aahr(sys(bb),bb)" << endl;
+	cout << "hrhh(sys(aa),hrhrsel(hr,ss))" << endl
+	    << *hrhh(*sys(*aa), *hrhrsel(*hr, *ss)) << endl << endl;
+	bb = regcart(3, 1);
+	cout << "bb = regcart(3,1)" << endl;
+	ss = aahr(*sys(*bb), *bb);
+	cout << "ss = aahr(sys(bb),bb)" << endl;
+	cout << "hrhh(sys(aa),hrhrsel(hr,ss))" << endl
+	    << *hrhh(*sys(*aa), *hrhrsel(*hr, *ss)) << endl << endl;
+
+	hr = aahr(*sys(*aa), *aa);
 	cout << "hraa(sys(aa),hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
 	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
 	cout << "hraa(sys(aa),hrhrred(hr, VarList{ Variable(1) }))" << endl
@@ -782,7 +806,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;

@@ -95,6 +95,9 @@ namespace Alignment
     // eventsHistoryRepasHistoryRepaSelection :: [Int] -> HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> eventsHistoryRepasHistoryRepaSelection_u(const SizeList&, const HistoryRepa&);
 
+    // historyRepasHistoryRepasHistoryRepaSelection_u :: HistoryRepa -> HistoryRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> historyRepasHistoryRepasHistoryRepaSelection_u(const HistoryRepa&, const HistoryRepa&);
+
     // setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(const VarList&, const HistoryRepa&);
 

@@ -271,11 +271,47 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
 	std::size_t jn = j*n;
 	for (std::size_t i = 0; i < n; i++)
 	{
-	    rr1[k] = rr[jn+i];
+	    rr1[k] = rr[jn + i];
 	    k++;
 	}
     }
     return hr1;
+}
+
+// historyRepasHistoryRepasHistoryRepaSelection_u :: HistoryRepa -> HistoryRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::historyRepasHistoryRepasHistoryRepaSelection_u(const HistoryRepa& ss, const HistoryRepa& hr)
+{
+    auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
+
+    auto& kk = ss.vectorVar;
+    auto n = hr.vectorVar.size();
+    auto& svv = hr.shape;
+    auto& mvv = hr.mapVarInt();
+    auto z = hr.size;
+    auto m = kk.size();
+    auto y = ss.size;
+    SizeList pkk;
+    for (std::size_t i = 0; i < m; i++)
+	pkk.push_back(mvv[kk[i]]);
+    auto rr1 = ss.arr.get();
+    auto rr = hr.arr.get();
+    SizeList ll;
+    for (std::size_t j = 0; j < z; j++)
+    {
+	std::size_t jn = j*n;
+	bool any = false;
+	for (std::size_t k = 0; !any && k < y; k++)
+	{
+	    std::size_t km = k*m;
+	    bool all = true;
+	    for (std::size_t i = 0; all && i < m; i++)
+		all = rr1[km + i] == rr[jn + pkk[i]];
+	    any = all;
+	}
+	if (any)
+	    ll.push_back(j);
+    }
+    return hrsel(ll,hr);
 }
 
 // setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
