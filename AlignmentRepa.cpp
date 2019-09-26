@@ -636,3 +636,35 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
     return hr1;
 }
 
+/*
+// stateFudPairsHistoryRepaFudRepaPair :: (State,Fud) -> (HistoryRepa,FudRepa)
+Tree<HistoryRepaPtrFudRepaPtrPair> Alignment::stateFudPairTreesHistoryRepaFudRepaPairTree(const System& uu, const Tree<StatePtrFudPtrPair>& rr)
+{
+    auto fffr = systemsFudsFudRepa_u;
+
+    Tree<HistoryRepaPtrFudRepaPtrPair> tt;
+    for (auto& pp : rr._list)
+    {
+	auto qq = stateFudPairTreesHistoryRepaFudRepaPairTree(uu, pp.second);
+	auto& ss = pp.first.first;
+	auto& ff = pp.first.second;
+	auto fr = fffr(*uu, *ff);
+	rr->_list.push_back(std::pair<HistoryRepaPtrFudRepaPtrPair,Tree<HistoryRepaPtrFudRepaPtrPair>>(HistoryRepaPtrFudRepaPtrPair(hr,fr), qq));
+    }
+    return tt;
+}
+
+// systemsDecompFudsDecompFudRepa_u :: System -> DecompFud -> DecompFudRepa
+std::unique_ptr<FudRepa> Alignment::systemsDecompFudsDecompFudRepa_u(const System& uu, const DecompFud& df)
+{
+    auto fund = fudsUnderlying;
+    auto tttr = systemsTransformsTransformRepa_u;
+    auto llfr = setVariablesListTransformRepasFudRepa_u;
+
+    auto vv = fund(ff);
+    TransformRepaPtrList ll;
+    for (auto& tt : ff.list_u())
+	ll.push_back(std::move(tttr(uu, *tt)));
+    return llfr(*vv, ll);
+}
+*/

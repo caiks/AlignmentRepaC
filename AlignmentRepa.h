@@ -164,6 +164,28 @@ namespace Alignment
     std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
 }
 
+namespace Alignment
+{
+    struct HistoryRepaPtrFudRepaPtrPair
+    {
+	HistoryRepaPtrFudRepaPtrPair() {}
+	HistoryRepaPtrFudRepaPtrPair(std::shared_ptr<HistoryRepa> ss, std::shared_ptr<FudRepa> ff) : _state(ss), _fud(ff) {}
+
+	std::shared_ptr<HistoryRepa> _state;
+	std::shared_ptr<FudRepa> _fud;
+    };
+
+    struct DecompFudRepa
+    {
+	Tree<HistoryRepaPtrFudRepaPtrPair> tree;
+    };
+
+    // systemsDecompFudsDecompFudRepa_u :: System -> DecompFud -> DecompFudRepa
+    std::unique_ptr<DecompFudRepa> systemsDecompFudsDecompFudRepa_u(const System&, const DecompFud&);
+
+    // systemsDecompFudRepasDecompFud_u :: System -> DecompFudRepa -> DecompFud
+    std::unique_ptr<DecompFud> systemsDecompFudRepasDecompFud_u(const System&, const DecompFudRepa&);
+}
 
 
 #endif
