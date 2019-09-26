@@ -132,8 +132,6 @@ namespace Alignment
 
     // systemsTransformRepasTransform_u :: System -> TransformRepa -> Transform
     std::unique_ptr<Transform> systemsTransformRepasTransform_u(const System&, const TransformRepa&);
-
-
 }
 
 namespace Alignment
@@ -155,6 +153,9 @@ namespace Alignment
 
     // systemsFudsFudRepa_u :: System -> Fud -> FudRepa
     std::unique_ptr<FudRepa> systemsFudsFudRepa_u(const System&, const Fud&);
+
+    // systemsFudRepasFud_u :: System -> FudRepa -> Fud
+    std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const FudRepa&);
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);

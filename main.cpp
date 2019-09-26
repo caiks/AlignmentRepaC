@@ -658,7 +658,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -782,7 +782,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -886,6 +886,7 @@ void main()
 	    return systemsHistoryRepasHistory_u(uu, hr);
 	};
 	auto fffr = systemsFudsFudRepa_u;
+	auto frff = systemsFudRepasFud_u;
 	auto frmul = historyRepasFudRepasMultiply_u;
 
 	auto pressure = Variable("pressure");
@@ -1011,6 +1012,9 @@ void main()
 		cout << " " << *fr->layers[i][j]->derived;
 	    cout << endl;
 	}
+	cout << "frff(uu1, fr)" << endl
+	    << *frff(*uu1, *fr) << endl << endl;
+
 	fr = fffr(*uu1, *gg);
 	cout << "fr = fffr(uu1,gg)" << endl;
 	for (std::size_t i = 0; i < fr->layers.size(); i++)
@@ -1020,6 +1024,8 @@ void main()
 		cout << " " << *fr->layers[i][j]->derived;
 	    cout << endl;
 	}
+	cout << "frff(uu1, fr)" << endl
+	    << *frff(*uu1, *fr) << endl << endl;
 
 	auto hr = hhhr(*uu, *hh);
 	cout << "hr = hhhr(uu,hh)" << endl;

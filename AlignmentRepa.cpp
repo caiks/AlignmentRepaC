@@ -528,6 +528,19 @@ std::unique_ptr<FudRepa> Alignment::systemsFudsFudRepa_u(const System& uu, const
     return llfr(*vv, ll);
 }
 
+// systemsFudRepasFud_u :: System -> FudRepa -> Fud
+std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const FudRepa& fr)
+{
+    auto trtt = systemsTransformRepasTransform_u;
+
+    auto ff = std::make_unique<Fud>();
+    auto& mm = ff->list_u();
+    for (auto& ll : fr.layers)
+	for (auto& tr : ll)
+	    mm.push_back(std::move(trtt(uu,*tr)));
+    return ff;
+}
+
 // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
 // cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
