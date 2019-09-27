@@ -636,35 +636,66 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
     return hr1;
 }
 
-/*
-// stateFudPairsHistoryRepaFudRepaPair :: (State,Fud) -> (HistoryRepa,FudRepa)
-Tree<HistoryRepaPtrFudRepaPtrPair> Alignment::stateFudPairTreesHistoryRepaFudRepaPairTree(const System& uu, const Tree<StatePtrFudPtrPair>& rr)
-{
-    auto fffr = systemsFudsFudRepa_u;
+typedef std::shared_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> HistoryRepaPtrFudRepaPtrPairTreePtr;
+typedef std::pair<HistoryRepaPtrFudRepaPtrPair, HistoryRepaPtrFudRepaPtrPairTreePtr> HistoryRepaPtrFudRepaPtrPairTreePtrPair;
 
-    Tree<HistoryRepaPtrFudRepaPtrPair> tt;
+// systemsStateFudPairTreesHistoryRepaFudRepaPairTree_u :: Tree (State,Fud) -> Tree (HistoryRepa,FudRepa)
+std::unique_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> systemsStateFudPairTreesHistoryRepaFudRepaPairTree_u(const System& uu, const Tree<StatePtrFudPtrPair>& rr)
+{
+    auto sshr = [](const System& uu, const State& ss)
+    {
+	History hh;
+	hh.map_u().insert_or_assign(Id(1),ss);
+	return systemsHistoriesHistoryRepa_u(uu, hh);
+    };
+    auto fffr = systemsFudsFudRepa_u;
+    auto zzzr = systemsStateFudPairTreesHistoryRepaFudRepaPairTree_u;
+
+    auto tt = std::make_unique<Tree<HistoryRepaPtrFudRepaPtrPair>>();
     for (auto& pp : rr._list)
     {
-	auto qq = stateFudPairTreesHistoryRepaFudRepaPairTree(uu, pp.second);
-	auto& ss = pp.first.first;
-	auto& ff = pp.first.second;
-	auto fr = fffr(*uu, *ff);
-	rr->_list.push_back(std::pair<HistoryRepaPtrFudRepaPtrPair,Tree<HistoryRepaPtrFudRepaPtrPair>>(HistoryRepaPtrFudRepaPtrPair(hr,fr), qq));
+	auto hr = sshr(uu, *pp.first._state);
+	auto fr = fffr(uu, *pp.first._fud);
+	HistoryRepaPtrFudRepaPtrPair mm(std::move(hr), std::move(fr));
+	if (pp.second)
+	{
+	    auto qq = zzzr(uu, *pp.second);
+	    tt->_list.push_back(HistoryRepaPtrFudRepaPtrPairTreePtrPair(mm, std::move(qq)));
+	}
+	else
+	    tt->_list.push_back(HistoryRepaPtrFudRepaPtrPairTreePtrPair(mm, HistoryRepaPtrFudRepaPtrPairTreePtr()));
     }
     return tt;
 }
 
 // systemsDecompFudsDecompFudRepa_u :: System -> DecompFud -> DecompFudRepa
-std::unique_ptr<FudRepa> Alignment::systemsDecompFudsDecompFudRepa_u(const System& uu, const DecompFud& df)
+std::unique_ptr<DecompFudRepa> Alignment::systemsDecompFudsDecompFudRepa_u(const System& uu, const DecompFud& df)
 {
-    auto fund = fudsUnderlying;
-    auto tttr = systemsTransformsTransformRepa_u;
-    auto llfr = setVariablesListTransformRepasFudRepa_u;
+    auto sshr = [](const System& uu, const State& ss)
+    {
+	History hh;
+	hh.map_u().insert_or_assign(Id(1), ss);
+	return systemsHistoriesHistoryRepa_u(uu, hh);
+    };
+    auto fffr = systemsFudsFudRepa_u;
+    auto zzzr = systemsStateFudPairTreesHistoryRepaFudRepaPairTree_u;
 
-    auto vv = fund(ff);
-    TransformRepaPtrList ll;
-    for (auto& tt : ff.list_u())
-	ll.push_back(std::move(tttr(uu, *tt)));
-    return llfr(*vv, ll);
+    auto dr = std::make_unique<DecompFudRepa>();
+    auto& rr = df.tree_u();
+    auto& tt = dr->tree;
+    for (auto& pp : rr._list)
+    {
+	auto hr = sshr(uu, *pp.first._state);
+	auto fr = fffr(uu, *pp.first._fud);
+	HistoryRepaPtrFudRepaPtrPair mm(std::move(hr), std::move(fr));
+	if (pp.second)
+	{
+	    auto qq = zzzr(uu, *pp.second);
+	    tt._list.push_back(HistoryRepaPtrFudRepaPtrPairTreePtrPair(mm, std::move(qq)));
+	}
+	else
+	    tt._list.push_back(HistoryRepaPtrFudRepaPtrPairTreePtrPair(mm, HistoryRepaPtrFudRepaPtrPairTreePtr()));
+    }
+    return dr;
 }
-*/
+

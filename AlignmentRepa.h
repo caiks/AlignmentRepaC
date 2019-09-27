@@ -103,8 +103,6 @@ namespace Alignment
 
     // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
     std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, const VarList&, const HistoryRepa&);
-
-
 }
 
 namespace Alignment
