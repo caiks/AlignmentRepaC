@@ -354,7 +354,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -1256,7 +1256,7 @@ void main()
 	    << *drdf(*uu1,*dr) << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1272,27 +1272,35 @@ void main()
 	auto end = chrono::system_clock::now();
 	cout << "df = persistentsDecompFud(istrm) " << ((chrono::duration<double>)(end-start)).count() << "s" << endl;
 
+	auto ff = dfff(*df);
 	cout << "len(fvars(dfff(df)))" << endl
-	    << fvars(*dfff(*df))->size() << endl << endl;
+	    << fvars(*ff)->size() << endl << endl;
 
-	auto uu = fsys(*dfff(*df));
+	auto uu = fsys(*ff);
 	cout << "len(uu)" << endl
 	    << uu->map_u().size() << endl << endl;
 
 	start = chrono::system_clock::now();
-	auto dr = dfdr(*uu,*df);
-	end = chrono::system_clock::now();
-	cout << "dr = dfdr(*uu,*df) " << ((chrono::duration<double>)(end-start)).count() << "s" << endl;
+	std::unique_ptr<DecompFudRepa> dr;
+	try
+	{
+	    dr = dfdr(*uu,*df);
+	    end = chrono::system_clock::now();
+	    cout << "dr = dfdr(*uu,*df) " << ((chrono::duration<double>)(end-start)).count() << "s" << endl;
 
-	start = chrono::system_clock::now();
-	auto df1 = drdf(*uu,*dr);
-	end = chrono::system_clock::now();
-	cout << "df1 = drdf(*uu,*dr) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+	    start = chrono::system_clock::now();
+	    auto df1 = drdf(*uu,*dr);
+	    end = chrono::system_clock::now();
+	    cout << "df1 = drdf(*uu,*dr) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
 
-	cout << "len(fvars(dfff(df1)))" << endl
-	    << fvars(*dfff(*df1))->size() << endl << endl;
-
-
+	    auto ff1 = dfff(*df1);
+	    cout << "len(fvars(dfff(df1)))" << endl
+		<< fvars(*ff1)->size() << endl << endl;
+	}
+	catch (const std::exception& e)
+	{
+	    cout << "caught exception: " << e.what() << endl << endl;
+	}
     }
 
 
