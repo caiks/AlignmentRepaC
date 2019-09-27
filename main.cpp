@@ -354,7 +354,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -1063,6 +1063,236 @@ void main()
 	    << *hrhh(*uu2,*hr1) << endl << endl;
 	cout << "rpln(aall(hraa(uu2,hr1)))" << endl;
 	rpln(cout, sorted(*aall(*hraa(*uu2,*hr1)))); cout << endl;
+    }
+
+    if (false)
+    {
+	auto lluu = listsSystem_u;
+	auto cart = systemsSetVarsSetStateCartesian_u;
+	auto llss = listsState;
+	auto unit = setStatesHistogramUnit_u;
+	auto aall = histogramsList;
+	auto size = histogramsSize;
+	auto resize = histogramsResize;
+	auto norm = [](const Histogram& aa)
+	{
+	    return histogramsResize(1, aa);
+	};
+	auto add = pairHistogramsAdd_u;
+	auto scalar = histogramScalar_u;
+	auto regsing = histogramRegularUnitSingleton_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	auto regcart = histogramRegularCartesian_u;
+	auto ared = [](const Histogram& aa, const VarUSet& vv)
+	{
+	    return setVarsHistogramsReduce(vv, aa);
+	};
+	auto llhh = [llss](const VarList& vv, const IntValListPairList& ee)
+	{
+	    std::vector<IdStatePair> ii;
+	    for (auto& pp : ee)
+	    {
+		auto i = pp.first;
+		auto& ll = pp.second;
+		auto jj = std::vector<VarValPair>();
+		for (int j = 0; j < ll.size(); j++)
+		    jj.push_back(VarValPair(vv[j], ll[j]));
+		ii.push_back(IdStatePair(Id(i), *llss(jj)));
+	    }
+	    return listsHistory_u(ii);
+	};
+	auto hhaa = historiesHistogram;
+	auto trans = [](std::unique_ptr<Histogram>& xx, const VarUSet& ww)
+	{
+	    return std::make_shared<Transform>(std::move(xx), ww);
+	};
+	auto ttaa = transformsHistogram;
+	auto und = transformsUnderlying;
+	auto der = transformsDerived;
+	auto tmul = [](const Histogram& aa, const Transform& tt)
+	{
+	    return transformsHistogramsApply(tt, aa);
+	};
+	auto lltt = [llss, trans](const VarList& kk, const VarList& ww, const ValListList& qq)
+	{
+	    VarList vv(kk.begin(), kk.end());
+	    vv.insert(vv.end(), ww.begin(), ww.end());
+	    std::vector<StateRationalPair> ii;
+	    for (auto& ll : qq)
+	    {
+		auto jj = std::vector<VarValPair>();
+		for (int j = 0; j < ll.size(); j++)
+		    jj.push_back(VarValPair(vv[j], ll[j]));
+		ii.push_back(StateRationalPair(*llss(jj), 1));
+	    }
+	    return trans(std::make_unique<Histogram>(ii), VarUSet(ww.begin(), ww.end()));
+	};
+	auto llff = setTransformsFud_u;
+	auto fhis = fudsSetHistogram;
+	auto fvars = fudsSetVar;
+	auto fder = fudsDerived;
+	auto fund = fudsUnderlying;
+	auto fftt = fudsTransform;
+	auto fsys = fudsSystemImplied;
+	auto dep = fudsSetVarsDepends_u;
+	typedef std::pair<VarValPairList, TransformPtrList> VarValPairListTransformPtrListPair;
+	typedef std::vector<VarValPairListTransformPtrListPair> VarValPairListTransformPtrListPairList;
+	typedef std::vector<VarValPairListTransformPtrListPairList> VarValPairListTransformPtrListPairListList;
+	auto lldf = [llss, llff](const VarValPairListTransformPtrListPairListList& zz)
+	{
+	    auto jj = std::vector<std::vector<StatePtrFudPtrPair>>();
+	    jj.reserve(zz.size());
+	    for (auto& ll : zz)
+	    {
+		auto kk = std::vector<StatePtrFudPtrPair>();
+		kk.reserve(ll.size());
+		for (auto& pp : ll)
+		{
+		    StatePtrFudPtrPair qq(std::move(llss(pp.first)), std::move(llff(pp.second)));
+		    kk.push_back(qq);
+		}
+		jj.push_back(kk);
+	    }
+	    auto tt = std::make_unique<DecompFud>();
+	    tt->tree_u() = *pathsTree(jj);
+	    return tt;
+	};
+	auto dfll = [](const DecompFud& df)
+	{
+	    return treesPaths(df.tree_u());
+	};
+	auto dfund = decompFudsUnderlying;
+	auto dfff = decompFudsFud;
+	auto dfdr = systemsDecompFudsDecompFudRepa_u;
+	auto drdf = systemsDecompFudRepasDecompFud_u;
+
+	auto suit = Variable("suit");
+	auto rank = Variable("rank");
+	auto vv = VarUSet{ suit,rank };
+	auto hearts = Value("hearts");
+	auto clubs = Value("clubs");
+	auto diamonds = Value("diamonds");
+	auto spades = Value("spades");
+	auto wws = ValSet{ hearts,clubs,diamonds,spades };
+	auto jack = Value("J");
+	auto queen = Value("Q");
+	auto king = Value("K");
+	auto ace = Value("A");
+	auto wwr = ValSet{ jack,queen,king,ace };
+	for (int i = 2; i <= 10; i++)
+	    wwr.insert(Value(i));
+	auto uu = lluu(std::vector<VarValSetPair>{VarValSetPair(suit, wws), VarValSetPair(rank, wwr)});
+
+	cout << "uu" << endl
+	    << *uu << endl << endl;
+
+	cout << "vv" << endl
+	    << sorted(vv) << endl << endl;
+
+	auto colour = Variable("colour");
+	auto red = Value("red");
+	auto black = Value("black");
+
+	auto ttc = lltt(VarList{ suit }, VarList{ colour }, ValListList{
+	    ValList{ hearts, red },
+	    ValList{ clubs, black },
+	    ValList{ diamonds, red },
+	    ValList{ spades, black } });
+
+	auto pip_or_face = Variable("pip_or_face");
+	auto pip = Value("pip");
+	auto face = Value("face");
+
+	auto xxt = ValListList{
+	    ValList{ ace, pip },
+	    ValList{ king, face },
+	    ValList{ queen, face },
+	    ValList{ jack, face } };
+	for (int i = 2; i <= 10; i++)
+	    xxt.push_back(ValList{ Value(i),pip });
+
+	auto ttt = lltt(VarList{ rank }, VarList{ pip_or_face }, xxt);
+
+	auto odd_pip = Variable("odd_pip");
+	auto yes = Value("yes");
+	auto no = Value("no");
+
+	auto xxop = ValListList{
+	    ValList{ ace, yes },
+	    ValList{ king, no },
+	    ValList{ queen, no },
+	    ValList{ jack, no } };
+	for (int i = 2; i <= 10; i += 2)
+	    xxop.push_back(ValList{ Value(i),no });
+	for (int i = 3; i <= 9; i += 2)
+	    xxop.push_back(ValList{ Value(i),yes });
+
+	auto ttop = lltt(VarList{ rank }, VarList{ odd_pip }, xxop);
+
+	auto df = lldf(VarValPairListTransformPtrListPairListList{
+	    VarValPairListTransformPtrListPairList{
+	    VarValPairListTransformPtrListPair(VarValPairList{},TransformPtrList{ ttop }),
+	    VarValPairListTransformPtrListPair(VarValPairList{ VarValPair(odd_pip, no) },TransformPtrList{ ttc, ttt }) },
+	    VarValPairListTransformPtrListPairList{
+	    VarValPairListTransformPtrListPair(VarValPairList{},TransformPtrList{ ttop }),
+	    VarValPairListTransformPtrListPair(VarValPairList{ VarValPair(odd_pip, yes) },TransformPtrList{ ttc }) } });
+
+	cout << "df" << endl
+	    << *df << endl << endl;
+
+	cout << "treesSize(dfzz(df))" << endl
+	    << treesSize(df->tree_u()) << endl << endl;
+
+	cout << "dfund(df)" << endl
+	    << sorted(*dfund(*df)) << endl << endl;
+
+	cout << "rpln(dfll(df))" << endl;
+	rpln(cout, *dfll(*df)); cout << endl;
+
+	auto uu1 = fsys(*dfff(*df));
+	auto dr = dfdr(*uu1, *df);
+	cout << "dr = dfdr(uu1,df)" << endl;
+	cout << "drdf(uu1,dr)" << endl
+	    << *drdf(*uu1,*dr) << endl << endl;
+    }
+
+    if (true)
+    {
+	auto fsys = fudsSystemImplied;
+	auto dfund = decompFudsUnderlying;
+	auto dfff = decompFudsFud;
+	auto fvars = fudsSetVar;
+	auto dfdr = systemsDecompFudsDecompFudRepa_u;
+	auto drdf = systemsDecompFudRepasDecompFud_u;
+
+	ifstream istrm("C:/zzz/caiks/NISTPy-master/NIST_model2.json");
+
+	auto start = chrono::system_clock::now();
+	auto df = persistentsDecompFud(istrm);
+	auto end = chrono::system_clock::now();
+	cout << "df = persistentsDecompFud(istrm) " << ((chrono::duration<double>)(end-start)).count() << "s" << endl;
+
+	cout << "len(fvars(dfff(df)))" << endl
+	    << fvars(*dfff(*df))->size() << endl << endl;
+
+	auto uu = fsys(*dfff(*df));
+	cout << "len(uu)" << endl
+	    << uu->map_u().size() << endl << endl;
+
+	start = chrono::system_clock::now();
+	auto dr = dfdr(*uu,*df);
+	end = chrono::system_clock::now();
+	cout << "dr = dfdr(*uu,*df) " << ((chrono::duration<double>)(end-start)).count() << "s" << endl;
+
+	start = chrono::system_clock::now();
+	auto df1 = drdf(*uu,*dr);
+	end = chrono::system_clock::now();
+	cout << "df1 = drdf(*uu,*dr) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	cout << "len(fvars(dfff(df1)))" << endl
+	    << fvars(*dfff(*df1))->size() << endl << endl;
+
+
     }
 
 

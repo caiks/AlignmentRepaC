@@ -699,3 +699,71 @@ std::unique_ptr<DecompFudRepa> Alignment::systemsDecompFudsDecompFudRepa_u(const
     return dr;
 }
 
+
+typedef std::shared_ptr<Tree<StatePtrFudPtrPair>> StatePtrFudPtrPairTreePtr;
+typedef std::pair<StatePtrFudPtrPair, StatePtrFudPtrPairTreePtr> StatePtrFudPtrPairTreePtrPair;
+
+// systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u :: Tree (HistoryRepa,FudRepa) -> Tree (State,Fud)
+std::unique_ptr<Tree<StatePtrFudPtrPair>> systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u(const System& uu, const Tree<HistoryRepaPtrFudRepaPtrPair>& rr)
+{
+    auto hrss = [](const System& uu, const HistoryRepa& hr)
+    {
+	auto hh = systemsHistoryRepasHistory_u(uu,hr);
+	auto it = hh->map_u().begin();
+	if (it != hh->map_u().end())
+	    return std::make_unique<State>(it->second);
+	return std::make_unique<State>(State());
+    };
+    auto frff = systemsFudRepasFud_u;
+    auto zrzz = systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u;
+
+    auto tt = std::make_unique<Tree<StatePtrFudPtrPair>>();
+    for (auto& pp : rr._list)
+    {
+	auto ss = hrss(uu, *pp.first._state);
+	auto ff = frff(uu, *pp.first._fud);
+	StatePtrFudPtrPair mm(std::move(ss), std::move(ff));
+	if (pp.second)
+	{
+	    auto qq = zrzz(uu, *pp.second);
+	    tt->_list.push_back(StatePtrFudPtrPairTreePtrPair(mm, std::move(qq)));
+	}
+	else
+	    tt->_list.push_back(StatePtrFudPtrPairTreePtrPair(mm, StatePtrFudPtrPairTreePtr()));
+    }
+    return tt;
+}
+
+// systemsDecompFudRepasDecompFud_u :: System -> DecompFudRepa -> DecompFud
+std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const System& uu, const DecompFudRepa& dr)
+{
+    auto hrss = [](const System& uu, const HistoryRepa& hr)
+    {
+	auto hh = systemsHistoryRepasHistory_u(uu, hr);
+	auto it = hh->map_u().begin();
+	if (it != hh->map_u().end())
+	    return std::make_unique<State>(it->second);
+	return std::make_unique<State>(State());
+    };
+    auto frff = systemsFudRepasFud_u;
+    auto zrzz = systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u;
+
+    auto df = std::make_unique<DecompFud>();
+    auto& tt = df->tree_u();
+    auto& rr = dr.tree;
+    for (auto& pp : rr._list)
+    {
+	auto ss = hrss(uu, *pp.first._state);
+	auto ff = frff(uu, *pp.first._fud);
+	StatePtrFudPtrPair mm(std::move(ss), std::move(ff));
+	if (pp.second)
+	{
+	    auto qq = zrzz(uu, *pp.second);
+	    tt._list.push_back(StatePtrFudPtrPairTreePtrPair(mm, std::move(qq)));
+	}
+	else
+	    tt._list.push_back(StatePtrFudPtrPairTreePtrPair(mm, StatePtrFudPtrPairTreePtr()));
+    }
+    return df;
+}
+
