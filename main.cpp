@@ -500,6 +500,9 @@ void main()
 	cout << "hraa(uu,hrhrred(hr, VarList{ }))" << endl
 	    << *hraa(*uu, *hrhrred(*hr, VarList{ })) << endl << endl;
 
+	aa = regcart(3, 2);
+	uu = sys(*aa);
+	hr = aahr(*uu, *aa);
 	auto ar1 = hrred(*hr, VarList{ Variable(2),Variable(1) });
 	auto aa1 = araa(*uu, *ar1);
 	cout << "araa(uu,hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
@@ -511,6 +514,9 @@ void main()
 	aa1 = araa(*uu, *ar1);
 	cout << "araa(uu,hrred(hr, VarList{ Variable(1) }))" << endl
 	    << *aa1 << endl << endl;
+	aa = regcart(3, 2);
+	uu = sys(*aa);
+	hr = aahr(*uu, *aa);
 	ar1 = hrred(*hr, VarList{});
 	aa1 = araa(*uu, *ar1);
 	cout << "araa(uu,hrred(hr, VarList{  }))" << endl
