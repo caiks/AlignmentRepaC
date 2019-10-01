@@ -461,50 +461,57 @@ void main()
 	aa = regcart(3, 2);
 	cout << "aa = regcart(3, 2)" << endl;
 
-	hr = aahr(*sys(*aa), *aa);
-	cout << "hr = aahr(sys(aa),aa)" << endl;
-	cout << "hrhh(sys(aa),hr)" << endl
-	    << *hrhh(*sys(*aa), *hr) << endl << endl;
-	cout << "hrhh(sys(aa),hrsel(hr,SizeList{}))" << endl
-	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{})) << endl << endl;
-	cout << "hrhh(sys(aa),hrsel(hr,SizeList{0}))" << endl
-	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{0})) << endl << endl;
-	cout << "hrhh(sys(aa),hrsel(hr,SizeList{0,4,8}))" << endl
-	    << *hrhh(*sys(*aa), *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
+	auto uu = sys(*aa);
+	hr = aahr(*uu, *aa);
+	cout << "hr = aahr(uu,aa)" << endl;
+	cout << "hrhh(uu,hr)" << endl
+	    << *hrhh(*uu, *hr) << endl << endl;
+	cout << "hrhh(uu,hrsel(hr,SizeList{}))" << endl
+	    << *hrhh(*uu, *hrsel(*hr, SizeList{})) << endl << endl;
+	cout << "hrhh(uu,hrsel(hr,SizeList{0}))" << endl
+	    << *hrhh(*uu, *hrsel(*hr, SizeList{0})) << endl << endl;
+	cout << "hrhh(uu,hrsel(hr,SizeList{0,4,8}))" << endl
+	    << *hrhh(*uu, *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
 
 	auto bb = regcart(1,1);
 	cout << "bb = regcart(1,1)" << endl;
-	auto ss = aahr(*sys(*bb), *bb);
-	cout << "ss = aahr(sys(bb),bb)" << endl;
-	cout << "hrhh(sys(aa),hrhrsel(hr,ss))" << endl
-	    << *hrhh(*sys(*aa),*hrhrsel(*hr, *ss)) << endl << endl;
+	auto ss = aahr(*uu, *bb);
+	cout << "ss = aahr(uu,bb)" << endl;
+	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	    << *hrhh(*uu,*hrhrsel(*hr, *ss)) << endl << endl;
 	bb = regcart(2, 1);
 	cout << "bb = regcart(2,1)" << endl;
-	ss = aahr(*sys(*bb), *bb);
-	cout << "ss = aahr(sys(bb),bb)" << endl;
-	cout << "hrhh(sys(aa),hrhrsel(hr,ss))" << endl
-	    << *hrhh(*sys(*aa), *hrhrsel(*hr, *ss)) << endl << endl;
+	ss = aahr(*uu, *bb);
+	cout << "ss = aahr(uu,bb)" << endl;
+	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
 	bb = regcart(3, 1);
 	cout << "bb = regcart(3,1)" << endl;
-	ss = aahr(*sys(*bb), *bb);
-	cout << "ss = aahr(sys(bb),bb)" << endl;
-	cout << "hrhh(sys(aa),hrhrsel(hr,ss))" << endl
-	    << *hrhh(*sys(*aa), *hrhrsel(*hr, *ss)) << endl << endl;
+	ss = aahr(*uu, *bb);
+	cout << "ss = aahr(uu,bb)" << endl;
+	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
 
-	hr = aahr(*sys(*aa), *aa);
-	cout << "hraa(sys(aa),hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
-	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
-	cout << "hraa(sys(aa),hrhrred(hr, VarList{ Variable(1) }))" << endl
-	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ Variable(1) })) << endl << endl;
-	cout << "hraa(sys(aa),hrhrred(hr, VarList{ }))" << endl
-	    << *hraa(*sys(*aa), *hrhrred(*hr, VarList{ })) << endl << endl;
+	hr = aahr(*uu, *aa);
+	cout << "hraa(uu,hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
+	cout << "hraa(uu,hrhrred(hr, VarList{ Variable(1) }))" << endl
+	    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(1) })) << endl << endl;
+	cout << "hraa(uu,hrhrred(hr, VarList{ }))" << endl
+	    << *hraa(*uu, *hrhrred(*hr, VarList{ })) << endl << endl;
 
-	cout << "araa(sys(aa),hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
-	    << *araa(*sys(*aa), *hrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
-	cout << "araa(sys(aa),hrred(hr, VarList{ Variable(1) }))" << endl
-	    << *araa(*sys(*aa), *hrred(*hr, VarList{ Variable(1) })) << endl << endl;
-	cout << "araa(sys(aa),hrred(hr, VarList{  }))" << endl
-	    << *araa(*sys(*aa), *hrred(*hr, VarList{ })) << endl << endl;
+	auto hhr1 = hrred(*hr, VarList{ Variable(2),Variable(1) });
+	auto aa1 = araa(*uu, *hhr1);
+	cout << "araa(uu,hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	    << *aa1 << endl << endl;
+	hhr1 = hrred(*hr, VarList{ Variable(1) });
+	aa1 = araa(*uu, *hhr1);
+	cout << "araa(uu,hrred(hr, VarList{ Variable(1) }))" << endl
+	    << *aa1 << endl << endl;
+	hhr1 = hrred(*hr, VarList{});
+	aa1 = araa(*uu, *hhr1);
+	cout << "araa(uu,hrred(hr, VarList{  }))" << endl
+	    << *aa1 << endl << endl;
 
     }
 

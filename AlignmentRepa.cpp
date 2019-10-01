@@ -3,14 +3,22 @@
 
 using namespace Alignment;
 
+HistogramRepa::HistogramRepa() : _mapVarInt(0)
+{
+}
+
+HistogramRepa::~HistogramRepa()
+{
+    delete _mapVarInt;
+}
+
 VarSizeUMap& Alignment::HistogramRepa::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
-	mm = std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size()));
+	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    mm->insert_or_assign(vectorVar[i], i);
+	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
@@ -76,8 +84,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 	    yy.push_back(w);
     }
     auto aa = std::make_unique<Histogram>();
-    auto& am = aa->map_u();
-    am.reserve(sz);
+    aa->map_u().reserve(sz);
     SizeList ii(n);
     auto rrp = rr.data();
     for (std::size_t j = 0; j < sz; j++)
@@ -85,8 +92,15 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 	std::vector<VarValPair> ss;
 	ss.reserve(n);
 	for (std::size_t i = 0; i < n; i++)
-	    ss.push_back(VarValPair(vv[i], mm[i][ii[i]]));
-	am.insert_or_assign(State(ss), Rational(rrp[j]));
+	{
+	    VarValPair pp(vv[i], mm[i][ii[i]]);
+	    ss.push_back(pp);
+	}
+	State ss1(ss);
+	std::cout << "ss1 : " << ss1 << std::endl;
+	Rational r(rrp[j]);
+	std::cout << "r : " << r << std::endl;
+	aa->map_u().insert_or_assign(ss1,r);
 	for (std::size_t k = n - 1; k >= 0; k--)
 	{
 	    std::size_t y = ii[k] + 1;
@@ -99,6 +113,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 	    }
 	}
     }
+    std::cout << "aa : " << *aa << std::endl;
     return aa;
 }
 
@@ -153,27 +168,43 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(const Va
     return br;
 }
 
+HistogramRepaVec::HistogramRepaVec() : _mapVarInt(0)
+{
+}
+
+HistogramRepaVec::~HistogramRepaVec()
+{
+    delete _mapVarInt;
+}
 
 VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
-	mm = std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size()));
+	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    mm->insert_or_assign(vectorVar[i], i);
+	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
+}
+
+HistoryRepa::HistoryRepa() : _mapVarInt(0), arr(0)
+{
+}
+
+HistoryRepa::~HistoryRepa()
+{
+    delete _mapVarInt;
+    delete arr;
 }
 
 VarSizeUMap& Alignment::HistoryRepa::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	std::unique_ptr<VarSizeUMap>& mm = (std::unique_ptr<VarSizeUMap>&)_mapVarInt;
-	mm = std::unique_ptr<VarSizeUMap>(new VarSizeUMap(vectorVar.size()));
+	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    mm->insert_or_assign(vectorVar[i], i);
+	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
@@ -202,8 +233,8 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	for (auto& w : xx)
 	    yy.insert_or_assign(w, j++);
     }
-    hr->arr = std::unique_ptr<unsigned char[]>(new unsigned char[hr->size * n]);
-    auto rr = hr->arr.get();
+    hr->arr = new unsigned char[hr->size * n];
+    auto rr = hr->arr;
     unsigned char ucmax = std::numeric_limits<unsigned char>::max();
     auto hm = sorted(hh.map_u());
     std::size_t j = 0;
@@ -228,7 +259,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
     auto& vv = hr.vectorVar;
     auto n = vv.size();
     auto& sh = hr.shape;
-    auto rr = hr.arr.get();
+    auto rr = hr.arr;
     auto z = hr.size;
     std::vector<ValList> mm(n);
     for (std::size_t i = 0; i < n; i++)
@@ -262,9 +293,9 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     hr1->size = ll.size();
     hr1->shape = hr.shape;
     auto n = hr.vectorVar.size();
-    auto rr = hr.arr.get();
-    hr1->arr = std::unique_ptr<unsigned char[]>(new unsigned char[hr1->size * n]);
-    auto rr1 = hr1->arr.get();
+    auto rr = hr.arr;
+    hr1->arr = new unsigned char[hr1->size * n];
+    auto rr1 = hr1->arr;
     std::size_t k = 0;
     for (auto j : ll)
     {
@@ -293,8 +324,8 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasHistoryRepasHistoryRepaSelec
     SizeList pkk;
     for (std::size_t i = 0; i < m; i++)
 	pkk.push_back(mvv[kk[i]]);
-    auto rr1 = ss.arr.get();
-    auto rr = hr.arr.get();
+    auto rr1 = ss.arr;
+    auto rr = hr.arr;
     SizeList ll;
     for (std::size_t j = 0; j < z; j++)
     {
@@ -332,9 +363,9 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     skk.reserve(m);
     for (std::size_t i = 0; i < m; i++)
 	skk.push_back(svv[pkk[i]]);
-    auto rr = hr.arr.get();
-    hr1->arr = std::unique_ptr<unsigned char[]>(new unsigned char[z*m]);
-    auto rr1 = hr1->arr.get();
+    auto rr = hr.arr;
+    hr1->arr = new unsigned char[z*m];
+    auto rr1 = hr1->arr;
     std::size_t k = 0;
     for (std::size_t j = 0; j < z; j++)
     {
@@ -372,7 +403,7 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
 	w *= s;
 	skk.push_back(s);
     }
-    auto rr = hr.arr.get();
+    auto rr = hr.arr;
     auto& rr1 = ar1->arr;
     rr1.resize(w);
     auto rr1p = rr1.data();
@@ -392,6 +423,28 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     return ar1;
 }
 
+TransformRepa::TransformRepa() : _mapVarInt(0), derived(0), arr(0)
+{
+}
+
+TransformRepa::~TransformRepa()
+{
+    delete _mapVarInt;
+    delete derived;
+    delete arr;
+}
+
+VarSizeUMap& Alignment::TransformRepa::mapVarInt() const
+{
+    if (!_mapVarInt)
+    {
+	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
+	for (std::size_t i = 0; i < vectorVar.size(); i++)
+	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
+    }
+    return *_mapVarInt;
+}
+
 // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
 std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const System& uu, const Transform& tt)
 {
@@ -400,7 +453,7 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
     auto it = ww.begin();
     if (it == ww.end())
 	return tr;
-    tr->derived = std::make_unique<Variable>(*it);
+    tr->derived = new Variable(*it);
     auto zz = systemsVarsSetValue(uu,*tr->derived);
     auto w = zz.size();
     if (w > std::numeric_limits<unsigned char>::max())
@@ -436,8 +489,8 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 	for (auto& x : xx)
 	    yy.insert_or_assign(x, j++);
     }
-    tr->arr = std::unique_ptr<unsigned char[]>(new unsigned char[sz]);
-    auto rr = tr->arr.get();
+    tr->arr = new unsigned char[sz];
+    auto rr = tr->arr;
     for (auto& sc : tt.histogram_u().map_u())
     {
 	auto& sm = sc.first.map_u();
@@ -457,7 +510,7 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
     auto& vv = tr.vectorVar;
     auto n = vv.size();
     auto& sh = tr.shape;
-    auto rr = tr.arr.get();
+    auto rr = tr.arr;
     if (!tr.derived || !n)
 	return std::make_unique<Transform>();
     auto& w = *tr.derived;
@@ -636,9 +689,9 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	    p++;
 	}
     auto& mkk = hr1->mapVarInt();
-    auto rr = hr.arr.get();
-    hr1->arr = std::unique_ptr<unsigned char[]>(new unsigned char[z*p]);
-    auto rr1 = hr1->arr.get();
+    auto rr = hr.arr;
+    hr1->arr = new unsigned char[z*p];
+    auto rr1 = hr1->arr;
     for (std::size_t j = 0; j < z; j++)
     {
 	std::size_t jn = j*n;
@@ -653,7 +706,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	    auto& vv = tr->vectorVar;
 	    auto& svv = tr->shape;
 	    auto m = vv.size();
-	    auto ar = tr->arr.get();
+	    auto ar = tr->arr;
 	    SizeList pkk;
 	    for (auto& v : vv)
 		pkk.push_back(mkk[v]);

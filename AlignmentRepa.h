@@ -25,10 +25,13 @@ namespace Alignment
 
     struct HistogramRepa
     {
+	HistogramRepa();
+	~HistogramRepa();
+
 	VarList vectorVar;
 
 	VarSizeUMap& mapVarInt() const;
-	std::unique_ptr<VarSizeUMap> _mapVarInt;
+	VarSizeUMap* _mapVarInt;
 
 	SizeList shape;
 	DoubleList arr;
@@ -55,10 +58,13 @@ namespace Alignment
 
     struct HistogramRepaVec
     {
+	HistogramRepaVec();
+	~HistogramRepaVec();
+
 	VarList vectorVar;
 
 	VarSizeUMap& mapVarInt() const;
-	std::unique_ptr<VarSizeUMap> _mapVarInt;
+	VarSizeUMap* _mapVarInt;
 
 	double size;
 	SizeList shape;
@@ -76,14 +82,17 @@ namespace Alignment
 
     struct HistoryRepa
     {
+	HistoryRepa();
+	~HistoryRepa();
+
 	VarList vectorVar;
 
 	VarSizeUMap& mapVarInt() const;
-	std::unique_ptr<VarSizeUMap> _mapVarInt;
+	VarSizeUMap* _mapVarInt;
 
 	std::size_t size;
 	SizeList shape;
-	std::unique_ptr<unsigned char[]> arr;
+	unsigned char* arr;
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
@@ -116,16 +125,19 @@ namespace Alignment
 
     struct TransformRepa
     {
+	TransformRepa();
+	~TransformRepa();
+
 	VarList vectorVar;
 
 	VarSizeUMap& mapVarInt() const;
-	std::unique_ptr<VarSizeUMap> _mapVarInt;
+	VarSizeUMap* _mapVarInt;
 
-	std::unique_ptr<Variable> derived;
+	Variable* derived;
 	unsigned char valency;
 
 	SizeList shape;
-	std::unique_ptr<unsigned char[]> arr;
+	unsigned char* arr;
     };
 
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
