@@ -96,11 +96,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 	    VarValPair pp(vv[i], mm[i][ii[i]]);
 	    ss.push_back(pp);
 	}
-	State ss1(ss);
-	std::cout << "ss1 : " << ss1 << std::endl;
-	Rational r(rrp[j]);
-	std::cout << "r : " << r << std::endl;
-	aa->map_u().insert_or_assign(ss1,r);
+	aa->map_u().insert_or_assign(State(ss),Rational(rrp[j]));
 	for (std::size_t k = n - 1; k >= 0; k--)
 	{
 	    std::size_t y = ii[k] + 1;
@@ -113,7 +109,6 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 	    }
 	}
     }
-    std::cout << "aa : " << *aa << std::endl;
     return aa;
 }
 
@@ -195,7 +190,7 @@ HistoryRepa::HistoryRepa() : _mapVarInt(0), arr(0)
 HistoryRepa::~HistoryRepa()
 {
     delete _mapVarInt;
-    delete arr;
+    delete[] arr;
 }
 
 VarSizeUMap& Alignment::HistoryRepa::mapVarInt() const
@@ -382,8 +377,6 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
 // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
 std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, const VarList& kk, const HistoryRepa& hr)
 {
-//    std::cout << "setVarsHistoryRepasReduce_u enter" << std::endl;
-
     auto n = hr.vectorVar.size();
     auto& svv = hr.shape;
     auto& mvv = hr.mapVarInt();
@@ -418,8 +411,6 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
 	}
     else
 	rr1p[0] = f*z;
-
-//    std::cout << "setVarsHistoryRepasReduce_u leave" << std::endl;
     return ar1;
 }
 
@@ -431,7 +422,7 @@ TransformRepa::~TransformRepa()
 {
     delete _mapVarInt;
     delete derived;
-    delete arr;
+    delete[] arr;
 }
 
 VarSizeUMap& Alignment::TransformRepa::mapVarInt() const
@@ -505,8 +496,6 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 // systemsTransformRepasTransform_u :: System -> TransformRepa -> Transform
 std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const System& uu, const TransformRepa& tr)
 {
-//    std::cout << "systemsTransformRepasTransform_u enter" << std::endl;
-
     auto& vv = tr.vectorVar;
     auto n = vv.size();
     auto& sh = tr.shape;
@@ -559,15 +548,6 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
 	    }
 	}
     }
-//    std::cout << "tt.derived_u() : " << tt->derived_u() << std::endl;
-//    std::cout << "tt.histogram_u() : " << tt->histogram_u() << std::endl;
-//    std::cout << "vv : " << vv << std::endl;
-//    std::cout << "sh : " << sh << std::endl;
-//    std::cout << "ii : " << ii << std::endl;
-//    std::cout << "sz : " << sz << std::endl;
-//    std::cout << "mm : " << mm << std::endl;
-//    std::cout << "systemsTransformRepasTransform_u leave" << std::endl;
-
     return tt;
 }
 
@@ -644,27 +624,18 @@ std::unique_ptr<FudRepa> Alignment::systemsFudsFudRepa_u(const System& uu, const
 // systemsFudRepasFud_u :: System -> FudRepa -> Fud
 std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const FudRepa& fr)
 {
- //   std::cout << "systemsFudRepasFud_u enter" << std::endl;
-
     auto trtt = systemsTransformRepasTransform_u;
 
     auto ff = std::make_unique<Fud>();
     auto& mm = ff->list_u();
-//    std::cout << "fr.layers.size() : " << fr.layers.size() << std::endl;
-//    int j = 0;
     for (auto& ll : fr.layers)
     {
-//	std::cout << "j : " << j++ << std::endl;
-//	std::cout << "ll.size() : " << ll.size() << std::endl;
 	for (auto& tr : ll)
 	{
-//	    std::cout << "tr : " << (std::size_t)tr.get() << std::endl;
 	    auto tt = trtt(uu, *tr);
 	    mm.push_back(std::move(tt));
 	}
     }
-//    std::cout << "systemsFudRepasFud_u leave" << std::endl;
-
     return ff;
 }
 
@@ -814,16 +785,11 @@ std::unique_ptr<Tree<StatePtrFudPtrPair>> systemsHistoryRepaFudRepaPairTreesStat
     auto frff = systemsFudRepasFud_u;
     auto zrzz = systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u;
 
-//    std::cout << "systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u" << std::endl;
-//    int j = 0;
     auto tt = std::make_unique<Tree<StatePtrFudPtrPair>>();
     for (auto& pp : rr._list)
     {
-//	std::cout << "j : " << j++ << std::endl;
 	auto ss = hrss(uu, *pp.first._state);
-//	std::cout << "ss : " << *ss << std::endl;
 	auto ff = frff(uu, *pp.first._fud);
-//	std::cout << "ff : " << (std::size_t)ff.get() << std::endl;
 	StatePtrFudPtrPair mm(std::move(ss), std::move(ff));
 	if (pp.second)
 	{
@@ -853,18 +819,13 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
     auto frff = systemsFudRepasFud_u;
     auto zrzz = systemsHistoryRepaFudRepaPairTreesStateFudPairTree_u;
 
-//    std::cout << "systemsDecompFudRepasDecompFud_u" << std::endl;
     auto df = std::make_unique<DecompFud>();
     auto& tt = df->tree_u();
     auto& rr = dr.tree;
-//    int j = 0;
     for (auto& pp : rr._list)
     {
-//	std::cout << "j : " << j++ << std::endl;
 	auto ss = hrss(uu, *pp.first._state);
-//	std::cout << "ss : " << *ss << std::endl;
 	auto ff = frff(uu, *pp.first._fud);
-//	std::cout << "ff : " << (std::size_t)ff.get() << std::endl;
 	StatePtrFudPtrPair mm(std::move(ss), std::move(ff));
 	if (pp.second)
 	{
