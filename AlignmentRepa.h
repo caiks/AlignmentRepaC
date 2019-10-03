@@ -92,7 +92,7 @@ namespace Alignment
 
 	std::size_t size;
 	SizeList shape;
-	unsigned char* arr;
+	unsigned short* arr;
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
@@ -134,10 +134,10 @@ namespace Alignment
 	VarSizeUMap* _mapVarInt;
 
 	Variable* derived;
-	unsigned char valency;
+	unsigned short valency;
 
 	SizeList shape;
-	unsigned char* arr;
+	unsigned short* arr;
     };
 
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa

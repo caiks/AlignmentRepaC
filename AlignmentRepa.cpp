@@ -228,9 +228,9 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	for (auto& w : xx)
 	    yy.insert_or_assign(w, j++);
     }
-    hr->arr = new unsigned char[hr->size * n];
+    hr->arr = new unsigned short[hr->size * n];
     auto rr = hr->arr;
-    unsigned char ucmax = std::numeric_limits<unsigned char>::max();
+    unsigned short ucmax = std::numeric_limits<unsigned short>::max();
     auto hm = sorted(hh.map_u());
     std::size_t j = 0;
     for (auto& is : hm)
@@ -289,7 +289,7 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     hr1->shape = hr.shape;
     auto n = hr.vectorVar.size();
     auto rr = hr.arr;
-    hr1->arr = new unsigned char[hr1->size * n];
+    hr1->arr = new unsigned short[hr1->size * n];
     auto rr1 = hr1->arr;
     std::size_t k = 0;
     for (auto j : ll)
@@ -359,7 +359,7 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     for (std::size_t i = 0; i < m; i++)
 	skk.push_back(svv[pkk[i]]);
     auto rr = hr.arr;
-    hr1->arr = new unsigned char[z*m];
+    hr1->arr = new unsigned short[z*m];
     auto rr1 = hr1->arr;
     std::size_t k = 0;
     for (std::size_t j = 0; j < z; j++)
@@ -447,7 +447,7 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
     tr->derived = new Variable(*it);
     auto zz = systemsVarsSetValue(uu,*tr->derived);
     auto w = zz.size();
-    if (w > std::numeric_limits<unsigned char>::max())
+    if (w > std::numeric_limits<unsigned short>::max())
 	throw std::out_of_range::out_of_range("systemsTransformsTransformRepa_u");
     tr->valency = w;
     auto qq = transformsUnderlying(tt);
@@ -480,7 +480,7 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 	for (auto& x : xx)
 	    yy.insert_or_assign(x, j++);
     }
-    tr->arr = new unsigned char[sz];
+    tr->arr = new unsigned short[sz];
     auto rr = tr->arr;
     for (auto& sc : tt.histogram_u().map_u())
     {
@@ -661,7 +661,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	}
     auto& mkk = hr1->mapVarInt();
     auto rr = hr.arr;
-    hr1->arr = new unsigned char[z*p];
+    hr1->arr = new unsigned short[z*p];
     auto rr1 = hr1->arr;
     for (std::size_t j = 0; j < z; j++)
     {
