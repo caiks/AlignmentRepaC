@@ -146,7 +146,7 @@ namespace Alignment
     private: VarSizeUMap* _mapVarInt;
 
     public: Variable* derived;
-    public: unsigned char valency;
+    public: std::size_t valency;
 
     public: SizeList shape;
     public: unsigned char* arr;

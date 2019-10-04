@@ -1469,6 +1469,7 @@ void main()
 	auto fder = fudsDerived;
 	auto fund = fudsUnderlying;
 	auto fftt = fudsTransform;
+	auto fsys = fudsSystemImplied;
 	auto dep = fudsSetVarsDepends_u;
 	auto aahr = [](const System& uu, const Histogram& aa)
 	{
@@ -1486,6 +1487,8 @@ void main()
 	{
 	    return systemsHistoryRepasHistory_u(uu, hr);
 	};
+	auto tttr = systemsTransformsTransformRepa_u;
+	auto trtt = systemsTransformRepasTransform_u;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -1568,21 +1571,44 @@ void main()
 	systemsPersistent(*uu, str);
 	auto uu1 = persistentsSystem(str, m);
 
-	auto hr = hhhr(*uu1, *hh);
-	cout << "hr = hhhr(uu1,hh)" << endl;
-	rpln(cout, sorted(*aall(*trim(*hraa(*uu1,*hr))))); cout << endl;
+	{
+	    auto hr = hhhr(*uu1, *hh);
+	    cout << "hr = hhhr(uu1,hh)" << endl;
+	    rpln(cout, sorted(*aall(*trim(*hraa(*uu1,*hr))))); cout << endl;
 
-	std::string filename = "test.bin";
-	std::ofstream out(filename, std::ios::binary);
-	cout << "historyRepasPersistent(hr,out)" << endl;
-	historyRepasPersistent(*hr,out); cout << endl;
-	out.close();
+	    std::string filename = "test.bin";
+	    std::ofstream out(filename, std::ios::binary);
+	    cout << "historyRepasPersistent(hr,out)" << endl;
+	    historyRepasPersistent(*hr,out); cout << endl;
+	    out.close();
 
-	std::ifstream in(filename, std::ios::binary);
-	auto hr2 = persistentsHistoryRepa(in, m);
-	cout << "hr2 = persistentsHistoryRepa(in, m)" << endl;
-	rpln(cout, sorted(*aall(*trim(*hraa(*uu1, *hr2))))); cout << endl;
-	in.close();
+	    std::ifstream in(filename, std::ios::binary);
+	    auto hr2 = persistentsHistoryRepa(in, m);
+	    cout << "hr2 = persistentsHistoryRepa(in, m)" << endl;
+	    rpln(cout, sorted(*aall(*trim(*hraa(*uu1, *hr2))))); cout << endl;
+	    in.close();
+	}
+
+	auto uu2 = fsys(*gg);
+	{
+	    auto tr = tttr(*uu2, *ttcw);
+	    cout << "tr = tttr(uu2,ttcw)" << endl;
+	    cout << "trtt(uu2,tr)" << endl
+		<< *trtt(*uu2, *tr) << endl << endl;
+
+	    std::string filename = "test.bin";
+	    std::ofstream out(filename, std::ios::binary);
+	    cout << "transformRepasPersistent(tr,out)" << endl;
+	    transformRepasPersistent(*tr,out); cout << endl;
+	    out.close();
+
+	    std::ifstream in(filename, std::ios::binary);
+	    auto tr2 = persistentsTransformRepa(in, m);
+	    cout << "tr2 = persistentsTransformRepa(in, m)" << endl;
+	    cout << "trtt(uu2,tr2)" << endl
+		<< *trtt(*uu2,*tr2) << endl << endl;
+	    in.close();
+	}
 
     }
 
