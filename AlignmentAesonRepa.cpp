@@ -55,6 +55,7 @@ std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in,
 	in.read(reinterpret_cast<char*>(&s), sizeof s);
 	sh.push_back(s);
     }
+    hr->arr = new unsigned char[z*n];
     in.read(reinterpret_cast<char*>(hr->arr), z*n);
     return hr;
 }
