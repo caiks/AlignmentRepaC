@@ -26,7 +26,7 @@ using namespace std;
 
 void main()
 {
-    if (false)
+    if (true)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -43,7 +43,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -180,7 +180,7 @@ void main()
 	    << br->arr << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -337,7 +337,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -524,7 +524,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -698,7 +698,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -822,7 +822,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -1081,7 +1081,7 @@ void main()
 	rpln(cout, sorted(*aall(*hraa(*uu2,*hr1)))); cout << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1272,7 +1272,7 @@ void main()
 	    << *drdf(*uu1,*dr) << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;

@@ -23,18 +23,21 @@ namespace Alignment
     //   histogramRepasMapVarInt::Map.Map Variable Int,
     //   histogramRepasArray :: !(Array U VShape Double)
 
-    struct HistogramRepa
+    class HistogramRepa
     {
-	HistogramRepa();
-	~HistogramRepa();
+    public: HistogramRepa();
+    private: HistogramRepa(const HistogramRepa &);
+    public: ~HistogramRepa();
 
-	VarList vectorVar;
+    private: HistogramRepa& operator=(const HistogramRepa &);
 
-	VarSizeUMap& mapVarInt() const;
-	VarSizeUMap* _mapVarInt;
+    public: VarList vectorVar;
 
-	SizeList shape;
-	DoubleList arr;
+    public: VarSizeUMap& mapVarInt() const;
+    private: VarSizeUMap* _mapVarInt;
+
+    public: SizeList shape;
+    public: DoubleList arr;
     };
 
     // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa
@@ -56,19 +59,22 @@ namespace Alignment
     //   histogramRepaVecsShape :: !VShape,
     //   histogramRepaVecsArray :: !(V.Vector(UV.Vector Double))
 
-    struct HistogramRepaVec
+    class HistogramRepaVec
     {
-	HistogramRepaVec();
-	~HistogramRepaVec();
+    public: HistogramRepaVec();
+    private: HistogramRepaVec(const HistogramRepaVec &);
+    public: ~HistogramRepaVec();
 
-	VarList vectorVar;
+    private: HistogramRepaVec& operator=(const HistogramRepaVec &);
 
-	VarSizeUMap& mapVarInt() const;
-	VarSizeUMap* _mapVarInt;
+    public: VarList vectorVar;
 
-	double size;
-	SizeList shape;
-	DoubleListList arr;
+    public: VarSizeUMap& mapVarInt() const;
+    private: VarSizeUMap* _mapVarInt;
+
+    public: double size;
+    public: SizeList shape;
+    public: DoubleListList arr;
     };
 }
 
@@ -80,19 +86,22 @@ namespace Alignment
     //   historyRepasShape :: !VShape,
     //   historyRepasArray :: !(Array U DIM2 Int)
 
-    struct HistoryRepa
+    class HistoryRepa
     {
-	HistoryRepa();
-	~HistoryRepa();
+    public: HistoryRepa();
+    private: HistoryRepa(const HistoryRepa &);
+    public: ~HistoryRepa();
 
-	VarList vectorVar;
+    private: HistoryRepa& operator=(const HistoryRepa &);
 
-	VarSizeUMap& mapVarInt() const;
-	VarSizeUMap* _mapVarInt;
+    public: VarList vectorVar;
 
-	std::size_t size;
-	SizeList shape;
-	unsigned short* arr;
+    public: VarSizeUMap& mapVarInt() const;
+    private: VarSizeUMap* _mapVarInt;
+
+    public: std::size_t size;
+    public: SizeList shape;
+    public: unsigned short* arr;
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
@@ -123,21 +132,24 @@ namespace Alignment
     //   transformRepasValency :: !Int,
     //   transformRepasArray :: !(Array U VShape Int) }
 
-    struct TransformRepa
+    class TransformRepa
     {
-	TransformRepa();
-	~TransformRepa();
+    public: TransformRepa();
+    private: TransformRepa(const TransformRepa &);
+    public: ~TransformRepa();
 
-	VarList vectorVar;
+    private: TransformRepa& operator=(const TransformRepa &);
 
-	VarSizeUMap& mapVarInt() const;
-	VarSizeUMap* _mapVarInt;
+    public: VarList vectorVar;
 
-	Variable* derived;
-	unsigned short valency;
+    public: VarSizeUMap& mapVarInt() const;
+    private: VarSizeUMap* _mapVarInt;
 
-	SizeList shape;
-	unsigned short* arr;
+    public: Variable* derived;
+    public: unsigned short valency;
+
+    public: SizeList shape;
+    public: unsigned short* arr;
     };
 
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
