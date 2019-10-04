@@ -26,7 +26,7 @@ using namespace std;
 
 void main()
 {
-    if (true)
+    if (false)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -43,7 +43,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -180,7 +180,7 @@ void main()
 	    << br->arr << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -337,7 +337,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -354,7 +354,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -524,7 +524,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -698,7 +698,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -822,7 +822,7 @@ void main()
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -1081,7 +1081,7 @@ void main()
 	rpln(cout, sorted(*aall(*hraa(*uu2,*hr1)))); cout << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1272,7 +1272,7 @@ void main()
 	    << *drdf(*uu1,*dr) << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1319,5 +1319,64 @@ void main()
 	}
     }
 
+    if (true)
+    {
+	auto fsys = fudsSystemImplied;
+	auto dfund = decompFudsUnderlying;
+	auto dfff = decompFudsFud;
+	auto fvars = fudsSetVar;
+	auto dfdr = systemsDecompFudsDecompFudRepa_u;
+	auto drdf = systemsDecompFudRepasDecompFud_u;
+
+	ifstream istrm("C:/zzz/caiks/NISTPy-master/NIST_model24.json");
+
+	auto start = chrono::system_clock::now();
+	auto df = persistentsDecompFud(istrm);
+	auto end = chrono::system_clock::now();
+	cout << "df = persistentsDecompFud(istrm) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	auto ff = dfff(*df);
+	cout << "len(fvars(dfff(df)))" << endl
+	    << fvars(*ff)->size() << endl << endl;
+
+	auto uu = fsys(*ff);
+	cout << "len(uu)" << endl
+	    << uu->map_u().size() << endl << endl;
+
+	start = chrono::system_clock::now();
+	std::unique_ptr<DecompFudRepa> dr;
+	try
+	{
+	    dr = dfdr(*uu, *df);
+	    end = chrono::system_clock::now();
+	    cout << "dr = dfdr(*uu,*df) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    auto df1 = drdf(*uu, *dr);
+	    end = chrono::system_clock::now();
+	    cout << "df1 = drdf(*uu,*dr) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    auto ff1 = dfff(*df1);
+	    cout << "len(fvars(dfff(df1)))" << endl
+		<< fvars(*ff1)->size() << endl << endl;
+	}
+	catch (const std::exception& e)
+	{
+	    cout << "caught exception: " << e.what() << endl << endl;
+	}
+	/*
+	df = persistentsDecompFud(istrm) 10.8109s
+	len(fvars(dfff(df)))
+	5966
+
+	len(uu)
+	5966
+
+	dr = dfdr(*uu,*df) 4.08723s
+	df1 = drdf(*uu,*dr) 4.00923s
+	len(fvars(dfff(df1)))
+	5966
+	*/
+    }
 
 }
