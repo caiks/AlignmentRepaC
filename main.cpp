@@ -25,9 +25,9 @@ using namespace Alignment;
 namespace js = rapidjson;
 using namespace std;
 
-void main()
+int main(int argc, char **argv)
 {
-    if (false)
+    if (true)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -44,7 +44,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -181,7 +181,7 @@ void main()
 	    << br->arr << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -338,7 +338,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -355,7 +355,7 @@ void main()
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -525,7 +525,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -699,7 +699,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -823,7 +823,7 @@ void main()
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -883,7 +883,7 @@ void main()
 	auto algn = histogramsAlignment;
 	auto trans = [](std::unique_ptr<Histogram>& xx, const VarUSet& ww)
 	{
-	    return std::make_shared<Transform>(std::move(xx), ww);
+	    return std::make_shared<Transform>(xx, ww);
 	};
 	auto ttaa = transformsHistogram;
 	auto und = transformsUnderlying;
@@ -904,7 +904,8 @@ void main()
 		    jj.push_back(VarValPair(vv[j], ll[j]));
 		ii.push_back(StateRationalPair(*llss(jj), 1));
 	    }
-	    return trans(std::make_unique<Histogram>(ii), VarUSet(ww.begin(), ww.end()));
+            auto aa = std::make_unique<Histogram>(ii);
+	    return trans(aa, VarUSet(ww.begin(), ww.end()));
 	};
 	auto llff = setTransformsFud_u;
 	auto fhis = fudsSetHistogram;
@@ -1082,7 +1083,7 @@ void main()
 	rpln(cout, sorted(*aall(*hraa(*uu2,*hr1)))); cout << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1121,7 +1122,7 @@ void main()
 	auto hhaa = historiesHistogram;
 	auto trans = [](std::unique_ptr<Histogram>& xx, const VarUSet& ww)
 	{
-	    return std::make_shared<Transform>(std::move(xx), ww);
+	    return std::make_shared<Transform>(xx, ww);
 	};
 	auto ttaa = transformsHistogram;
 	auto und = transformsUnderlying;
@@ -1142,7 +1143,8 @@ void main()
 		    jj.push_back(VarValPair(vv[j], ll[j]));
 		ii.push_back(StateRationalPair(*llss(jj), 1));
 	    }
-	    return trans(std::make_unique<Histogram>(ii), VarUSet(ww.begin(), ww.end()));
+            auto aa = std::make_unique<Histogram>(ii);
+	    return trans(aa, VarUSet(ww.begin(), ww.end()));
 	};
 	auto llff = setTransformsFud_u;
 	auto fhis = fudsSetHistogram;
@@ -1273,7 +1275,7 @@ void main()
 	    << *drdf(*uu1,*dr) << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1320,7 +1322,7 @@ void main()
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1440,7 +1442,7 @@ void main()
 	auto algn = histogramsAlignment;
 	auto trans = [](std::unique_ptr<Histogram>& xx, const VarUSet& ww)
 	{
-	    return std::make_shared<Transform>(std::move(xx), ww);
+	    return std::make_shared<Transform>(xx, ww);
 	};
 	auto ttaa = transformsHistogram;
 	auto und = transformsUnderlying;
@@ -1461,7 +1463,8 @@ void main()
 		    jj.push_back(VarValPair(vv[j], ll[j]));
 		ii.push_back(StateRationalPair(*llss(jj), 1));
 	    }
-	    return trans(std::make_unique<Histogram>(ii), VarUSet(ww.begin(), ww.end()));
+            auto aa = std::make_unique<Histogram>(ii);
+	    return trans(aa, VarUSet(ww.begin(), ww.end()));
 	};
 	auto llff = setTransformsFud_u;
 	auto fhis = fudsSetHistogram;
@@ -1611,5 +1614,5 @@ void main()
 	}
 
     }
-
+    return 0;
 }

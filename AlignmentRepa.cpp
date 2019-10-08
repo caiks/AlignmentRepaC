@@ -16,9 +16,9 @@ VarSizeUMap& Alignment::HistogramRepa::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
+	const_cast<HistogramRepa*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
+	    const_cast<HistogramRepa*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
@@ -176,9 +176,9 @@ VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
+	const_cast<HistogramRepaVec*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
+	    const_cast<HistogramRepaVec*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
@@ -197,9 +197,9 @@ VarSizeUMap& Alignment::HistoryRepa::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
+	const_cast<HistoryRepa*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
+	    const_cast<HistoryRepa*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
@@ -240,7 +240,7 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	{
 	    std::size_t k = mm[i][sm.find(vv[i])->second];
 	    if (k > ucmax)
-		throw std::out_of_range::out_of_range("systemsHistoriesHistoryRepa_u");
+		throw std::out_of_range("systemsHistoriesHistoryRepa_u");
 	    rr[j] = k;
 	    j++;
 	}
@@ -429,9 +429,9 @@ VarSizeUMap& Alignment::TransformRepa::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	((VarSizeUMap*)_mapVarInt) = new VarSizeUMap(vectorVar.size());
+	const_cast<TransformRepa*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
 	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    ((VarSizeUMap*)_mapVarInt)->insert_or_assign(vectorVar[i], i);
+	    const_cast<TransformRepa*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
@@ -448,7 +448,7 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
     auto zz = systemsVarsSetValue(uu,*tr->derived);
     auto w = zz.size();
     if (w > std::numeric_limits<unsigned char>::max())
-	throw std::out_of_range::out_of_range("systemsTransformsTransformRepa_u");
+	throw std::out_of_range("systemsTransformsTransformRepa_u");
     tr->valency = w;
     auto qq = transformsUnderlying(tt);
     auto n = qq->size();

@@ -25,3 +25,19 @@ cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /O2 main.cpp Ali
 
 main
 ```
+```
+Ubuntu debug -
+```sh
+git clone https://github.com/Tencent/rapidjson.git
+
+cd AlignmentC
+
+g++ -I../rapidjson/include -std=gnu++17 -g -c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
+
+cd ../AlignmentRepaC
+
+g++ -I../rapidjson/include -std=gnu++17 -g -o main main.cpp AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
+
+./main
+
+```
