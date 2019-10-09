@@ -97,7 +97,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 	    ss.push_back(pp);
 	}
 	aa->map_u().insert_or_assign(State(ss),Rational(rrp[j]));
-	for (std::size_t k = n - 1; k >= 0; k--)
+	for (int k = n - 1; k >= 0; k--)
 	{
 	    std::size_t y = ii[k] + 1;
 	    if (y == sh[k])
@@ -148,7 +148,7 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(const Va
 	for (std::size_t i = 0; i < m; i++)
 	    k = skk[i]*k + ivv[pkk[i]];
 	rkkp[k] += rvvp[j];
-	for (std::size_t i = n - 1; i >= 0; i--)
+	for (int i = n - 1; i >= 0; i--)
 	{
 	    std::size_t y = ivv[i] + 1;
 	    if (y == svv[i])
@@ -536,7 +536,7 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
 	    ss.push_back(VarValPair(vv[i], mm[i][ii[i]]));
 	ss.push_back(VarValPair(w, mm[n][rr[j]]));
 	am.insert_or_assign(State(ss), Rational(1));
-	for (std::size_t k = n - 1; k >= 0; k--)
+	for (int k = n - 1; k >= 0; k--)
 	{
 	    std::size_t y = ii[k] + 1;
 	    if (y == sh[k])
