@@ -28,10 +28,10 @@ namespace Alignment
 
     private: SystemRepa& operator=(const SystemRepa &);
 
-    public: VarSizePairList varSizePairList;
+    public: VarSizePairList listVarSizePair;
 
-    public: VarSizeUMap& varSizeUMap() const;
-    private: VarSizeUMap* _varSizeUMap;
+    public: VarSizeUMap& mapVarSize() const;
+    private: VarSizeUMap* _mapVarSize;
     };
 
     // systemsSystemRepa :: System -> SystemRepa

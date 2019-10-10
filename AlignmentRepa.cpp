@@ -3,32 +3,32 @@
 
 using namespace Alignment;
 
-SystemRepa::SystemRepa() : _varSizeUMap(0)
+SystemRepa::SystemRepa() : _mapVarSize(0)
 {
 }
 
 SystemRepa::~SystemRepa()
 {
-    delete _varSizeUMap;
+    delete _mapVarSize;
 }
 
-VarSizeUMap& Alignment::SystemRepa::varSizeUMap() const
+VarSizeUMap& Alignment::SystemRepa::mapVarSize() const
 {
-    if (!_varSizeUMap)
-	const_cast<SystemRepa*>(this)->_varSizeUMap = new VarSizeUMap(varSizePairList.size());
-    if (_varSizeUMap->size() < varSizePairList.size())
+    if (!_mapVarSize)
+	const_cast<SystemRepa*>(this)->_mapVarSize = new VarSizeUMap(listVarSizePair.size());
+    if (_mapVarSize->size() < listVarSizePair.size())
     {
-	for (std::size_t i = _varSizeUMap->size(); i < varSizePairList.size(); i++)
-	    const_cast<SystemRepa*>(this)->_varSizeUMap->insert_or_assign(varSizePairList[i].first, i);
+	for (std::size_t i = _mapVarSize->size(); i < listVarSizePair.size(); i++)
+	    const_cast<SystemRepa*>(this)->_mapVarSize->insert_or_assign(listVarSizePair[i].first, i);
     }
-    return *_varSizeUMap;
+    return *_mapVarSize;
 }
 
 // systemsSystemRepa :: System -> SystemRepa
 std::unique_ptr<SystemRepa> Alignment::systemsSystemRepa(const System& uu)
 {
     auto ur = std::make_unique<SystemRepa>();
-    auto& ll = ur->varSizePairList;
+    auto& ll = ur->listVarSizePair;
     auto mm = sorted(uu.map_u());
     ll.reserve(mm.size());
     for (auto& vww : mm)
@@ -39,7 +39,7 @@ std::unique_ptr<SystemRepa> Alignment::systemsSystemRepa(const System& uu)
 // systemsRepasSystem :: SystemRepa -> System
 void Alignment::systemsRepasSystem(const SystemRepa& ur, System& uu)
 {
-    for (auto& vs : ur.varSizePairList)
+    for (auto& vs : ur.listVarSizePair)
     {
 	auto it = uu.map_u().find(vs.first);
 	if (it == uu.map_u().end())

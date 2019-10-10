@@ -48,18 +48,18 @@ int main(int argc, char **argv)
 
 	auto ur = uuur(*uu);
 	cout << "ur = uuur(*uu)" << endl;
-	cout << "ur.varSizePairList" << endl
-	    << ur->varSizePairList << endl << endl;
-	cout << "ur.varSizeUMap()" << endl
-	    << ur->varSizeUMap() << endl << endl;
+	cout << "ur.listVarSizePair" << endl
+	    << ur->listVarSizePair << endl << endl;
+	cout << "ur.mapVarSize()" << endl
+	    << ur->mapVarSize() << endl << endl;
 
-	ur->varSizePairList.push_back(VarSizePair(Variable(98), 3));
-	ur->varSizePairList.push_back(VarSizePair(Variable(99), 5));
+	ur->listVarSizePair.push_back(VarSizePair(Variable(98), 3));
+	ur->listVarSizePair.push_back(VarSizePair(Variable(99), 5));
 
-	cout << "ur.varSizePairList" << endl
-	    << ur->varSizePairList << endl << endl;
-	cout << "ur.varSizeUMap()" << endl
-	    << ur->varSizeUMap() << endl << endl;
+	cout << "ur.listVarSizePair" << endl
+	    << ur->listVarSizePair << endl << endl;
+	cout << "ur.mapVarSize()" << endl
+	    << ur->mapVarSize() << endl << endl;
 
 	uruu(*ur,*uu);
 	cout << "uruu(ur,uu)" << endl;
