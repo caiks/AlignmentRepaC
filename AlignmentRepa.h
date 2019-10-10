@@ -9,12 +9,38 @@
 
 namespace Alignment
 {
+    typedef std::pair<Variable, std::size_t> VarSizePair;
+    typedef std::vector<VarSizePair> VarSizePairList;
     typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
 }
+
+namespace Alignment
+{
+    class SystemRepa
+    {
+    public: SystemRepa();
+    private: SystemRepa(const SystemRepa &);
+    public: ~SystemRepa();
+
+    private: SystemRepa& operator=(const SystemRepa &);
+
+    public: VarSizePairList varSizePairList;
+
+    public: VarSizeUMap& varSizeUMap() const;
+    private: VarSizeUMap* _varSizeUMap;
+    };
+
+    // systemsSystemRepa :: System -> SystemRepa
+    std::unique_ptr<SystemRepa> systemsSystemRepa(const System&);
+
+    // systemsRepasSystem :: SystemRepa -> System
+    void systemsRepasSystem(const SystemRepa&, System&);
+}
+
 
 namespace Alignment
 {

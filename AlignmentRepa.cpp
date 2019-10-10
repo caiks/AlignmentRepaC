@@ -3,6 +3,55 @@
 
 using namespace Alignment;
 
+SystemRepa::SystemRepa() : _varSizeUMap(0)
+{
+}
+
+SystemRepa::~SystemRepa()
+{
+    delete _varSizeUMap;
+}
+
+VarSizeUMap& Alignment::SystemRepa::varSizeUMap() const
+{
+    if (!_varSizeUMap)
+	const_cast<SystemRepa*>(this)->_varSizeUMap = new VarSizeUMap(varSizePairList.size());
+    if (_varSizeUMap->size() < varSizePairList.size())
+    {
+	for (std::size_t i = _varSizeUMap->size(); i < varSizePairList.size(); i++)
+	    const_cast<SystemRepa*>(this)->_varSizeUMap->insert_or_assign(varSizePairList[i].first, i);
+    }
+    return *_varSizeUMap;
+}
+
+// systemsSystemRepa :: System -> SystemRepa
+std::unique_ptr<SystemRepa> Alignment::systemsSystemRepa(const System& uu)
+{
+    auto ur = std::make_unique<SystemRepa>();
+    auto& ll = ur->varSizePairList;
+    auto mm = sorted(uu.map_u());
+    ll.reserve(mm.size());
+    for (auto& vww : mm)
+	ll.push_back(VarSizePair(vww.first, vww.second.size()));
+    return ur;
+}
+
+// systemsRepasSystem :: SystemRepa -> System
+void Alignment::systemsRepasSystem(const SystemRepa& ur, System& uu)
+{
+    for (auto& vs : ur.varSizePairList)
+    {
+	auto it = uu.map_u().find(vs.first);
+	if (it == uu.map_u().end())
+	{
+	    ValSet ww;
+	    for (int i = 0; i < vs.second; i++)
+		ww.insert(Value(i));
+	    uu.map_u().insert_or_assign(vs.first, ww);
+	}
+    }
+}
+
 HistogramRepa::HistogramRepa() : _mapVarInt(0)
 {
 }

@@ -27,6 +27,46 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
+    if (true)
+    {
+	auto regcart = histogramRegularCartesian_u;
+	auto regsing = histogramRegularUnitSingleton_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	auto sys = histogramsSystemImplied;
+	auto uuur = systemsSystemRepa;
+	auto uruu = systemsRepasSystem;
+
+	auto aa = regdiag(2, 2);
+	cout << "aa = regdiag(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	auto uu = sys(*aa);
+	cout << "uu = sys(aa)" << endl;
+	cout << "uu" << endl
+	    << *uu << endl << endl;
+
+	auto ur = uuur(*uu);
+	cout << "ur = uuur(*uu)" << endl;
+	cout << "ur.varSizePairList" << endl
+	    << ur->varSizePairList << endl << endl;
+	cout << "ur.varSizeUMap()" << endl
+	    << ur->varSizeUMap() << endl << endl;
+
+	ur->varSizePairList.push_back(VarSizePair(Variable(98), 3));
+	ur->varSizePairList.push_back(VarSizePair(Variable(99), 5));
+
+	cout << "ur.varSizePairList" << endl
+	    << ur->varSizePairList << endl << endl;
+	cout << "ur.varSizeUMap()" << endl
+	    << ur->varSizeUMap() << endl << endl;
+
+	uruu(*ur,*uu);
+	cout << "uruu(ur,uu)" << endl;
+	cout << "uu" << endl
+	    << *uu << endl << endl;
+    }
+
     if (false)
     {
 	auto suit = Variable("suit");
@@ -1834,7 +1874,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	cout << "sizeof(std::size_t): " << sizeof(std::size_t) << endl;
 	cout << "sizeof(Variable): " << sizeof(Variable) << endl;
