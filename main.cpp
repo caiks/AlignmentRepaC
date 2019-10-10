@@ -1735,7 +1735,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1832,6 +1832,12 @@ int main(int argc, char **argv)
 	len(fvars(dfff(df2)))
 	5966
 	*/
+    }
+
+    if (true)
+    {
+	cout << "sizeof(std::size_t): " << sizeof(std::size_t) << endl;
+	cout << "sizeof(Variable): " << sizeof(Variable) << endl;
     }
 
 
