@@ -24,6 +24,12 @@ namespace Alignment
     // persistentsFudRepa :: FudRepaPersistent -> Maybe FudRepa
     std::unique_ptr<FudRepa> persistentsFudRepa(std::istream&, StrVarPtrMap&);
 
+    // decompFudRepasPersistent :: DecompFudRepa -> DecompFudRepaPersistent
+    void decompFudRepasPersistent(const DecompFudRepa&, std::ostream&);
+
+    // persistentsDecompFudRepa :: DecompFudRepaPersistent -> Maybe DecompFudRepa
+    std::unique_ptr<DecompFudRepa> persistentsDecompFudRepa(std::istream&, StrVarPtrMap&);
+
 
 }
 

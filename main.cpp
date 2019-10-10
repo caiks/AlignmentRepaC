@@ -1382,7 +1382,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1634,7 +1634,206 @@ int main(int argc, char **argv)
 		<< *frff(*uu2, *fr2) << endl << endl;
 	    in.close();
 	}
-
     }
+
+    if (false)
+    {
+	auto fsys = fudsSystemImplied;
+	auto dfund = decompFudsUnderlying;
+	auto dfff = decompFudsFud;
+	auto fvars = fudsSetVar;
+	auto dfdr = systemsDecompFudsDecompFudRepa_u;
+	auto drdf = systemsDecompFudRepasDecompFud_u;
+
+	ifstream istrm("C:/zzz/caiks/NISTPy-master/NIST_model2.json");
+
+	auto start = chrono::system_clock::now();
+	auto df = persistentsDecompFud(istrm);
+	auto end = chrono::system_clock::now();
+	cout << "df = persistentsDecompFud(istrm) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	auto ff = dfff(*df);
+	cout << "len(fvars(dfff(df)))" << endl
+	    << fvars(*ff)->size() << endl << endl;
+
+	auto uu = fsys(*ff);
+	cout << "len(uu)" << endl
+	    << uu->map_u().size() << endl << endl;
+
+	std::unique_ptr<DecompFudRepa> dr;
+	try
+	{
+	    StrVarPtrMap m;
+
+	    start = chrono::system_clock::now();
+	    std::stringstream str;
+	    systemsPersistent(*uu, str);
+	    end = chrono::system_clock::now();
+	    cout << "systemsPersistent(*uu, str) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    auto uu1 = persistentsSystem(str, m);
+	    end = chrono::system_clock::now();
+	    cout << "persistentsSystem(str, m) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    cout << "len(uu1)" << endl
+		<< uu1->map_u().size() << endl << endl;
+
+	    start = chrono::system_clock::now();
+	    dr = dfdr(*uu, *df);
+	    end = chrono::system_clock::now();
+	    cout << "dr = dfdr(*uu,*df) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    std::string filename = "test.bin";
+	    std::ofstream out(filename, std::ios::binary);
+	    decompFudRepasPersistent(*dr, out); cout << endl;
+	    out.close();
+	    end = chrono::system_clock::now();
+	    cout << "decompFudRepasPersistent(dr,out) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    std::ifstream in(filename, std::ios::binary);
+	    auto dr2 = persistentsDecompFudRepa(in, m);
+	    in.close();
+	    end = chrono::system_clock::now();
+	    cout << "dr2 = persistentsDecompFudRepa(in, m) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    auto df2 = drdf(*uu, *dr2);
+	    end = chrono::system_clock::now();
+	    cout << "df2 = drdf(*uu,*dr2) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    auto ff2 = dfff(*df2);
+	    cout << "len(fvars(dfff(df2)))" << endl
+		<< fvars(*ff2)->size() << endl << endl;
+	}
+	catch (const std::exception& e)
+	{
+	    cout << "caught exception: " << e.what() << endl << endl;
+	}
+	/*
+	df = persistentsDecompFud(istrm) 0.156003s
+	len(fvars(dfff(df)))
+	515
+
+	len(uu)
+	515
+
+	systemsPersistent(*uu, str) 0s
+	persistentsSystem(str, m) 0s
+	len(uu1)
+	515
+
+	dr = dfdr(*uu,*df) 0.0312006s
+
+	decompFudRepasPersistent(dr,out) 0s
+	dr2 = persistentsDecompFudRepa(in, m) 0s
+	df2 = drdf(*uu,*dr2) 0.0624012s
+	len(fvars(dfff(df2)))
+	515
+	*/
+    }
+
+    if (true)
+    {
+	auto fsys = fudsSystemImplied;
+	auto dfund = decompFudsUnderlying;
+	auto dfff = decompFudsFud;
+	auto fvars = fudsSetVar;
+	auto dfdr = systemsDecompFudsDecompFudRepa_u;
+	auto drdf = systemsDecompFudRepasDecompFud_u;
+
+	ifstream istrm("C:/zzz/caiks/NISTPy-master/NIST_model24.json");
+
+	auto start = chrono::system_clock::now();
+	auto df = persistentsDecompFud(istrm);
+	auto end = chrono::system_clock::now();
+	cout << "df = persistentsDecompFud(istrm) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	auto ff = dfff(*df);
+	cout << "len(fvars(dfff(df)))" << endl
+	    << fvars(*ff)->size() << endl << endl;
+
+	auto uu = fsys(*ff);
+	cout << "len(uu)" << endl
+	    << uu->map_u().size() << endl << endl;
+
+	std::unique_ptr<DecompFudRepa> dr;
+	try
+	{
+	    StrVarPtrMap m;
+
+	    start = chrono::system_clock::now();
+	    std::stringstream str;
+	    systemsPersistent(*uu, str);
+	    end = chrono::system_clock::now();
+	    cout << "systemsPersistent(*uu, str) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    auto uu1 = persistentsSystem(str, m);
+	    end = chrono::system_clock::now();
+	    cout << "persistentsSystem(str, m) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    cout << "len(uu1)" << endl
+		<< uu1->map_u().size() << endl << endl;
+
+	    start = chrono::system_clock::now();
+	    dr = dfdr(*uu, *df);
+	    end = chrono::system_clock::now();
+	    cout << "dr = dfdr(*uu,*df) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    std::string filename = "test.bin";
+	    std::ofstream out(filename, std::ios::binary);
+	    decompFudRepasPersistent(*dr, out); cout << endl;
+	    out.close();
+	    end = chrono::system_clock::now();
+	    cout << "decompFudRepasPersistent(dr,out) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    std::ifstream in(filename, std::ios::binary);
+	    auto dr2 = persistentsDecompFudRepa(in, m);
+	    in.close();
+	    end = chrono::system_clock::now();
+	    cout << "dr2 = persistentsDecompFudRepa(in, m) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    start = chrono::system_clock::now();
+	    auto df2 = drdf(*uu, *dr2);
+	    end = chrono::system_clock::now();
+	    cout << "df2 = drdf(*uu,*dr2) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	    auto ff2 = dfff(*df2);
+	    cout << "len(fvars(dfff(df2)))" << endl
+		<< fvars(*ff2)->size() << endl << endl;
+	}
+	catch (const std::exception& e)
+	{
+	    cout << "caught exception: " << e.what() << endl << endl;
+	}
+	/*
+	df = persistentsDecompFud(istrm) 11.4818s
+	len(fvars(dfff(df)))
+	5966
+
+	len(uu)
+	5966
+
+	systemsPersistent(*uu, str) 0.0624012s
+	persistentsSystem(str, m) 0.124802s
+	len(uu1)
+	5966
+
+	dr = dfdr(*uu,*df) 4.19648s
+
+	decompFudRepasPersistent(dr,out) 0.655213s
+	dr2 = persistentsDecompFudRepa(in, m) 0.156003s
+	df2 = drdf(*uu,*dr2) 4.14968s
+	len(fvars(dfff(df2)))
+	5966
+	*/
+    }
+
+
     return 0;
 }
