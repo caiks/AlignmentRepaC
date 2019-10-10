@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    if (true)
+    if (false)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 	    << br->arr << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -338,7 +338,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto suit = Variable("suit");
 	auto rank = Variable("rank");
@@ -355,7 +355,7 @@ int main(int argc, char **argv)
 	    << hr.mapVarInt() << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -525,7 +525,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -699,7 +699,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -823,7 +823,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -1083,7 +1083,7 @@ int main(int argc, char **argv)
 	rpln(cout, sorted(*aall(*hraa(*uu2,*hr1)))); cout << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1275,7 +1275,7 @@ int main(int argc, char **argv)
 	    << *drdf(*uu1,*dr) << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1322,7 +1322,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -1492,6 +1492,8 @@ int main(int argc, char **argv)
 	};
 	auto tttr = systemsTransformsTransformRepa_u;
 	auto trtt = systemsTransformRepasTransform_u;
+	auto fffr = systemsFudsFudRepa_u;
+	auto frff = systemsFudRepasFud_u;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -1610,6 +1612,26 @@ int main(int argc, char **argv)
 	    cout << "tr2 = persistentsTransformRepa(in, m)" << endl;
 	    cout << "trtt(uu2,tr2)" << endl
 		<< *trtt(*uu2,*tr2) << endl << endl;
+	    in.close();
+	}
+
+	{
+	    auto fr = fffr(*uu2, *gg);
+	    cout << "fr = fffr(uu2,gg)" << endl;
+	    cout << "frff(uu2, fr)" << endl
+		<< *frff(*uu2, *fr) << endl << endl;
+
+	    std::string filename = "test.bin";
+	    std::ofstream out(filename, std::ios::binary);
+	    cout << "fudRepasPersistent(fr,out)" << endl;
+	    fudRepasPersistent(*fr, out); cout << endl;
+	    out.close();
+
+	    std::ifstream in(filename, std::ios::binary);
+	    auto fr2 = persistentsFudRepa(in, m);
+	    cout << "fr2 = persistentsFudRepa(in, m)" << endl;
+	    cout << "frff(uu2, fr2)" << endl
+		<< *frff(*uu2, *fr2) << endl << endl;
 	    in.close();
 	}
 
