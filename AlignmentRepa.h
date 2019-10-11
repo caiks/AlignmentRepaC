@@ -83,33 +83,33 @@ namespace Alignment
 std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepa&);
 
 
-namespace Alignment
-{
-    // data HistogramRepaVec = HistogramRepaVec {
-    //   histogramRepaVecsVectorVar :: !(V.Vector Variable),
-    //   histogramRepaVecsMapVarInt::Map.Map Variable Int,
-    //   histogramRepaVecsSize :: !Double,
-    //   histogramRepaVecsShape :: !VShape,
-    //   histogramRepaVecsArray :: !(V.Vector(UV.Vector Double))
-
-    class HistogramRepaVec
-    {
-    public: HistogramRepaVec();
-    private: HistogramRepaVec(const HistogramRepaVec &);
-    public: ~HistogramRepaVec();
-
-    private: HistogramRepaVec& operator=(const HistogramRepaVec &);
-
-    public: VarList vectorVar;
-
-    public: VarSizeUMap& mapVarInt() const;
-    private: VarSizeUMap* _mapVarInt;
-
-    public: double size;
-    public: SizeList shape;
-    public: DoubleListList arr;
-    };
-}
+//namespace Alignment
+//{
+//    // data HistogramRepaVec = HistogramRepaVec {
+//    //   histogramRepaVecsVectorVar :: !(V.Vector Variable),
+//    //   histogramRepaVecsMapVarInt::Map.Map Variable Int,
+//    //   histogramRepaVecsSize :: !Double,
+//    //   histogramRepaVecsShape :: !VShape,
+//    //   histogramRepaVecsArray :: !(V.Vector(UV.Vector Double))
+//
+//    class HistogramRepaVec
+//    {
+//    public: HistogramRepaVec();
+//    private: HistogramRepaVec(const HistogramRepaVec &);
+//    public: ~HistogramRepaVec();
+//
+//    private: HistogramRepaVec& operator=(const HistogramRepaVec &);
+//
+//    public: VarList vectorVar;
+//
+//    public: VarSizeUMap& mapVarInt() const;
+//    private: VarSizeUMap* _mapVarInt;
+//
+//    public: double size;
+//    public: SizeList shape;
+//    public: DoubleListList arr;
+//    };
+//}
 
 namespace Alignment
 {

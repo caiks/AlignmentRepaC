@@ -293,25 +293,25 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(std::siz
     return br;
 }
 
-HistogramRepaVec::HistogramRepaVec() : _mapVarInt(0)
-{
-}
-
-HistogramRepaVec::~HistogramRepaVec()
-{
-    delete _mapVarInt;
-}
-
-VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
-{
-    if (!_mapVarInt)
-    {
-	const_cast<HistogramRepaVec*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
-	for (std::size_t i = 0; i < vectorVar.size(); i++)
-	    const_cast<HistogramRepaVec*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
-    }
-    return *_mapVarInt;
-}
+//HistogramRepaVec::HistogramRepaVec() : _mapVarInt(0)
+//{
+//}
+//
+//HistogramRepaVec::~HistogramRepaVec()
+//{
+//    delete _mapVarInt;
+//}
+//
+//VarSizeUMap& Alignment::HistogramRepaVec::mapVarInt() const
+//{
+//    if (!_mapVarInt)
+//    {
+//	const_cast<HistogramRepaVec*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
+//	for (std::size_t i = 0; i < vectorVar.size(); i++)
+//	    const_cast<HistogramRepaVec*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
+//    }
+//    return *_mapVarInt;
+//}
 
 HistoryRepa::HistoryRepa() : _mapVarInt(0), arr(0)
 {
