@@ -27,7 +27,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -65,6 +65,25 @@ int main(int argc, char **argv)
 	cout << "uruu(ur,uu)" << endl;
 	cout << "uu" << endl
 	    << *uu << endl << endl;
+
+	aa = regcart(257, 1);
+	cout << "aa = regcart(257,1)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	uu = sys(*aa);
+	cout << "uu = sys(aa)" << endl;
+	cout << "uu" << endl
+	    << *uu << endl << endl;
+
+	try
+	{
+	    ur = uuur(*uu);
+	}
+	catch (const std::out_of_range& e)
+	{
+	    cout << "caught out_of_range: " << e.what() << endl << endl;
+	}
     }
 
     if (false)
@@ -232,7 +251,7 @@ int main(int argc, char **argv)
 	    << *bb1 << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -412,177 +431,213 @@ int main(int argc, char **argv)
 //	cout << "hr.mapVarInt()" << endl
 //	    << hr.mapVarInt() << endl << endl;
 //    }
-//
-//    if (false)
-//    {
-//	auto regcart = histogramRegularCartesian_u;
-//	auto regsing = histogramRegularUnitSingleton_u;
-//	auto regdiag = histogramRegularUnitDiagonal_u;
-//	auto sys = histogramsSystemImplied;
-//	auto araa = systemsHistogramRepasHistogram_u;
-//	auto aahr = [](const System& uu, const Histogram& aa)
-//	{
-//	    return systemsHistoriesHistoryRepa_u(uu, *histogramsHistory_u(aa));
-//	};
-//	auto hraa = [](const System& uu, const HistoryRepa& hr)
-//	{
-//	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu,hr));
-//	};
-//	auto hrhh = [](const System& uu, const HistoryRepa& hr)
-//	{
-//	    return systemsHistoryRepasHistory_u(uu, hr);
-//	};
-//	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
-//	{
-//	    return eventsHistoryRepasHistoryRepaSelection_u(ll, hr);
-//	};	
-//	auto hrhrsel = [](const HistoryRepa& hr, const HistoryRepa& ss)
-//	{
-//	    return historyRepasHistoryRepasHistoryRepaSelection_u(ss, hr);
-//	};
-//	auto hrhrred = [](const HistoryRepa& hr, const VarList& kk)
-//	{
-//	    return setVarsHistoryRepasHistoryRepaReduced_u(kk, hr);
-//	};
-//	auto hrred = [](const HistoryRepa& hr, const VarList& kk)
-//	{
-//	    return setVarsHistoryRepasReduce_u(1.0,kk, hr);
-//	};
-//
-//	auto aa = regdiag(2, 2);
-//	cout << "aa = regdiag(2, 2)" << endl;
-//	cout << "aa" << endl
-//	    << *aa << endl << endl;
-//
-//	auto hr = aahr(*sys(*aa), *aa);
-//	cout << "hr = aahr(sys(aa),aa)" << endl;
-//	cout << "hr.vectorVar" << endl
-//	    << hr->vectorVar << endl << endl;
-//	cout << "hr.size" << endl
-//	    << hr->size << endl << endl;
-//	cout << "hr.shape" << endl
-//	    << hr->shape << endl << endl;
-////	cout << "hr.arr" << endl
-////	    << hr->arr << endl << endl;
-//	cout << "hraa(sys(aa),hr)" << endl
-//	    << *hraa(*sys(*aa), *hr) << endl << endl;
-//
-//	aa = regcart(2, 2);
-//	cout << "aa = regcart(2, 2)" << endl;
-//	cout << "aa" << endl
-//	    << *aa << endl << endl;
-//
-//	hr = aahr(*sys(*aa), *aa);
-//	cout << "hr = aahr(sys(aa),aa)" << endl;
-//	cout << "hr.vectorVar" << endl
-//	    << hr->vectorVar << endl << endl;
-//	cout << "hr.size" << endl
-//	    << hr->size << endl << endl;
-//	cout << "hr.shape" << endl
-//	    << hr->shape << endl << endl;
-////	cout << "hr.arr" << endl
-////	    << hr->arr << endl << endl;
-//	cout << "hraa(sys(aa),hr)" << endl
-//	    << *hraa(*sys(*aa), *hr) << endl << endl;
-//
-//	aa = regsing(2, 2);
-//	cout << "aa = regsing(2, 2)" << endl;
-//	cout << "aa" << endl
-//	    << *aa << endl << endl;
-//
-//	hr = aahr(*sys(*aa), *aa);
-//	cout << "hr = aahr(sys(aa),aa)" << endl;
-//	cout << "hr.vectorVar" << endl
-//	    << hr->vectorVar << endl << endl;
-//	cout << "hr.size" << endl
-//	    << hr->size << endl << endl;
-//	cout << "hr.shape" << endl
-//	    << hr->shape << endl << endl;
-////	cout << "hr.arr" << endl
-////	    << hr->arr << endl << endl;
-//	cout << "hraa(sys(aa),hr)" << endl
-//	    << *hraa(*sys(*aa), *hr) << endl << endl;
-//
-//	aa = regcart(257,1);
-//	cout << "aa = regcart(257,1)" << endl;
-//	cout << "aa" << endl
-//	    << *aa << endl << endl;
-//
-//	try
-//	{
-//	    hr = aahr(*sys(*aa), *aa);
-//	}
-//	catch (const std::out_of_range& e)
-//	{
-//	    cout << "caught out_of_range: " << e.what() << endl << endl;
-//	}
-//
-//	aa = regcart(3, 2);
-//	cout << "aa = regcart(3, 2)" << endl;
-//
-//	auto uu = sys(*aa);
-//	hr = aahr(*uu, *aa);
-//	cout << "hr = aahr(uu,aa)" << endl;
-//	cout << "hrhh(uu,hr)" << endl
-//	    << *hrhh(*uu, *hr) << endl << endl;
-//	cout << "hrhh(uu,hrsel(hr,SizeList{}))" << endl
-//	    << *hrhh(*uu, *hrsel(*hr, SizeList{})) << endl << endl;
-//	cout << "hrhh(uu,hrsel(hr,SizeList{0}))" << endl
-//	    << *hrhh(*uu, *hrsel(*hr, SizeList{0})) << endl << endl;
-//	cout << "hrhh(uu,hrsel(hr,SizeList{0,4,8}))" << endl
-//	    << *hrhh(*uu, *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
-//
-//	auto bb = regcart(1,1);
-//	cout << "bb = regcart(1,1)" << endl;
-//	auto ss = aahr(*uu, *bb);
-//	cout << "ss = aahr(uu,bb)" << endl;
-//	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
-//	    << *hrhh(*uu,*hrhrsel(*hr, *ss)) << endl << endl;
-//	bb = regcart(2, 1);
-//	cout << "bb = regcart(2,1)" << endl;
-//	ss = aahr(*uu, *bb);
-//	cout << "ss = aahr(uu,bb)" << endl;
-//	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
-//	    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
-//	bb = regcart(3, 1);
-//	cout << "bb = regcart(3,1)" << endl;
-//	ss = aahr(*uu, *bb);
-//	cout << "ss = aahr(uu,bb)" << endl;
-//	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
-//	    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
-//
-//	hr = aahr(*uu, *aa);
-//	cout << "hraa(uu,hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
-//	    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
-//	cout << "hraa(uu,hrhrred(hr, VarList{ Variable(1) }))" << endl
-//	    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(1) })) << endl << endl;
-//	cout << "hraa(uu,hrhrred(hr, VarList{ }))" << endl
-//	    << *hraa(*uu, *hrhrred(*hr, VarList{ })) << endl << endl;
-//
-//	aa = regcart(3, 2);
-//	uu = sys(*aa);
-//	hr = aahr(*uu, *aa);
-//	auto ar1 = hrred(*hr, VarList{ Variable(2),Variable(1) });
-//	auto aa1 = araa(*uu, *ar1);
-//	cout << "araa(uu,hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
-//	    << *aa1 << endl << endl;
-//	aa = regcart(3, 2);
-//	uu = sys(*aa);
-//	hr = aahr(*uu, *aa);
-//	ar1 = hrred(*hr, VarList{ Variable(1) });
-//	aa1 = araa(*uu, *ar1);
-//	cout << "araa(uu,hrred(hr, VarList{ Variable(1) }))" << endl
-//	    << *aa1 << endl << endl;
-//	aa = regcart(3, 2);
-//	uu = sys(*aa);
-//	hr = aahr(*uu, *aa);
-//	ar1 = hrred(*hr, VarList{});
-//	aa1 = araa(*uu, *ar1);
-//	cout << "araa(uu,hrred(hr, VarList{  }))" << endl
-//	    << *aa1 << endl << endl;
-//
-//    }
-//
+
+    if (true)
+    {
+	auto regcart = histogramRegularCartesian_u;
+	auto regsing = histogramRegularUnitSingleton_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	auto sys = histogramsSystemImplied;
+	auto uuur = systemsSystemRepa;
+	auto araa = systemsHistogramRepasHistogram_u;
+	auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa));
+	};
+	auto hraa = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+	{
+	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu,ur,hr));
+	};
+	auto hrhh = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+	{
+	    return systemsHistoryRepasHistory_u(uu, ur, hr);
+	};
+	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
+	{
+	    return eventsHistoryRepasHistoryRepaSelection_u(ll.size(), (std::size_t*)ll.data(), hr);
+	};	
+	auto hrhrsel = [](const HistoryRepa& hr, const HistoryRepa& ss)
+	{
+	    return historyRepasHistoryRepasHistoryRepaSelection_u(ss, hr);
+	};
+	auto hrhrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
+	{
+	    auto& vvi = ur.mapVarSize();
+	    std::size_t m = kk.size();
+	    SizeList kk1;
+	    for (std::size_t i = 0; i < m; i++)
+		kk1.push_back(vvi[kk[i]]);
+	    return setVarsHistoryRepasHistoryRepaReduced_u(m, kk1.data(), hr);
+	};
+	auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
+	{
+	    auto& vvi = ur.mapVarSize();
+	    std::size_t m = kk.size();
+	    SizeList kk1;
+	    for (std::size_t i = 0; i < m; i++)
+		kk1.push_back(vvi[kk[i]]);
+	    return setVarsHistoryRepasReduce_u(1.0, m, kk1.data(), hr);
+	};
+
+	auto aa = regdiag(2, 2);
+	cout << "aa = regdiag(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	auto uu = sys(*aa);
+	cout << "uu = sys(aa)" << endl;
+	cout << "uu" << endl
+	    << *uu << endl << endl;
+
+	auto ur = uuur(*uu);
+	cout << "ur = uuur(*uu)" << endl;
+	cout << "ur" << endl
+	    << *ur << endl << endl;
+
+	auto hr = aahr(*uu, *ur, *aa);
+	cout << "hr = aarr(uu,ur,aa)" << endl;
+	cout << "hr" << endl
+	    << *hr << endl << endl;
+
+	auto aa1 = hraa(*uu, *ur, *hr);
+	cout << "aa1 = hraa(uu,ur,hr)" << endl;
+	cout << "aa1" << endl
+	    << *aa1 << endl << endl;
+
+	aa = regcart(2, 2);
+	cout << "aa = regcart(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	hr = aahr(*uu, *ur, *aa);
+	cout << "hr = aarr(uu,ur,aa)" << endl;
+	cout << "hr" << endl
+	    << *hr << endl << endl;
+
+	aa1 = hraa(*uu, *ur, *hr);
+	cout << "aa1 = hraa(uu,ur,hr)" << endl;
+	cout << "aa1" << endl
+	    << *aa1 << endl << endl;
+
+	aa = regsing(2, 2);
+	cout << "aa = regsing(2, 2)" << endl;
+	cout << "aa" << endl
+	    << *aa << endl << endl;
+
+	hr = aahr(*uu, *ur, *aa);
+	cout << "hr = aarr(uu,ur,aa)" << endl;
+	cout << "hr" << endl
+	    << *hr << endl << endl;
+
+	aa1 = hraa(*uu, *ur, *hr);
+	cout << "aa1 = hraa(uu,ur,hr)" << endl;
+	cout << "aa1" << endl
+	    << *aa1 << endl << endl;
+
+	aa = regcart(3, 2);
+	cout << "aa = regcart(3, 2)" << endl;
+
+	uu = sys(*aa);
+	cout << "uu = sys(aa)" << endl;
+	cout << "uu" << endl
+	    << *uu << endl << endl;
+
+	ur = uuur(*uu);
+	cout << "ur = uuur(*uu)" << endl;
+	cout << "ur" << endl
+	    << *ur << endl << endl;
+
+	hr = aahr(*uu, *ur, *aa);
+	cout << "hr = aarr(uu,ur,aa)" << endl;
+	cout << "hr" << endl
+	    << *hr << endl << endl;
+
+	auto hh = hrhh(*uu, *ur, *hr);
+	cout << "hh = hraa(uu,hr)" << endl;
+	cout << "hh" << endl
+	    << *hh << endl << endl;
+
+	auto hr1 = hrsel(*hr, SizeList{});
+	cout << "hr1 = hrsel(hr, SizeList{})" << endl;
+	cout << "hr1" << endl
+	    << *hr1 << endl << endl;
+
+	auto hh1 = hrhh(*uu, *ur, *hr1);
+	cout << "hh1 = hraa(uu,hr1)" << endl;
+	cout << "hh1" << endl
+	    << *hh1 << endl << endl;
+
+	hr1 = hrsel(*hr, SizeList{ 0 });
+	cout << "hr1 = hrsel(hr, SizeList{0})" << endl;
+	cout << "hr1" << endl
+	    << *hr1 << endl << endl;
+
+	hh1 = hrhh(*uu, *ur, *hr1);
+	cout << "hh1 = hraa(uu,hr1)" << endl;
+	cout << "hh1" << endl
+	    << *hh1 << endl << endl;
+
+	hr1 = hrsel(*hr, SizeList{ 0,4,8 });
+	cout << "hr1 = hrsel(hr, SizeList{0,4,8})" << endl;
+	cout << "hr1" << endl
+	    << *hr1 << endl << endl;
+
+	hh1 = hrhh(*uu, *ur, *hr1);
+	cout << "hh1 = hraa(uu,hr1)" << endl;
+	cout << "hh1" << endl
+	    << *hh1 << endl << endl;
+
+	//auto bb = regcart(1,1);
+	//cout << "bb = regcart(1,1)" << endl;
+	//auto ss = aahr(*uu, *bb);
+	//cout << "ss = aahr(uu,bb)" << endl;
+	//cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	//    << *hrhh(*uu,*hrhrsel(*hr, *ss)) << endl << endl;
+	//bb = regcart(2, 1);
+	//cout << "bb = regcart(2,1)" << endl;
+	//ss = aahr(*uu, *bb);
+	//cout << "ss = aahr(uu,bb)" << endl;
+	//cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	//    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
+	//bb = regcart(3, 1);
+	//cout << "bb = regcart(3,1)" << endl;
+	//ss = aahr(*uu, *bb);
+	//cout << "ss = aahr(uu,bb)" << endl;
+	//cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	//    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
+
+	//hr = aahr(*uu, *aa);
+	//cout << "hraa(uu,hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	//    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
+	//cout << "hraa(uu,hrhrred(hr, VarList{ Variable(1) }))" << endl
+	//    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(1) })) << endl << endl;
+	//cout << "hraa(uu,hrhrred(hr, VarList{ }))" << endl
+	//    << *hraa(*uu, *hrhrred(*hr, VarList{ })) << endl << endl;
+
+	//aa = regcart(3, 2);
+	//uu = sys(*aa);
+	//hr = aahr(*uu, *aa);
+	//auto ar1 = hrred(*hr, VarList{ Variable(2),Variable(1) });
+	//auto aa1 = araa(*uu, *ar1);
+	//cout << "araa(uu,hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	//    << *aa1 << endl << endl;
+	//aa = regcart(3, 2);
+	//uu = sys(*aa);
+	//hr = aahr(*uu, *aa);
+	//ar1 = hrred(*hr, VarList{ Variable(1) });
+	//aa1 = araa(*uu, *ar1);
+	//cout << "araa(uu,hrred(hr, VarList{ Variable(1) }))" << endl
+	//    << *aa1 << endl << endl;
+	//aa = regcart(3, 2);
+	//uu = sys(*aa);
+	//hr = aahr(*uu, *aa);
+	//ar1 = hrred(*hr, VarList{});
+	//aa1 = araa(*uu, *ar1);
+	//cout << "araa(uu,hrred(hr, VarList{  }))" << endl
+	//    << *aa1 << endl << endl;
+
+    }
+
 //    if (false)
 //    {
 //	auto uvars = systemsSetVar;

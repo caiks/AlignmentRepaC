@@ -8,23 +8,18 @@ using namespace Alignment;
 // historyRepasPersistent :: HistoryRepa -> HistoryRepaPersistent
 void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
 {
-    auto& vv = hr.vectorVar;
-    std::size_t n = vv.size();
-    out.write(reinterpret_cast<char*>(&n), sizeof n);
-    for (auto& v : vv)
+    auto n = hr.dimension;
+    auto vv = hr.vectorVar;
+    auto sh = hr.shape;
+    auto z = hr.size;
+    auto rr = hr.arr;
+    out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+    for (std::size_t i = 0; i < n; i++)
     {
-	std::stringstream str1;
-	str1 << v;
-	auto s = str1.str();
-	std::size_t l = s.size();
-	out.write(reinterpret_cast<char*>(&l), sizeof l);
-	out << s;
+	out.write(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(&sh[i]), 1);
     }
-    std::size_t z = hr.size;
-    out.write(reinterpret_cast<char*>(&z), sizeof z);
-    auto& sh = hr.shape;
-    for (std::size_t s : sh)
-	out.write(reinterpret_cast<char*>(&s), sizeof s);
+    out.write(reinterpret_cast<char*>(&z), sizeof(std::size_t));
     out.write(reinterpret_cast<char*>(hr.arr), z*n);
 }
 
@@ -32,27 +27,21 @@ void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
 std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in, StrVarPtrMap& vm)
 {
     auto hr = std::make_unique<HistoryRepa>();
-    auto& vv = hr->vectorVar;
     std::size_t n;
-    in.read(reinterpret_cast<char*>(&n), sizeof n);
+    in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+    hr->dimension = n;
+    hr->vectorVar = new std::size_t[n];
+    auto vv = hr->vectorVar;
+    hr->shape = new unsigned char[n];
+    auto sh = hr->shape;
     for (std::size_t i = 0; i < n; i++)
     {
-	std::size_t l;
-	in.read(reinterpret_cast<char*>(&l), sizeof l);
-	std::string s(l,'\0');
-	in.read(&s[0],l);
-	vv.push_back(*stringsVariable(s, vm));
+	in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+	in.read(reinterpret_cast<char*>(&sh[i]), 1);
     }
     std::size_t z;
-    in.read(reinterpret_cast<char*>(&z), sizeof z);
+    in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
     hr->size = z;
-    auto& sh = hr->shape;
-    for (std::size_t i = 0; i < n; i++)
-    {
-	std::size_t s;
-	in.read(reinterpret_cast<char*>(&s), sizeof s);
-	sh.push_back(s);
-    }
     hr->arr = new unsigned char[z*n];
     in.read(reinterpret_cast<char*>(hr->arr), z*n);
     return hr;

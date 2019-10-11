@@ -127,34 +127,38 @@ namespace Alignment
 
     private: HistoryRepa& operator=(const HistoryRepa &);
 
-    public: VarList vectorVar;
+    public: std::size_t dimension;
+    public: std::size_t* vectorVar;
 
-    public: VarSizeUMap& mapVarInt() const;
-    private: VarSizeUMap* _mapVarInt;
+    public: SizeSizeUMap& mapVarInt() const;
+    private: SizeSizeUMap* _mapVarInt;
 
+    public: unsigned char* shape;
     public: std::size_t size;
-    public: SizeList shape;
     public: unsigned char* arr;
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
-    std::unique_ptr<HistoryRepa> systemsHistoriesHistoryRepa_u(const System&, const History&);
+    std::unique_ptr<HistoryRepa> systemsHistoriesHistoryRepa_u(const System&, const SystemRepa&, const History&);
 
     // systemsHistoryRepasHistory_u :: System -> HistoryRepa -> Maybe History
-    std::unique_ptr<History> systemsHistoryRepasHistory_u(const System&, const HistoryRepa&);
+    std::unique_ptr<History> systemsHistoryRepasHistory_u(const System&, const SystemRepa&, const HistoryRepa&);
 
     // eventsHistoryRepasHistoryRepaSelection :: [Int] -> HistoryRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> eventsHistoryRepasHistoryRepaSelection_u(const SizeList&, const HistoryRepa&);
+    std::unique_ptr<HistoryRepa> eventsHistoryRepasHistoryRepaSelection_u(std::size_t, std::size_t*, const HistoryRepa&);
 
     // historyRepasHistoryRepasHistoryRepaSelection_u :: HistoryRepa -> HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasHistoryRepasHistoryRepaSelection_u(const HistoryRepa&, const HistoryRepa&);
 
     // setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(const VarList&, const HistoryRepa&);
+    std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(std::size_t, std::size_t*, const HistoryRepa&);
 
     // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
-//    std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, const VarList&, const HistoryRepa&);
+    std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, std::size_t, std::size_t*, const HistoryRepa&);
 }
+
+std::ostream& operator<<(std::ostream& out, const Alignment::HistoryRepa&);
+
 
 namespace Alignment
 {
@@ -216,7 +220,7 @@ namespace Alignment
     std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const FudRepa&);
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
+//    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
 }
 
 namespace Alignment
@@ -236,10 +240,10 @@ namespace Alignment
     };
 
     // systemsDecompFudsDecompFudRepa_u :: System -> DecompFud -> DecompFudRepa
-    std::unique_ptr<DecompFudRepa> systemsDecompFudsDecompFudRepa_u(const System&, const DecompFud&);
+    std::unique_ptr<DecompFudRepa> systemsDecompFudsDecompFudRepa_u(const System&, const SystemRepa&, const DecompFud&);
 
     // systemsDecompFudRepasDecompFud_u :: System -> DecompFudRepa -> DecompFud
-    std::unique_ptr<DecompFud> systemsDecompFudRepasDecompFud_u(const System&, const DecompFudRepa&);
+    std::unique_ptr<DecompFud> systemsDecompFudRepasDecompFud_u(const System&, const SystemRepa&, const DecompFudRepa&);
 }
 
 
