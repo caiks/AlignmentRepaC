@@ -432,7 +432,7 @@ int main(int argc, char **argv)
 //	    << hr.mapVarInt() << endl << endl;
 //    }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -587,231 +587,229 @@ int main(int argc, char **argv)
 	cout << "hh1" << endl
 	    << *hh1 << endl << endl;
 
-	//auto bb = regcart(1,1);
-	//cout << "bb = regcart(1,1)" << endl;
-	//auto ss = aahr(*uu, *bb);
-	//cout << "ss = aahr(uu,bb)" << endl;
-	//cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
-	//    << *hrhh(*uu,*hrhrsel(*hr, *ss)) << endl << endl;
-	//bb = regcart(2, 1);
-	//cout << "bb = regcart(2,1)" << endl;
-	//ss = aahr(*uu, *bb);
-	//cout << "ss = aahr(uu,bb)" << endl;
-	//cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
-	//    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
-	//bb = regcart(3, 1);
-	//cout << "bb = regcart(3,1)" << endl;
-	//ss = aahr(*uu, *bb);
-	//cout << "ss = aahr(uu,bb)" << endl;
-	//cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
-	//    << *hrhh(*uu, *hrhrsel(*hr, *ss)) << endl << endl;
+	auto bb = regcart(1,1);
+	cout << "bb = regcart(1,1)" << endl;
+	auto ss = aahr(*uu, *ur, *bb);
+	cout << "ss = aahr(uu,bb)" << endl;
+	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	    << *hrhh(*uu,*ur,*hrhrsel(*hr,*ss)) << endl << endl;
+	bb = regcart(2, 1);
+	cout << "bb = regcart(2,1)" << endl;
+	ss = aahr(*uu, *ur, *bb);
+	cout << "ss = aahr(uu,bb)" << endl;
+	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	    << *hrhh(*uu, *ur, *hrhrsel(*hr, *ss)) << endl << endl;
+	bb = regcart(3, 1);
+	cout << "bb = regcart(3,1)" << endl;
+	ss = aahr(*uu, *ur, *bb);
+	cout << "ss = aahr(uu,bb)" << endl;
+	cout << "hrhh(uu,hrhrsel(hr,ss))" << endl
+	    << *hrhh(*uu, *ur, *hrhrsel(*hr, *ss)) << endl << endl;
 
-	//hr = aahr(*uu, *aa);
-	//cout << "hraa(uu,hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
-	//    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(2),Variable(1) })) << endl << endl;
-	//cout << "hraa(uu,hrhrred(hr, VarList{ Variable(1) }))" << endl
-	//    << *hraa(*uu, *hrhrred(*hr, VarList{ Variable(1) })) << endl << endl;
-	//cout << "hraa(uu,hrhrred(hr, VarList{ }))" << endl
-	//    << *hraa(*uu, *hrhrred(*hr, VarList{ })) << endl << endl;
+	cout << "hraa(uu,hrhrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	    << *hraa(*uu, *ur, *hrhrred(*hr, *ur, VarList{ Variable(2),Variable(1) })) << endl << endl;
+	cout << "hraa(uu,hrhrred(hr, VarList{ Variable(1) }))" << endl
+	    << *hraa(*uu, *ur, *hrhrred(*hr, *ur, VarList{ Variable(1) })) << endl << endl;
+	cout << "hraa(uu,hrhrred(hr, VarList{ }))" << endl
+	    << *hraa(*uu, *ur, *hrhrred(*hr, *ur, VarList{ })) << endl << endl;
 
-	//aa = regcart(3, 2);
-	//uu = sys(*aa);
-	//hr = aahr(*uu, *aa);
-	//auto ar1 = hrred(*hr, VarList{ Variable(2),Variable(1) });
-	//auto aa1 = araa(*uu, *ar1);
-	//cout << "araa(uu,hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
-	//    << *aa1 << endl << endl;
-	//aa = regcart(3, 2);
-	//uu = sys(*aa);
-	//hr = aahr(*uu, *aa);
-	//ar1 = hrred(*hr, VarList{ Variable(1) });
-	//aa1 = araa(*uu, *ar1);
-	//cout << "araa(uu,hrred(hr, VarList{ Variable(1) }))" << endl
-	//    << *aa1 << endl << endl;
-	//aa = regcart(3, 2);
-	//uu = sys(*aa);
-	//hr = aahr(*uu, *aa);
-	//ar1 = hrred(*hr, VarList{});
-	//aa1 = araa(*uu, *ar1);
-	//cout << "araa(uu,hrred(hr, VarList{  }))" << endl
-	//    << *aa1 << endl << endl;
+	cout << "araa(uu,hrred(hr, VarList{ Variable(2),Variable(1) }))" << endl
+	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ Variable(2),Variable(1) })) << endl << endl;
+	cout << "araa(uu,hrred(hr, VarList{ Variable(1) }))" << endl
+	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ Variable(1) })) << endl << endl;
+	cout << "araa(uu,hrred(hr, VarList{ }))" << endl
+	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ })) << endl << endl;
+    }
+
+    if (true)
+    {
+	auto uvars = systemsSetVar;
+	auto cart = systemsSetVarsSetStateCartesian_u;
+	typedef std::pair<int, ValList> IntValListPair;
+	typedef std::vector<IntValListPair> IntValListPairList;
+	auto llhh = [](const VarList& vv, const IntValListPairList& ee)
+	{
+	    std::vector<IdStatePair> ii;
+	    for (auto& pp : ee)
+	    {
+		auto i = pp.first;
+		auto& ll = pp.second;
+		auto jj = std::vector<VarValPair>();
+		for (int j = 0; j < ll.size(); j++)
+		    jj.push_back(VarValPair(vv[j], ll[j]));
+		ii.push_back(IdStatePair(Id(i), *listsState(jj)));
+	    }
+	    return listsHistory_u(ii);
+	};
+	auto hhll = historiesList;
+	auto hvars = historiesSetVar;
+	auto hsize = historiesSize;
+	auto hred = [](const History& hh, const VarUSet& vv)
+	{
+	    return setVarsHistoriesReduce(vv, hh);
+	};
+	auto hhaa = historiesHistogram;
+	auto aahh = histogramsHistory_u;
+	auto aall = histogramsList;
+	auto vars = histogramsSetVar;
+	auto size = histogramsSize;
+	auto trim = histogramsTrim;
+	auto unit = setStatesHistogramUnit_u;
+	auto norm = [](const Histogram& aa)
+	{
+	    return histogramsResize(1, aa);
+	};
+	auto ared = [](const Histogram& aa, const VarUSet& vv)
+	{
+	    return setVarsHistogramsReduce(vv, aa);
+	};
+	auto ind = histogramsIndependent;
+	auto aarr = systemsHistogramsHistogramRepa_u;
+	auto rraa = systemsHistogramRepasHistogram_u;
+	auto uuur = systemsSystemRepa;
+	auto araa = systemsHistogramRepasHistogram_u;
+	auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa));
+	};
+	auto hraa = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+	{
+	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu, ur, hr));
+	};
+	auto hhhr = [](const System& uu, const SystemRepa& ur, const History& hh)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, ur, hh);
+	};
+	auto hrhh = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+	{
+	    return systemsHistoryRepasHistory_u(uu, ur, hr);
+	};
+	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
+	{
+	    return eventsHistoryRepasHistoryRepaSelection_u(ll.size(), (std::size_t*)ll.data(), hr);
+	};
+	auto hrhrsel = [](const HistoryRepa& hr, const HistoryRepa& ss)
+	{
+	    return historyRepasHistoryRepasHistoryRepaSelection_u(ss, hr);
+	};
+	auto hrhrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
+	{
+	    auto& vvi = ur.mapVarSize();
+	    std::size_t m = kk.size();
+	    SizeList kk1;
+	    for (std::size_t i = 0; i < m; i++)
+		kk1.push_back(vvi[kk[i]]);
+	    return setVarsHistoryRepasHistoryRepaReduced_u(m, kk1.data(), hr);
+	};
+	auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
+	{
+	    auto& vvi = ur.mapVarSize();
+	    std::size_t m = kk.size();
+	    SizeList kk1;
+	    for (std::size_t i = 0; i < m; i++)
+		kk1.push_back(vvi[kk[i]]);
+	    return setVarsHistoryRepasReduce_u(1.0, m, kk1.data(), hr);
+	};
+
+	auto pressure = Variable("pressure");
+	auto cloud = Variable("cloud");
+	auto wind = Variable("wind");
+	auto rain = Variable("rain");
+	auto low = Value("low");
+	auto medium = Value("medium");
+	auto high = Value("high");
+	auto none = Value("none");
+	auto light = Value("light");
+	auto heavy = Value("heavy");
+	auto strong = Value("strong");
+	auto uu = listsSystem_u(std::vector<VarValSetPair>{
+	    VarValSetPair(pressure, ValSet{ low,medium,high }),
+		VarValSetPair(cloud, ValSet{ none,light,heavy }),
+		VarValSetPair(wind, ValSet{ none,light,strong }),
+		VarValSetPair(rain, ValSet{ none,light,heavy })});
+	auto hh = llhh(VarList{ pressure, cloud, wind, rain }, IntValListPairList{
+	    IntValListPair(1, ValList{ high, none, none, none }),
+	    IntValListPair(2, ValList{ medium, light, none, light }),
+	    IntValListPair(3, ValList{ high, none, light, none }),
+	    IntValListPair(4, ValList{ low, heavy, strong, heavy }),
+	    IntValListPair(5, ValList{ low, none, light, light }),
+	    IntValListPair(6, ValList{ medium, none, light, light }),
+	    IntValListPair(7, ValList{ low, heavy, light, heavy }),
+	    IntValListPair(8, ValList{ high, none, light, none }),
+	    IntValListPair(9, ValList{ medium, light, strong, heavy }),
+	    IntValListPair(10, ValList{ medium, light, light, light }),
+	    IntValListPair(11, ValList{ high, light, light, heavy }),
+	    IntValListPair(12, ValList{ medium, none, none, none }),
+	    IntValListPair(13, ValList{ medium, light, none, none }),
+	    IntValListPair(14, ValList{ high, light, strong, light }),
+	    IntValListPair(15, ValList{ medium, none, light, light }),
+	    IntValListPair(16, ValList{ low, heavy, strong, heavy }),
+	    IntValListPair(17, ValList{ low, heavy, light, heavy }),
+	    IntValListPair(18, ValList{ high, none, none, none }),
+	    IntValListPair(19, ValList{ low, light, none, light }),
+	    IntValListPair(20, ValList{ high, none, none, none }) });
+	cout << "rpln(hhll(hh))" << endl;
+	rpln(cout, sorted(*hhll(*hh))); cout << endl;
+
+	auto ur = uuur(*uu);
+	cout << "ur = uuur(*uu)" << endl;
+
+	auto hr = hhhr(*uu, *ur, *hh);
+	cout << "hr = hhhr(uu,hh)" << endl;
+	cout << "hraa(uu,hr)" << endl
+	    << *hraa(*uu, *ur, *hr) << endl << endl;
+
+	cout << "hrhh(uu,hrsel(hr,SizeList{}))" << endl
+	    << *hrhh(*uu, *ur, *hrsel(*hr, SizeList{})) << endl << endl;
+	cout << "hrhh(uu,hrsel(hr,SizeList{0}))" << endl
+	    << *hrhh(*uu, *ur, *hrsel(*hr, SizeList{ 0 })) << endl << endl;
+	cout << "hrhh(uu,hrsel(hr,SizeList{0,4,8}))" << endl
+	    << *hrhh(*uu, *ur, *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
+
+	auto hr1 = hrhrred(*hr, *ur, VarList{ pressure, rain, cloud, wind });
+	cout << "hr1 = hrhrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;
+	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	hr1 = hrhrred(*hr, *ur, VarList{ wind, cloud, rain });
+	cout << "hr1 = hrhrred(hr, VarList{ wind, cloud, rain })" << endl;
+	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	hr1 = hrhrred(*hr, *ur, VarList{ rain, wind });
+	cout << "hr1 = hrhrred(hr, VarList{ rain, wind })" << endl;
+	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	hr1 = hrhrred(*hr, *ur, VarList{ rain });
+	cout << "hr1 = hrhrred(hr, VarList{ rain })" << endl;
+	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	hr1 = hrhrred(*hr, *ur, VarList{ });
+	cout << "hr1 = hrhrred(hr, VarList{ })" << endl;
+	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+
+	auto br = hrred(*hr, *ur, VarList{ pressure, rain, cloud, wind });
+	cout << "br = hrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
+	br = hrred(*hr, *ur, VarList{ wind, cloud, rain });
+	cout << "br = hrred(hr, VarList{ wind, cloud, rain})" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
+	br = hrred(*hr, *ur, VarList{ rain, wind });
+	cout << "br = hrred(hr, VarList{ rain, wind})" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
+	br = hrred(*hr, *ur, VarList{ rain });
+	cout << "br = hrred(hr, VarList{ rain})" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
+	br = hrred(*hr, *ur, VarList{});
+	cout << "br = hrred(hr, VarList{})" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
 
     }
 
-//    if (false)
-//    {
-//	auto uvars = systemsSetVar;
-//	auto cart = systemsSetVarsSetStateCartesian_u;
-//	typedef std::pair<int, ValList> IntValListPair;
-//	typedef std::vector<IntValListPair> IntValListPairList;
-//	auto llhh = [](const VarList& vv, const IntValListPairList& ee)
-//	{
-//	    std::vector<IdStatePair> ii;
-//	    for (auto& pp : ee)
-//	    {
-//		auto i = pp.first;
-//		auto& ll = pp.second;
-//		auto jj = std::vector<VarValPair>();
-//		for (int j = 0; j < ll.size(); j++)
-//		    jj.push_back(VarValPair(vv[j], ll[j]));
-//		ii.push_back(IdStatePair(Id(i), *listsState(jj)));
-//	    }
-//	    return listsHistory_u(ii);
-//	};
-//	auto hhll = historiesList;
-//	auto hvars = historiesSetVar;
-//	auto hsize = historiesSize;
-//	auto hred = [](const History& hh, const VarUSet& vv)
-//	{
-//	    return setVarsHistoriesReduce(vv, hh);
-//	};
-//	auto hhaa = historiesHistogram;
-//	auto aahh = histogramsHistory_u;
-//	auto aall = histogramsList;
-//	auto vars = histogramsSetVar;
-//	auto size = histogramsSize;
-//	auto trim = histogramsTrim;
-//	auto unit = setStatesHistogramUnit_u;
-//	auto norm = [](const Histogram& aa)
-//	{
-//	    return histogramsResize(1, aa);
-//	};
-//	auto ared = [](const Histogram& aa, const VarUSet& vv)
-//	{
-//	    return setVarsHistogramsReduce(vv, aa);
-//	};
-//	auto ind = histogramsIndependent;
-//	auto aarr = systemsHistogramsHistogramRepa_u;
-//	auto rraa = systemsHistogramRepasHistogram_u;
-//	auto arred = [](const HistogramRepa& aa, const VarList& vv)
-//	{
-//	    return setVarsHistogramRepasReduce_u(vv, aa);
-//	};
-//	auto aahr = [](const System& uu, const Histogram& aa)
-//	{
-//	    return systemsHistoriesHistoryRepa_u(uu, *histogramsHistory_u(aa));
-//	};
-//	auto hhhr = [](const System& uu, const History& hh)
-//	{
-//	    return systemsHistoriesHistoryRepa_u(uu, hh);
-//	};
-//	auto hraa = [](const System& uu, const HistoryRepa& hr)
-//	{
-//	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu, hr));
-//	};
-//	auto hrhh = [](const System& uu, const HistoryRepa& hr)
-//	{
-//	    return systemsHistoryRepasHistory_u(uu, hr);
-//	};
-//	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
-//	{
-//	    return eventsHistoryRepasHistoryRepaSelection_u(ll, hr);
-//	};
-//	auto hrhrred = [](const HistoryRepa& hr, const VarList& kk)
-//	{
-//	    return setVarsHistoryRepasHistoryRepaReduced_u(kk, hr);
-//	};
-//	auto hrred = [](const HistoryRepa& hr, const VarList& kk)
-//	{
-//	    return setVarsHistoryRepasReduce_u(1.0, kk, hr);
-//	};
-//
-//	auto pressure = Variable("pressure");
-//	auto cloud = Variable("cloud");
-//	auto wind = Variable("wind");
-//	auto rain = Variable("rain");
-//	auto low = Value("low");
-//	auto medium = Value("medium");
-//	auto high = Value("high");
-//	auto none = Value("none");
-//	auto light = Value("light");
-//	auto heavy = Value("heavy");
-//	auto strong = Value("strong");
-//	auto uu = listsSystem_u(std::vector<VarValSetPair>{
-//	    VarValSetPair(pressure, ValSet{ low,medium,high }),
-//		VarValSetPair(cloud, ValSet{ none,light,heavy }),
-//		VarValSetPair(wind, ValSet{ none,light,strong }),
-//		VarValSetPair(rain, ValSet{ none,light,heavy })});
-//	auto hh = llhh(VarList{ pressure, cloud, wind, rain }, IntValListPairList{
-//	    IntValListPair(1, ValList{ high, none, none, none }),
-//	    IntValListPair(2, ValList{ medium, light, none, light }),
-//	    IntValListPair(3, ValList{ high, none, light, none }),
-//	    IntValListPair(4, ValList{ low, heavy, strong, heavy }),
-//	    IntValListPair(5, ValList{ low, none, light, light }),
-//	    IntValListPair(6, ValList{ medium, none, light, light }),
-//	    IntValListPair(7, ValList{ low, heavy, light, heavy }),
-//	    IntValListPair(8, ValList{ high, none, light, none }),
-//	    IntValListPair(9, ValList{ medium, light, strong, heavy }),
-//	    IntValListPair(10, ValList{ medium, light, light, light }),
-//	    IntValListPair(11, ValList{ high, light, light, heavy }),
-//	    IntValListPair(12, ValList{ medium, none, none, none }),
-//	    IntValListPair(13, ValList{ medium, light, none, none }),
-//	    IntValListPair(14, ValList{ high, light, strong, light }),
-//	    IntValListPair(15, ValList{ medium, none, light, light }),
-//	    IntValListPair(16, ValList{ low, heavy, strong, heavy }),
-//	    IntValListPair(17, ValList{ low, heavy, light, heavy }),
-//	    IntValListPair(18, ValList{ high, none, none, none }),
-//	    IntValListPair(19, ValList{ low, light, none, light }),
-//	    IntValListPair(20, ValList{ high, none, none, none }) });
-//	cout << "rpln(hhll(hh))" << endl;
-//	rpln(cout, sorted(*hhll(*hh))); cout << endl;
-//
-//	auto hr = hhhr(*uu, *hh);
-//	cout << "hr = hhhr(uu,hh)" << endl;
-//	cout << "hraa(uu,hr)" << endl
-//	    << *hraa(*uu,*hr) << endl << endl;
-//
-//	cout << "hrhh(uu,hrsel(hr,SizeList{}))" << endl
-//	    << *hrhh(*uu, *hrsel(*hr, SizeList{})) << endl << endl;
-//	cout << "hrhh(uu,hrsel(hr,SizeList{0}))" << endl
-//	    << *hrhh(*uu, *hrsel(*hr, SizeList{ 0 })) << endl << endl;
-//	cout << "hrhh(uu,hrsel(hr,SizeList{0,4,8}))" << endl
-//	    << *hrhh(*uu, *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
-//
-//	auto hr1 = hrhrred(*hr, VarList{ pressure, rain, cloud, wind });
-//	cout << "hr1 = hrhrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;
-//	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*hraa(*uu,*hr1))))); cout << endl;
-//	hr1 = hrhrred(*hr, VarList{ wind, cloud, rain });
-//	cout << "hr1 = hrhrred(hr, VarList{ wind, cloud, rain })" << endl;
-//	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *hr1))))); cout << endl;
-//	hr1 = hrhrred(*hr, VarList{ rain, wind });
-//	cout << "hr1 = hrhrred(hr, VarList{ rain, wind })" << endl;
-//	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *hr1))))); cout << endl;
-//	hr1 = hrhrred(*hr, VarList{ rain });
-//	cout << "hr1 = hrhrred(hr, VarList{ rain })" << endl;
-//	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *hr1))))); cout << endl;
-//	hr1 = hrhrred(*hr, VarList{ });
-//	cout << "hr1 = hrhrred(hr, VarList{ })" << endl;
-//	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *hr1))))); cout << endl;
-//
-//	auto br = hrred(*hr, VarList{ pressure, rain, cloud, wind });
-//	cout << "br = hrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;
-//	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*rraa(*uu,*br))))); cout << endl;
-//	br = hrred(*hr, VarList{ wind, cloud, rain });
-//	cout << "br = hrred(hr, VarList{ wind, cloud, rain})" << endl;
-//	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*rraa(*uu,*br))))); cout << endl;
-//	br = hrred(*hr, VarList{ rain, wind });
-//	cout << "br = hrred(hr, VarList{ rain, wind})" << endl;
-//	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*rraa(*uu,*br))))); cout << endl;
-//	br = hrred(*hr, VarList{ rain });
-//	cout << "br = hrred(hr, VarList{ rain})" << endl;
-//	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
-//	br = hrred(*hr, VarList{});
-//	cout << "br = hrred(hr, VarList{})" << endl;
-//	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
-//	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *br))))); cout << endl;
-//
-//    }
-//
 //    if (false)
 //    {
 //	auto lluu = listsSystem_u;

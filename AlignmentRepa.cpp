@@ -597,6 +597,8 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     }
     ar->arr = new double[w];
     auto rr1 = ar->arr;
+    for (std::size_t j = 0; j < w; j++)
+	rr1[j] = 0.0;
     if (m > 0)
 	for (std::size_t j = 0; j < z; j++)
 	{
