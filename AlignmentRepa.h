@@ -9,8 +9,9 @@
 
 namespace Alignment
 {
-    typedef std::pair<Variable, std::size_t> VarSizePair;
-    typedef std::vector<VarSizePair> VarSizePairList;
+    typedef std::pair<Variable, unsigned char> VarUCharPair;
+    typedef std::vector<VarUCharPair> VarUCharPairList;
+    typedef std::unordered_map<std::size_t, std::size_t> SizeSizeUMap;
     typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
@@ -28,7 +29,7 @@ namespace Alignment
 
     private: SystemRepa& operator=(const SystemRepa &);
 
-    public: VarSizePairList listVarSizePair;
+    public: VarUCharPairList listVarUCharPair;
 
     public: VarSizeUMap& mapVarSize() const;
     private: VarSizeUMap* _mapVarSize;
@@ -40,6 +41,8 @@ namespace Alignment
     // systemsRepasSystem :: SystemRepa -> System
     void systemsRepasSystem(const SystemRepa&, System&);
 }
+
+std::ostream& operator<<(std::ostream& out, const Alignment::SystemRepa&);
 
 
 namespace Alignment
@@ -57,24 +60,28 @@ namespace Alignment
 
     private: HistogramRepa& operator=(const HistogramRepa &);
 
-    public: VarList vectorVar;
+    public: std::size_t dimension;
+    public: std::size_t* vectorVar;
 
-    public: VarSizeUMap& mapVarInt() const;
-    private: VarSizeUMap* _mapVarInt;
+    public: SizeSizeUMap& mapVarInt() const;
+    private: SizeSizeUMap* _mapVarInt;
 
-    public: SizeList shape;
-    public: DoubleList arr;
+    public: unsigned char* shape;
+    public: double* arr;
     };
 
     // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa
-    std::unique_ptr<HistogramRepa> systemsHistogramsHistogramRepa_u(const System&, const Histogram&);
+    std::unique_ptr<HistogramRepa> systemsHistogramsHistogramRepa_u(const System&, const SystemRepa&, const Histogram&);
 
     // systemsHistogramRepasHistogram_u :: System -> HistogramRepa -> Maybe Histogram
-    std::unique_ptr<Histogram> systemsHistogramRepasHistogram_u(const System&, const HistogramRepa&);
+    std::unique_ptr<Histogram> systemsHistogramRepasHistogram_u(const System&, const SystemRepa&, const HistogramRepa&);
 
     // setVarsHistogramRepasReduce_u :: Set.Set Variable -> HistogramRepa -> HistogramRepa
-    std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(const VarList&, const HistogramRepa&);
+    std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(std::size_t m, std::size_t* kk, const HistogramRepa&);
 }
+
+std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepa&);
+
 
 namespace Alignment
 {
@@ -146,7 +153,7 @@ namespace Alignment
     std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(const VarList&, const HistoryRepa&);
 
     // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
-    std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, const VarList&, const HistoryRepa&);
+//    std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, const VarList&, const HistoryRepa&);
 }
 
 namespace Alignment
