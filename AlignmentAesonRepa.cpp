@@ -85,7 +85,7 @@ std::unique_ptr<TransformRepa> Alignment::persistentsTransformRepa(std::istream&
     for (std::size_t i = 0; i < n; i++)
     {
 	in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
-	std::size_t s;
+	unsigned char s;
 	in.read(reinterpret_cast<char*>(&s), 1);
 	sz *= s;
 	sh[i] = s;
