@@ -225,7 +225,7 @@ namespace Alignment
     std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const SystemRepa&, const FudRepa&);
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
-//    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
+    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
 }
 
 namespace Alignment
