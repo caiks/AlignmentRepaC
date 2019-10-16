@@ -338,11 +338,9 @@ std::ostream& operator<<(std::ostream& out, const HistoryRepa& hr)
 	out << vv[i];
     }
     out << "],[";
-    std::size_t v = 1;
     for (std::size_t i = 0; i < n; i++)
     {
 	auto s = sh[i];
-	v *= s;
 	if (i) out << ",";
 	out << (std::size_t)s;
     }
@@ -614,56 +612,89 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     return ar;
 }
 
-TransformRepa::TransformRepa() : _mapVarInt(0), derived(0), arr(0)
+TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
 {
 }
 
 TransformRepa::~TransformRepa()
 {
-    delete _mapVarInt;
-    delete derived;
     delete[] arr;
+    delete[] shape;
+    delete[] vectorVar;
+    delete _mapVarInt;
 }
 
-VarSizeUMap& Alignment::TransformRepa::mapVarInt() const
+std::ostream& operator<<(std::ostream& out, const TransformRepa& tr)
+{
+    auto n = tr.dimension;
+    auto vv = tr.vectorVar;
+    auto w = tr.derived;
+    auto u = tr.valency;
+    auto sh = tr.shape;
+    auto rr = tr.arr;
+    out << "(" << n << ",[";
+    for (std::size_t i = 0; i < n; i++)
+    {
+	if (i) out << ",";
+	out << vv[i];
+    }
+    out << "]," << w << ",[";
+    std::size_t v = 1;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto s = sh[i];
+	v *= s;
+	if (i) out << ",";
+	out << (std::size_t)s;
+    }
+    out << "]," << (std::size_t)u << ",[";
+    for (std::size_t j = 0; j < v; j++)
+    {
+	if (j) out << ",";
+	out << (std::size_t)rr[j];
+    }
+    out << "])";
+    return out;
+}
+
+SizeSizeUMap& Alignment::TransformRepa::mapVarInt() const
 {
     if (!_mapVarInt)
     {
-	const_cast<TransformRepa*>(this)->_mapVarInt = new VarSizeUMap(vectorVar.size());
-	for (std::size_t i = 0; i < vectorVar.size(); i++)
+	const_cast<TransformRepa*>(this)->_mapVarInt = new SizeSizeUMap(dimension);
+	for (std::size_t i = 0; i < dimension; i++)
 	    const_cast<TransformRepa*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
 }
 
+
 // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
-std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const System& uu, const Transform& tt)
+std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const System& uu, const SystemRepa& ur, const Transform& tt)
 {
-    auto tr = std::make_unique<TransformRepa>();
+    auto& vvi = ur.mapVarSize();
     auto ww = transformsDerived(tt);
-    auto it = ww.begin();
-    if (it == ww.end())
-	return tr;
-    tr->derived = new Variable(*it);
-    auto zz = systemsVarsSetValue(uu,*tr->derived);
-    auto w = zz.size();
-    if (w > std::numeric_limits<unsigned char>::max())
-	throw std::out_of_range("systemsTransformsTransformRepa_u");
-    tr->valency = w;
+    auto wit = ww.begin();
+    if (wit == ww.end())
+	return std::make_unique<TransformRepa>();
     auto qq = transformsUnderlying(tt);
-    auto n = qq->size();
-    auto& vv = tr->vectorVar;
-    vv.reserve(n);
-    vv.insert(vv.end(), qq->begin(), qq->end());
-    auto& sh = tr->shape;
-    sh.reserve(n);
+    VarList qq1(qq->begin(), qq->end());
+    auto tr = std::make_unique<TransformRepa>();
+    tr->dimension = qq1.size();
+    auto n = tr->dimension;
+    tr->vectorVar = new std::size_t[n];
+    auto vv = tr->vectorVar;
+    tr->shape = new unsigned char[n];
+    auto sh = tr->shape;
     std::vector<ValSizeUMap> mm(n+1);
     std::size_t sz = 1;
     for (std::size_t i = 0; i < n; i++)
     {
-	auto xx = systemsVarsSetValue(uu,vv[i]);
+	auto& v = qq1[i];
+	vv[i] = vvi[v];
+	auto xx = systemsVarsSetValue(uu,v);
 	auto s = xx.size();
-	sh.push_back(s);
+	sh[i] = s;
 	sz *= s;
 	auto& yy = mm[i];
 	yy.reserve(s);
@@ -672,8 +703,11 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 	    yy.insert_or_assign(x, j++);
     }
     {
-	auto xx = systemsVarsSetValue(uu, *tr->derived);
+	auto& v = *wit;
+	tr->derived = vvi[v];
+	auto xx = systemsVarsSetValue(uu, v);
 	auto s = xx.size();
+	tr->valency = s;
 	auto& yy = mm[n];
 	yy.reserve(s);
 	std::size_t j = 0;
@@ -687,27 +721,30 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 	auto& sm = sc.first.map_u();
 	std::size_t j = 0;
 	for (std::size_t i = 0; i < n; i++)
-	    j = sh[i]*j + mm[i][sm.find(vv[i])->second];
-	rr[j] = mm[n][sm.find(*tr->derived)->second];
+	    j = sh[i]*j + mm[i][sm.find(qq1[i])->second];
+	rr[j] = mm[n][sm.find(*wit)->second];
     }
     return tr;
 }
 
 // systemsTransformRepasTransform_u :: System -> TransformRepa -> Transform
-std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const System& uu, const TransformRepa& tr)
+std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const System& uu, const SystemRepa& ur, const TransformRepa& tr)
 {
-    auto& vv = tr.vectorVar;
-    auto n = vv.size();
-    auto& sh = tr.shape;
+    auto& ivv = ur.listVarUCharPair;
+    auto n = tr.dimension;
+    auto vv = tr.vectorVar;
+    auto sh = tr.shape;
     auto rr = tr.arr;
-    if (!tr.derived || !n)
+    if (!tr.arr || !n)
 	return std::make_unique<Transform>();
-    auto& w = *tr.derived;
     std::size_t sz = 1;
     std::vector<ValList> mm(n+1);
+    VarList ww;
     for (std::size_t i = 0; i < n; i++)
     {
-	auto xx = systemsVarsSetValue(uu, vv[i]);
+	auto& v = ivv[vv[i]].first;
+	ww.push_back(v);
+	auto xx = systemsVarsSetValue(uu, v);
 	auto s = xx.size();
 	sz *= s;
 	auto& yy = mm[i];
@@ -715,6 +752,7 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
 	for (auto& x : xx)
 	    yy.push_back(x);
     }
+    auto& w = ivv[tr.derived].first;
     {
 	auto xx = systemsVarsSetValue(uu, w);
 	auto s = xx.size();
@@ -733,7 +771,7 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
 	std::vector<VarValPair> ss;
 	ss.reserve(n+1);
 	for (std::size_t i = 0; i < n; i++)
-	    ss.push_back(VarValPair(vv[i], mm[i][ii[i]]));
+	    ss.push_back(VarValPair(ww[i], mm[i][ii[i]]));
 	ss.push_back(VarValPair(w, mm[n][rr[j]]));
 	am.insert_or_assign(State(ss), Rational(1));
 	for (int k = n - 1; k >= 0; k--)
@@ -753,10 +791,10 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
 
 // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
 // cf listVariablesListTransformRepasSort :: V.Vector Variable -> V.Vector TransformRepa -> V.Vector
-std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(const VarUSet& vv, const TransformRepaPtrList& ff)
+std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(const SizeUSet& vv, const TransformRepaPtrList& ff)
 {
     auto fr = std::make_unique<FudRepa>();
-    VarUSet vv1;
+    SizeUSet vv1;
     vv1.reserve(vv.size() + ff.size());
     vv1.insert(vv.begin(), vv.end());
     TransformRepaPtrList ff1(ff);
@@ -767,21 +805,23 @@ std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(cons
     while (found)
     {
 	found = false;
-	VarUSet vv0;
+	SizeUSet vv0;
 	vv0.reserve(ffb->size());
 	for (auto& tt : *ffb)
 	{
 	    bool layer = true;
-	    for (auto& v : tt->vectorVar)
+	    auto n = tt->dimension;
+	    auto ww = tt->vectorVar;
+	    for (std::size_t i = 0; i < n; i++)
 	    {
-		auto it = vv1.find(v);
+		auto it = vv1.find(ww[i]);
 		layer = it != vv1.end();
 		if (!layer)
 		    break;
 	    }
 	    if (layer)
 	    {
-		vv0.insert(*tt->derived);
+		vv0.insert(tt->derived);
 		if (!found)
 		{
 		    fr->layers.push_back(TransformRepaPtrList());
@@ -805,24 +845,28 @@ std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(cons
 }
 
 // systemsFudsFudRepa_u :: System -> Fud -> FudRepa
-std::unique_ptr<FudRepa> Alignment::systemsFudsFudRepa_u(const System& uu, const Fud& ff)
+std::unique_ptr<FudRepa> Alignment::systemsFudsFudRepa_u(const System& uu, const SystemRepa& ur, const Fud& ff)
 {
     auto fund = fudsUnderlying;
     auto tttr = systemsTransformsTransformRepa_u;
     auto llfr = setVariablesListTransformRepasFudRepa_u;
 
+    auto& vvi = ur.mapVarSize();
     auto vv = fund(ff);
+    SizeUSet vv1;
+    for (auto& v : *vv)
+	vv1.insert(vvi[v]);
     TransformRepaPtrList ll;
     for (auto& tt : ff.list_u())
     {
-	auto tr = tttr(uu, *tt);
+	auto tr = tttr(uu, ur, *tt);
 	ll.push_back(std::move(tr));
     }
-    return llfr(*vv, ll);
+    return llfr(vv1, ll);
 }
 
 // systemsFudRepasFud_u :: System -> FudRepa -> Fud
-std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const FudRepa& fr)
+std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const SystemRepa& ur, const FudRepa& fr)
 {
     auto trtt = systemsTransformRepasTransform_u;
 
@@ -832,7 +876,7 @@ std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const Fud
     {
 	for (auto& tr : ll)
 	{
-	    auto tt = trtt(uu, *tr);
+	    auto tt = trtt(uu, ur, *tr);
 	    mm.push_back(std::move(tt));
 	}
     }
@@ -917,7 +961,7 @@ std::unique_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> systemsStateFudPairTreesHist
     for (auto& pp : rr._list)
     {
 	auto hr = sshr(uu, ur, *pp.first._state);
-	auto fr = fffr(uu, *pp.first._fud);
+	auto fr = fffr(uu, ur, *pp.first._fud);
 	HistoryRepaPtrFudRepaPtrPair mm(std::move(hr), std::move(fr));
 	if (pp.second)
 	{
@@ -951,7 +995,7 @@ std::unique_ptr<DecompFudRepa> Alignment::systemsDecompFudsDecompFudRepa_u(const
     for (auto& pp : rr._list)
     {
 	auto hr = sshr(uu, ur, *pp.first._state);
-	auto fr = fffr(uu, *pp.first._fud);
+	auto fr = fffr(uu, ur, *pp.first._fud);
 	HistoryRepaPtrFudRepaPtrPair mm(std::move(hr), std::move(fr));
 	if (pp.second)
 	{
@@ -989,7 +1033,7 @@ std::unique_ptr<Tree<StatePtrFudPtrPair>> systemsHistoryRepaFudRepaPairTreesStat
     for (auto& pp : rr._list)
     {
 	auto ss = hrss(uu, ur, *pp.first._state);
-	auto ff = frff(uu, *pp.first._fud);
+	auto ff = frff(uu, ur, *pp.first._fud);
 	StatePtrFudPtrPair mm(std::move(ss), std::move(ff));
 	if (pp.second)
 	{
@@ -1025,7 +1069,7 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
     for (auto& pp : rr._list)
     {
 	auto ss = hrss(uu, ur, *pp.first._state);
-	auto ff = frff(uu, *pp.first._fud);
+	auto ff = frff(uu, ur, *pp.first._fud);
 	StatePtrFudPtrPair mm(std::move(ss), std::move(ff));
 	if (pp.second)
 	{

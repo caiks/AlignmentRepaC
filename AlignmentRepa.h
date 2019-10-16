@@ -15,6 +15,7 @@ namespace Alignment
     typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
+    typedef std::unordered_set<std::size_t> SizeUSet;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
 }
@@ -177,24 +178,28 @@ namespace Alignment
 
     private: TransformRepa& operator=(const TransformRepa &);
 
-    public: VarList vectorVar;
+    public: std::size_t dimension;
+    public: std::size_t* vectorVar;
 
-    public: VarSizeUMap& mapVarInt() const;
-    private: VarSizeUMap* _mapVarInt;
+    public: SizeSizeUMap& mapVarInt() const;
+    private: SizeSizeUMap* _mapVarInt;
 
-    public: Variable* derived;
-    public: std::size_t valency;
+    public: std::size_t derived;
+    public: unsigned char valency;
 
-    public: SizeList shape;
+    public: unsigned char* shape;
     public: unsigned char* arr;
     };
 
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
-    std::unique_ptr<TransformRepa> systemsTransformsTransformRepa_u(const System&, const Transform&);
+    std::unique_ptr<TransformRepa> systemsTransformsTransformRepa_u(const System&, const SystemRepa&, const Transform&);
 
     // systemsTransformRepasTransform_u :: System -> TransformRepa -> Transform
-    std::unique_ptr<Transform> systemsTransformRepasTransform_u(const System&, const TransformRepa&);
+    std::unique_ptr<Transform> systemsTransformRepasTransform_u(const System&, const SystemRepa&, const TransformRepa&);
 }
+
+std::ostream& operator<<(std::ostream& out, const Alignment::TransformRepa&);
+
 
 namespace Alignment
 {
@@ -211,13 +216,13 @@ namespace Alignment
     };
 
     // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
-    std::unique_ptr<FudRepa> setVariablesListTransformRepasFudRepa_u(const VarUSet&, const TransformRepaPtrList&);
+    std::unique_ptr<FudRepa> setVariablesListTransformRepasFudRepa_u(const SizeUSet&, const TransformRepaPtrList&);
 
     // systemsFudsFudRepa_u :: System -> Fud -> FudRepa
-    std::unique_ptr<FudRepa> systemsFudsFudRepa_u(const System&, const Fud&);
+    std::unique_ptr<FudRepa> systemsFudsFudRepa_u(const System&, const SystemRepa&, const Fud&);
 
     // systemsFudRepasFud_u :: System -> FudRepa -> Fud
-    std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const FudRepa&);
+    std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const SystemRepa&, const FudRepa&);
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
 //    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
