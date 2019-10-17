@@ -251,7 +251,7 @@ int main(int argc, char **argv)
 	    << *bb1 << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -306,6 +306,7 @@ int main(int argc, char **argv)
 		kk1.push_back(vvi[kk[i]]);
 	    return setVarsHistogramRepasReduce_u(m, kk1.data(), ar);
 	};
+	auto arpr = histogramRepasRed_u;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -364,6 +365,11 @@ int main(int argc, char **argv)
 	cout << "rpln(aall(trim(aa1)))" << endl;
 	rpln(cout, sorted(*aall(*trim(*aa1)))); cout << endl;
 
+	auto pr = arpr(20, *ar);
+	cout << "pr = arpr(20,ar)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	auto br = arred(*ar, *ur, VarList{ pressure, rain, cloud, wind });
 	cout << "br = arred(ar, VarList{ pressure, rain, cloud, wind })" << endl;
 	cout << "br" << endl
@@ -373,6 +379,11 @@ int main(int argc, char **argv)
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
 	cout << "rpln(aall(trim(bb1)))" << endl;
 	rpln(cout, sorted(*aall(*trim(*bb1)))); cout << endl;
+
+	pr = arpr(20, *br);
+	cout << "pr = arpr(20,br)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ wind, cloud, rain });
 	cout << "br = arred(ar, VarList{ wind, cloud, rain})" << endl;
@@ -384,6 +395,11 @@ int main(int argc, char **argv)
 	cout << "rpln(aall(trim(bb1)))" << endl;
 	rpln(cout, sorted(*aall(*trim(*bb1)))); cout << endl;
 
+	pr = arpr(20, *br);
+	cout << "pr = arpr(20,br)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	br = arred(*ar, *ur, VarList{ wind, rain });
 	cout << "br = arred(ar, VarList{ wind, rain})" << endl;
 	cout << "br" << endl
@@ -393,6 +409,11 @@ int main(int argc, char **argv)
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
 	cout << "rpln(aall(trim(bb1)))" << endl;
 	rpln(cout, sorted(*aall(*trim(*bb1)))); cout << endl;
+
+	pr = arpr(20, *br);
+	cout << "pr = arpr(20,br)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ rain });
 	cout << "br = arred(ar, VarList{ rain})" << endl;
@@ -404,6 +425,11 @@ int main(int argc, char **argv)
 	cout << "rpln(aall(trim(bb1)))" << endl;
 	rpln(cout, sorted(*aall(*trim(*bb1)))); cout << endl;
 
+	pr = arpr(20, *br);
+	cout << "pr = arpr(20,br)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	br = arred(*ar, *ur, VarList{ });
 	cout << "br = arred(ar, VarList{})" << endl;
 	cout << "br" << endl
@@ -413,6 +439,11 @@ int main(int argc, char **argv)
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
 	cout << "rpln(aall(trim(bb1)))" << endl;
 	rpln(cout, sorted(*aall(*trim(*bb1)))); cout << endl;
+
+	pr = arpr(20, *br);
+	cout << "pr = arpr(20,br)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
     }
 
 //    if (false)
@@ -939,7 +970,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;

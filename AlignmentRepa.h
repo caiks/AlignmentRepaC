@@ -83,6 +83,41 @@ namespace Alignment
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepa&);
 
+namespace Alignment
+{
+    // data HistogramRepaRed = HistogramRepaRed{
+    //   histogramRepaRedsVectorVar :: !(V.Vector Variable),
+    //   histogramRepaRedsMapVarInt::Map.Map Variable Int,
+    //   histogramRepaRedsShape :: !VShape,
+    //   histogramRepaRedsVectorArray :: !(V.Vector(UV.Vector Double)) }
+
+    class HistogramRepaRed
+    {
+    public: HistogramRepaRed();
+    private: HistogramRepaRed(const HistogramRepaRed &);
+    public: ~HistogramRepaRed();
+
+    private: HistogramRepaRed& operator=(const HistogramRepaRed &);
+
+    public: std::size_t dimension;
+    public: std::size_t* vectorVar;
+
+    public: SizeSizeUMap& mapVarInt() const;
+    private: SizeSizeUMap* _mapVarInt;
+
+    public: unsigned char* shape;
+    public: double* arr;
+    };
+
+    // histogramRepasRed_u :: Double -> HistogramRepa -> HistogramRepaRed
+    std::unique_ptr<HistogramRepaRed> histogramRepasRed_u(double, const HistogramRepa&);
+
+    // histogramRepaRedsIndependent :: Double -> HistogramRepaRed -> HistogramRepa
+    std::unique_ptr<HistogramRepa> histogramRepaRedsIndependent(double, const HistogramRepaRed&);
+}
+
+std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepaRed&);
+
 
 //namespace Alignment
 //{
@@ -156,6 +191,10 @@ namespace Alignment
 
     // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
     std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, std::size_t, std::size_t*, const HistoryRepa&);
+
+    // historyRepasRed :: HistoryRepa -> HistogramRepaRed
+    std::unique_ptr<HistogramRepaRed> historyRepasRed(const HistoryRepa&);
+
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistoryRepa&);

@@ -292,6 +292,118 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(std::siz
     return br;
 }
 
+HistogramRepaRed::HistogramRepaRed() : _mapVarInt(0), dimension(0), vectorVar(0), shape(0), arr(0)
+{
+}
+
+HistogramRepaRed::~HistogramRepaRed()
+{
+    delete[] arr;
+    delete[] shape;
+    delete[] vectorVar;
+    delete _mapVarInt;
+}
+
+std::ostream& operator<<(std::ostream& out, const HistogramRepaRed& ar)
+{
+    auto n = ar.dimension;
+    auto vv = ar.vectorVar;
+    auto sh = ar.shape;
+    auto rr = ar.arr;
+    out << "(" << n << ",[";
+    for (std::size_t i = 0; i < n; i++)
+    {
+	if (i) out << ",";
+	out << vv[i];
+    }
+    out << "],[";
+    std::size_t sz = 0;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto s = sh[i];
+	sz += s;
+	if (i) out << ",";
+	out << (std::size_t)s;
+    }
+    out << "],[";
+    for (std::size_t j = 0; j < sz; j++)
+    {
+	if (j) out << ",";
+	out << rr[j];
+    }
+    out << "])";
+    return out;
+}
+
+
+SizeSizeUMap& Alignment::HistogramRepaRed::mapVarInt() const
+{
+    if (!_mapVarInt)
+    {
+	const_cast<HistogramRepaRed*>(this)->_mapVarInt = new SizeSizeUMap(dimension);
+	for (std::size_t i = 0; i < dimension; i++)
+	    const_cast<HistogramRepaRed*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
+    }
+    return *_mapVarInt;
+}
+
+// histogramRepasRed_u :: Double -> HistogramRepa -> HistogramRepaRed
+std::unique_ptr<HistogramRepaRed> Alignment::histogramRepasRed_u(double z, const HistogramRepa& ar)
+{
+    auto n = ar.dimension;
+    auto vv = ar.vectorVar;
+    auto sh = ar.shape;
+    auto rr = ar.arr;
+    if (!n || !rr || z <= 0.0)
+	return std::make_unique<HistogramRepaRed>();
+    double f = 1.0 / z;
+    auto pr = std::make_unique<HistogramRepaRed>();
+    pr->dimension = n;
+    pr->vectorVar = new std::size_t[n];
+    auto vv1 = pr->vectorVar;
+    pr->shape = new unsigned char[n];
+    auto sh1 = pr->shape;
+    std::size_t v = 1;
+    std::size_t sz = 0;
+    unsigned char* ii = new unsigned char[n];
+    std::size_t* xx = new std::size_t[n];
+    for (std::size_t i = 0; i < n; i++)
+    {
+	vv1[i] = vv[i];
+	auto s = sh[i];
+	sh1[i] = s;
+	xx[i] = sz;
+	sz += s;
+	v *= s;
+	ii[i] = 0;
+    }
+    pr->arr = new double[sz];
+    auto rr1 = pr->arr;
+    for (std::size_t j = 0; j < sz; j++)
+	rr1[j] = 0.0;
+    for (std::size_t j = 0; j < v; j++)
+    {
+	auto a = f * rr[j];
+	for (std::size_t i = 0; i < n; i++)
+	    rr1[xx[i]+ii[i]] += a;
+	for (int i = n-1; i >= 0; i--)
+	{
+	    auto y = ii[i] + 1;
+	    if (y == sh[i])
+		ii[i] = 0;
+	    else
+	    {
+		ii[i] = y;
+		break;
+	    }
+	}
+    }
+    delete[] xx;
+    delete[] ii;
+    return pr;
+}
+
+
 //HistogramRepaVec::HistogramRepaVec() : _mapVarInt(0)
 //{
 //}
