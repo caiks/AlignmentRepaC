@@ -307,6 +307,7 @@ int main(int argc, char **argv)
 	    return setVarsHistogramRepasReduce_u(m, kk1.data(), ar);
 	};
 	auto arpr = histogramRepasRed_u;
+	auto prar = histogramRepaRedsIndependent;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -370,6 +371,11 @@ int main(int argc, char **argv)
 	cout << "pr" << endl
 	    << *pr << endl << endl;
 
+	auto xr = prar(20, *pr);
+	cout << "xr = prar(20,pr)" << endl;
+	cout << "xr" << endl
+	    << *xr << endl << endl;
+
 	auto br = arred(*ar, *ur, VarList{ pressure, rain, cloud, wind });
 	cout << "br = arred(ar, VarList{ pressure, rain, cloud, wind })" << endl;
 	cout << "br" << endl
@@ -384,6 +390,11 @@ int main(int argc, char **argv)
 	cout << "pr = arpr(20,br)" << endl;
 	cout << "pr" << endl
 	    << *pr << endl << endl;
+
+	xr = prar(20, *pr);
+	cout << "xr = prar(20,pr)" << endl;
+	cout << "xr" << endl
+	    << *xr << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ wind, cloud, rain });
 	cout << "br = arred(ar, VarList{ wind, cloud, rain})" << endl;
@@ -400,6 +411,11 @@ int main(int argc, char **argv)
 	cout << "pr" << endl
 	    << *pr << endl << endl;
 
+	xr = prar(20, *pr);
+	cout << "xr = prar(20,pr)" << endl;
+	cout << "xr" << endl
+	    << *xr << endl << endl;
+
 	br = arred(*ar, *ur, VarList{ wind, rain });
 	cout << "br = arred(ar, VarList{ wind, rain})" << endl;
 	cout << "br" << endl
@@ -414,6 +430,11 @@ int main(int argc, char **argv)
 	cout << "pr = arpr(20,br)" << endl;
 	cout << "pr" << endl
 	    << *pr << endl << endl;
+
+	xr = prar(20, *pr);
+	cout << "xr = prar(20,pr)" << endl;
+	cout << "xr" << endl
+	    << *xr << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ rain });
 	cout << "br = arred(ar, VarList{ rain})" << endl;
@@ -430,6 +451,11 @@ int main(int argc, char **argv)
 	cout << "pr" << endl
 	    << *pr << endl << endl;
 
+	xr = prar(20, *pr);
+	cout << "xr = prar(20,pr)" << endl;
+	cout << "xr" << endl
+	    << *xr << endl << endl;
+
 	br = arred(*ar, *ur, VarList{ });
 	cout << "br = arred(ar, VarList{})" << endl;
 	cout << "br" << endl
@@ -444,6 +470,11 @@ int main(int argc, char **argv)
 	cout << "pr = arpr(20,br)" << endl;
 	cout << "pr" << endl
 	    << *pr << endl << endl;
+
+	xr = prar(20, *pr);
+	cout << "xr = prar(20,pr)" << endl;
+	cout << "xr" << endl
+	    << *xr << endl << endl;
     }
 
 //    if (false)

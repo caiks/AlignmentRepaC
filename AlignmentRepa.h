@@ -56,6 +56,7 @@ namespace Alignment
     class HistogramRepa
     {
     public: HistogramRepa();
+    public: HistogramRepa(double);
     private: HistogramRepa(const HistogramRepa &);
     public: ~HistogramRepa();
 

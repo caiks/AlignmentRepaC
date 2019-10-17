@@ -78,6 +78,12 @@ HistogramRepa::HistogramRepa() : _mapVarInt(0), dimension(0), vectorVar(0), shap
 {
 }
 
+HistogramRepa::HistogramRepa(double z) : _mapVarInt(0), dimension(0), vectorVar(0), shape(0)
+{
+    arr = new double[1];
+    arr[0] = z;
+}
+
 HistogramRepa::~HistogramRepa()
 {
     delete[] arr;
@@ -401,6 +407,63 @@ std::unique_ptr<HistogramRepaRed> Alignment::histogramRepasRed_u(double z, const
     delete[] xx;
     delete[] ii;
     return pr;
+}
+
+// histogramRepaRedsIndependent :: Double -> HistogramRepaRed -> HistogramRepa
+std::unique_ptr<HistogramRepa> Alignment::histogramRepaRedsIndependent(double z, const HistogramRepaRed& pr)
+{
+    if (z < 0.0)
+	return std::make_unique<HistogramRepa>(0.0);
+    auto n = pr.dimension;
+    auto vv = pr.vectorVar;
+    auto sh = pr.shape;
+    auto rr = pr.arr;
+    if (!n || !rr)
+	return std::make_unique<HistogramRepa>(z);
+    double f = 1.0 / z;
+    auto ar = std::make_unique<HistogramRepa>();
+    ar->dimension = n;
+    ar->vectorVar = new std::size_t[n];
+    auto vv1 = ar->vectorVar;
+    ar->shape = new unsigned char[n];
+    auto sh1 = ar->shape;
+    std::size_t v = 1;
+    std::size_t sz = 0;
+    unsigned char* ii = new unsigned char[n];
+    std::size_t* xx = new std::size_t[n];
+    for (std::size_t i = 0; i < n; i++)
+    {
+	vv1[i] = vv[i];
+	auto s = sh[i];
+	sh1[i] = s;
+	xx[i] = sz;
+	sz += s;
+	v *= s;
+	ii[i] = 0;
+    }
+    ar->arr = new double[v];
+    auto rr1 = ar->arr;
+    for (std::size_t j = 0; j < v; j++)
+    {
+	auto a = z;
+	for (std::size_t i = 0; i < n; i++)
+	    a *= rr[xx[i] + ii[i]];
+	rr1[j] = a;
+	for (int i = n - 1; i >= 0; i--)
+	{
+	    auto y = ii[i] + 1;
+	    if (y == sh[i])
+		ii[i] = 0;
+	    else
+	    {
+		ii[i] = y;
+		break;
+	    }
+	}
+    }
+    delete[] xx;
+    delete[] ii;
+    return ar;
 }
 
 
