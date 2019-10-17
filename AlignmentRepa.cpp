@@ -906,6 +906,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	kk[i] = vv[i];
 	skk[i] = svv[i];
     }
+    std::size_t mmax = 1;
     auto p = n;
     for (auto& ll : fr.layers)
 	for (auto& tr : ll)
@@ -913,6 +914,8 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	    kk[p] = tr->derived;
 	    skk[p] = tr->valency;
 	    p++;
+	    if (mmax < tr->dimension)
+		mmax = tr->dimension;
 	}
     hr1->size = z;
     auto& mkk = hr1->mapVarInt();
@@ -925,6 +928,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	for (std::size_t i = 0; i < n; i++)
 	    rr1[jp+i] = rr[jn+i];
     }
+    std::size_t* pkk = new std::size_t[mmax];
     auto q = n;
     for (auto& ll : fr.layers)
 	for (auto& tr : ll)
@@ -933,7 +937,6 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	    auto ww = tr->vectorVar;
 	    auto sh = tr->shape;
 	    auto ar = tr->arr;
-	    std::size_t* pkk = new std::size_t[m];
 	    for (std::size_t i = 0; i < m; i++)
 		pkk[i] = mkk[ww[i]];
 	    if (m > 0)
@@ -949,8 +952,8 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 		for (std::size_t j = 0; j < z; j++)
 		    rr1[j*p+q] = 0;
 	    q++;
-	    delete[] pkk;
 	}
+    delete[] pkk;
     return hr1;
 }
 
