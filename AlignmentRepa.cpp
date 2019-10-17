@@ -353,8 +353,8 @@ SizeSizeUMap& Alignment::HistogramRepaRed::mapVarInt() const
     return *_mapVarInt;
 }
 
-// histogramRepasRed_u :: Double -> HistogramRepa -> HistogramRepaRed
-std::unique_ptr<HistogramRepaRed> Alignment::histogramRepasRed_u(double z, const HistogramRepa& ar)
+// histogramRepasRed :: Double -> HistogramRepa -> HistogramRepaRed
+std::unique_ptr<HistogramRepaRed> Alignment::histogramRepasRed(double z, const HistogramRepa& ar)
 {
     auto n = ar.dimension;
     auto vv = ar.vectorVar;
@@ -786,6 +786,47 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     delete[] pkk;
     return ar;
 }
+
+// historyRepasRed :: HistoryRepa -> HistogramRepaRed
+std::unique_ptr<HistogramRepaRed> Alignment::historyRepasRed(const HistoryRepa& hr)
+{
+    auto n = hr.dimension;
+    auto vv = hr.vectorVar;
+    auto sh = hr.shape;
+    auto z = hr.size;
+    auto rr = hr.arr;
+    if (!n || !rr || !z)
+	return std::make_unique<HistogramRepaRed>();
+    double f = 1.0 / z;
+    auto pr = std::make_unique<HistogramRepaRed>();
+    pr->dimension = n;
+    pr->vectorVar = new std::size_t[n];
+    auto vv1 = pr->vectorVar;
+    pr->shape = new unsigned char[n];
+    auto sh1 = pr->shape;
+    std::size_t sz = 0;
+    std::size_t* xx = new std::size_t[n];
+    for (std::size_t i = 0; i < n; i++)
+    {
+	vv1[i] = vv[i];
+	auto s = sh[i];
+	sh1[i] = s;
+	xx[i] = sz;
+	sz += s;
+    }
+    pr->arr = new double[sz];
+    auto rr1 = pr->arr;
+    for (std::size_t j = 0; j < sz; j++)
+	rr1[j] = 0.0;
+    for (std::size_t j = 0; j < z; j++)
+    {
+	std::size_t jn = j*n;
+	for (std::size_t i = 0; i < n; i++)
+	    rr1[xx[i] + rr[jn+i]] += f;
+    }
+    return pr;
+}
+
 
 TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
 {

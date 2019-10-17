@@ -251,7 +251,7 @@ int main(int argc, char **argv)
 	    << *bb1 << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -306,7 +306,7 @@ int main(int argc, char **argv)
 		kk1.push_back(vvi[kk[i]]);
 	    return setVarsHistogramRepasReduce_u(m, kk1.data(), ar);
 	};
-	auto arpr = histogramRepasRed_u;
+	auto arpr = histogramRepasRed;
 	auto prar = histogramRepaRedsIndependent;
 
 	auto pressure = Variable("pressure");
@@ -683,7 +683,7 @@ int main(int argc, char **argv)
 	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ })) << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -772,6 +772,7 @@ int main(int argc, char **argv)
 		kk1.push_back(vvi[kk[i]]);
 	    return setVarsHistoryRepasReduce_u(1.0, m, kk1.data(), hr);
 	};
+	auto hrpr = historyRepasRed;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -828,26 +829,55 @@ int main(int argc, char **argv)
 	cout << "hrhh(uu,hrsel(hr,SizeList{0,4,8}))" << endl
 	    << *hrhh(*uu, *ur, *hrsel(*hr, SizeList{ 0,4,8 })) << endl << endl;
 
+	auto pr = hrpr(*hr);
+	cout << "pr = hrpr(hr)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	auto hr1 = hrhrred(*hr, *ur, VarList{ pressure, rain, cloud, wind });
 	cout << "hr1 = hrhrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;
 	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	pr = hrpr(*hr1);
+	cout << "pr = hrpr(hr1)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	hr1 = hrhrred(*hr, *ur, VarList{ wind, cloud, rain });
 	cout << "hr1 = hrhrred(hr, VarList{ wind, cloud, rain })" << endl;
 	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	pr = hrpr(*hr1);
+	cout << "pr = hrpr(hr1)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	hr1 = hrhrred(*hr, *ur, VarList{ rain, wind });
 	cout << "hr1 = hrhrred(hr, VarList{ rain, wind })" << endl;
 	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	pr = hrpr(*hr1);
+	cout << "pr = hrpr(hr1)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	hr1 = hrhrred(*hr, *ur, VarList{ rain });
 	cout << "hr1 = hrhrred(hr, VarList{ rain })" << endl;
 	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	pr = hrpr(*hr1);
+	cout << "pr = hrpr(hr1)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
+
 	hr1 = hrhrred(*hr, *ur, VarList{ });
 	cout << "hr1 = hrhrred(hr, VarList{ })" << endl;
 	cout << "rpln(aall(trim(hraa(uu,hr1))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hr1))))); cout << endl;
+	pr = hrpr(*hr1);
+	cout << "pr = hrpr(hr1)" << endl;
+	cout << "pr" << endl
+	    << *pr << endl << endl;
 
 	auto br = hrred(*hr, *ur, VarList{ pressure, rain, cloud, wind });
 	cout << "br = hrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;

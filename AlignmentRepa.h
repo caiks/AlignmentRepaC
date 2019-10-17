@@ -110,8 +110,8 @@ namespace Alignment
     public: double* arr;
     };
 
-    // histogramRepasRed_u :: Double -> HistogramRepa -> HistogramRepaRed
-    std::unique_ptr<HistogramRepaRed> histogramRepasRed_u(double, const HistogramRepa&);
+    // histogramRepasRed :: Double -> HistogramRepa -> HistogramRepaRed
+    std::unique_ptr<HistogramRepaRed> histogramRepasRed(double, const HistogramRepa&);
 
     // histogramRepaRedsIndependent :: Double -> HistogramRepaRed -> HistogramRepa
     std::unique_ptr<HistogramRepa> histogramRepaRedsIndependent(double, const HistogramRepaRed&);
