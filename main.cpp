@@ -4,6 +4,7 @@
 #include "AlignmentAeson.h"
 #include "AlignmentRepa.h"
 #include "AlignmentAesonRepa.h"
+#include "AlignmentRandomRepa.h"
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/reader.h"
@@ -773,6 +774,7 @@ int main(int argc, char **argv)
 	    return setVarsHistoryRepasReduce_u(1.0, m, kk1.data(), hr);
 	};
 	auto hrpr = historyRepasRed;
+	auto hrshuffle = historyRepasShuffle_u;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -900,6 +902,19 @@ int main(int argc, char **argv)
 	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
 
+	auto hrs = hrshuffle(17,*hr);
+	cout << "hrs = hrshuffle(17,hr)" << endl;
+	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hrs))))); cout << endl;
+
+	br = hrred(*hrs, *ur, VarList{ rain });
+	cout << "br = hrred(hrs, VarList{ rain})" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
+
+	br = hrred(*hrs, *ur, VarList{});
+	cout << "br = hrred(hrs, VarList{})" << endl;
+	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
+	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
     }
 
     if (false)
