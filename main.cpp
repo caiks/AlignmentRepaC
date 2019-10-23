@@ -775,6 +775,7 @@ int main(int argc, char **argv)
 	};
 	auto hrpr = historyRepasRed;
 	auto hrshuffle = historyRepasShuffle_u;
+	auto cross = parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -915,6 +916,28 @@ int main(int argc, char **argv)
 	cout << "br = hrred(hrs, VarList{})" << endl;
 	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
+
+	{
+	    VarList ww{ pressure, rain, cloud, wind };
+	    auto& vvi = ur->mapVarSize();
+	    std::size_t m = ww.size();
+	    SizeList ww1;
+	    for (std::size_t i = 0; i < m; i++)
+		ww1.push_back(vvi[ww[i]]);
+	    pr = hrpr(*hr);
+	    auto prs = hrpr(*hrs);
+	    std::size_t xmax = 81;
+	    std::size_t omax = 2;
+	    auto xx = cross(xmax, omax, m, ww1.data(), *hr, *pr, *hrs, *prs);
+	    auto tt = *std::get<0>(xx);
+	    auto s = std::get<1>(xx);
+	    cout << "s" << endl
+		<< s << endl << endl;
+	    cout << "tt[0]" << endl
+		<< (ur->listVarUCharPair[tt[0][0]]).first << "," << (ur->listVarUCharPair[tt[0][1]]).first << endl << endl;
+	    cout << "tt[1]" << endl
+		<< (ur->listVarUCharPair[tt[1][0]]).first << "," << (ur->listVarUCharPair[tt[1][1]]).first << endl << endl;
+	}
     }
 
     if (false)

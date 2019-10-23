@@ -1,4 +1,5 @@
-﻿#include "AlignmentRepa.h"
+﻿#include "AlignmentApprox.h"
+#include "AlignmentRepa.h"
 #include <iostream>
 
 using namespace Alignment;
@@ -1316,3 +1317,217 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
     return df;
 }
 
+std::size_t listVarsArrayHistoriesAlignedTop_u(
+    const std::size_t xmax, const std::size_t omax, const std::size_t n, unsigned char* svv, const std::size_t m, const std::size_t z1, const std::size_t z2,
+    std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
+    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
+{
+    std::size_t t = 0;
+    double* aa = new double[xmax];
+    double** xx1 = new double*[n];
+    double** xx2 = new double*[n];
+    double zf = (double)z1;
+    double f = (double)z1 / (double)z2;
+    double t1;
+    double t2;
+    std::size_t t3;
+    std::size_t tm;
+    double x1;
+    double x2;
+    std::size_t x3;
+    double a1;
+    double a2;
+    double b1;
+    double b2;
+    std::size_t ii;
+    std::size_t ij;
+    std::size_t pi;
+    std::size_t pj;
+    std::size_t nj;
+    std::size_t si;
+    std::size_t sj;
+    std::size_t u;
+    std::size_t i;
+    std::size_t j;
+    std::size_t k;
+    std::size_t a;
+
+    s = 0;
+
+    for (k = 1, a = svv[0], xx1[0] = pxx1, xx2[0] = pxx2; k<n; k++)
+    {
+	xx1[k] = pxx1 + a;
+	xx2[k] = pxx2 + a;
+	a += svv[k];
+    }
+
+    for (ii = 0; ii<m-1; ii++)
+    {
+	pi = ppww[ii];
+	si = svv[pi];
+	for (ij = ii+1; ij<m; ij++)
+	{
+	    pj = ppww[ij];
+	    sj = svv[pj];
+	    u = si*sj;
+	    if (u <= xmax)
+	    {
+		s++;
+		for (i = 0; i<u; i++)
+		    aa[i] = 1.0;
+		for (j = 0; j < z1; j++)
+		{
+		    nj = n*j;
+		    aa[sj*phh1[nj+pi] + phh1[nj+pj]] += 1.0;
+		}
+		for (a1 = 0.0, i = 0; i<u; i++)
+		    a1 += alngam(aa[i]);
+		for (i = 0; i<u; i++)
+		    aa[i] = 1.0;
+		for (j = 0; j < z2; j++)
+		{
+		    nj = n*j;
+		    aa[sj*phh2[nj+pi] + phh2[nj+pj]] += f;
+		}
+		for (b1 = 0.0, i = 0; i<u; i++)
+		    b1 += alngam(aa[i]);
+		for (a2 = 0.0, b2 = 0.0, i = 0; i<si; i++)
+		{
+		    x1 = zf*xx1[pi][i];
+		    x2 = zf*xx2[pi][i];
+		    for (j = 0; j<sj; j++)
+		    {
+			a2 += alngam(x1*xx1[pj][j] + 1.0);
+			b2 += alngam(x2*xx2[pj][j] + 1.0);
+		    }
+		}
+		if (t<omax)
+		{
+		    tww1[t] = pi;
+		    tww2[t] = pj;
+		    ts1[t] = a1 - a2 - b1 + b2;
+		    ts2[t] = b2 - b1;
+		    ts3[t] = -u;
+		    t++;
+		    if (t == omax)
+		    {
+			for (t1 = ts1[0], t2 = ts2[0], t3 = ts3[0], tm = 0, i = 1; i<omax; i++)
+			{
+			    x1 = ts1[i];
+			    if (t1>x1)
+			    {
+				t1 = x1;
+				t2 = ts2[i];
+				t3 = ts3[i];
+				tm = i;
+			    }
+			    else if (t1 == x1)
+			    {
+				x2 = ts2[i];
+				if (t2>x2)
+				{
+				    t2 = x2;
+				    t3 = ts3[i];
+				    tm = i;
+				}
+				else if (t2 == x2)
+				{
+				    x3 = ts3[i];
+				    if (t3>x3)
+				    {
+					t3 = x3;
+					tm = i;
+				    }
+				}
+			    }
+			}
+		    }
+		}
+		else
+		{
+		    x1 = a1 - a2 - b1 + b2;
+		    x2 = b2 - b1;
+		    x3 = -u;
+		    if (t1<x1 || (t1 == x1 && t2<x2) || (t1 == x1 && t2 == x2 && t3<x3))
+		    {
+			tww1[tm] = pi;
+			tww2[tm] = pj;
+			ts1[tm] = x1;
+			ts2[tm] = x2;
+			ts3[tm] = x3;
+			for (t1 = ts1[0], t2 = ts2[0], t3 = ts3[0], tm = 0, i = 1; i<omax; i++)
+			{
+			    x1 = ts1[i];
+			    if (t1>x1)
+			    {
+				t1 = x1;
+				t2 = ts2[i];
+				t3 = ts3[i];
+				tm = i;
+			    }
+			    else if (t1 == x1)
+			    {
+				x2 = ts2[i];
+				if (t2>x2)
+				{
+				    t2 = x2;
+				    t3 = ts3[i];
+				    tm = i;
+				}
+				else if (t2 == x2)
+				{
+				    x3 = ts3[i];
+				    if (t3>x3)
+				    {
+					t3 = x3;
+					tm = i;
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+    delete[] xx2;
+    delete[] xx1;
+    delete[] aa;
+    return t;
+}
+
+
+// parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> V.Vector Variable -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> (V.Vector (V.Vector Variable),Integer)
+std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t xmax, std::size_t omax, std::size_t m, std::size_t* ww, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+{
+    auto n = hh.dimension;
+    auto vhh = hh.vectorVar;
+    auto& mvv = hh.mapVarInt();
+    auto svv = hh.shape;
+    auto z = hh.size;
+    auto phh1 = hh.arr;
+    auto zrr = hhrr.size;
+    auto pxx1 = hhx.arr;
+    auto phh2 = hhrr.arr;
+    auto pxx2 = hhrrx.arr;
+    std::size_t* pww = new std::size_t[m];
+    for (std::size_t i = 0; i < m; i++)
+	pww[i] = mvv[ww[i]];
+    std::size_t* tww1 = new std::size_t[omax];
+    std::size_t* tww2 = new std::size_t[omax];
+    double* ts1 = new double[omax];
+    double* ts2 = new double[omax];
+    std::size_t* ts3 = new std::size_t[omax];
+    std::size_t s = 0;
+    auto t = listVarsArrayHistoriesAlignedTop_u(xmax,omax,n,svv,m,z,zrr,pww,phh1,pxx1,phh2,pxx2,tww1,tww2,ts1,ts2,ts3,s);
+    auto qq = std::make_unique<SizeListList>();
+    for (std::size_t i = 0; i < t; i++)
+	qq->push_back(SizeList{vhh[tww1[i]],vhh[tww2[i]]});
+    delete[] ts3;
+    delete[] ts2;
+    delete[] ts1;
+    delete[] tww2;
+    delete[] tww1;
+    delete[] pww;
+    return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(qq),s);
+}
