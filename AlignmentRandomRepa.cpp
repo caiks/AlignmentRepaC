@@ -5,7 +5,7 @@
 using namespace Alignment;
 
 // historyRepasShuffle_u :: HistoryRepa -> Int -> HistoryRepa
-std::unique_ptr<HistoryRepa> Alignment::historyRepasShuffle_u(unsigned s, const HistoryRepa& hr)
+std::unique_ptr<HistoryRepa> Alignment::historyRepasShuffle_u(const HistoryRepa& hr, unsigned s)
 {
     auto n = hr.dimension;
     auto vv = hr.vectorVar;

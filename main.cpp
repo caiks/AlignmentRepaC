@@ -902,7 +902,7 @@ int main(int argc, char **argv)
 	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
 
-	auto hrs = hrshuffle(17,*hr);
+	auto hrs = hrshuffle(*hr,17);
 	cout << "hrs = hrshuffle(17,hr)" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hrs))))); cout << endl;
 
