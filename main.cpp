@@ -495,7 +495,7 @@ int main(int argc, char **argv)
 //	    << hr.mapVarInt() << endl << endl;
 //    }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -684,7 +684,7 @@ int main(int argc, char **argv)
 	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ })) << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -1117,16 +1117,14 @@ int main(int argc, char **argv)
 	    pr = hrpr(*hr);
 	    auto prs = hrpr(*hrs);
 	    std::size_t xmax = 81;
-	    std::size_t omax = 2;
+	    std::size_t omax = 5;
 	    auto xx = cross(xmax, omax, m, ww1.data(), *hr, *pr, *hrs, *prs);
-	    auto tt = *std::get<0>(xx);
 	    auto s = std::get<1>(xx);
 	    cout << "s" << endl
 		<< s << endl << endl;
-	    cout << "tt[0]" << endl
-		<< (ur->listVarUCharPair[tt[0][0]]).first << "," << (ur->listVarUCharPair[tt[0][1]]).first << endl << endl;
-	    cout << "tt[1]" << endl
-		<< (ur->listVarUCharPair[tt[1][0]]).first << "," << (ur->listVarUCharPair[tt[1][1]]).first << endl << endl;
+	    auto tt = sorted(*std::get<0>(xx));
+	    for (auto& mm : tt)
+		cout << mm.first << "," << mm.second << endl;
 	}
     }
 
@@ -1374,16 +1372,14 @@ int main(int argc, char **argv)
 	    pr = hrpr(*hr);
 	    auto prs = hrpr(*hrs);
 	    std::size_t xmax = 81;
-	    std::size_t omax = 2;
+	    std::size_t omax = 5;
 	    auto xx = cross(xmax, omax, m, ww1.data(), *hr, *pr, *hrs, *prs);
-	    auto tt = *std::get<0>(xx);
 	    auto s = std::get<1>(xx);
 	    cout << "s" << endl
 		<< s << endl << endl;
-	    cout << "tt[0]" << endl
-		<< (ur->listVarUCharPair[tt[0][0]]).first << "," << (ur->listVarUCharPair[tt[0][1]]).first << endl << endl;
-	    cout << "tt[1]" << endl
-		<< (ur->listVarUCharPair[tt[1][0]]).first << "," << (ur->listVarUCharPair[tt[1][1]]).first << endl << endl;
+	    auto tt = sorted(*std::get<0>(xx));
+	    for (auto& mm : tt)
+		cout << mm.first << "," << mm.second << endl;
 	}
     }
 
@@ -2080,7 +2076,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -2333,7 +2329,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;

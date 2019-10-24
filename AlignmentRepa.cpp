@@ -1818,7 +1818,7 @@ std::size_t listVarsArrayHistoryVarientAlignedTop_u(
 
 
 // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> V.Vector Variable -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> (V.Vector (V.Vector Variable),Integer)
-std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t xmax, std::size_t omax, std::size_t m, std::size_t* ww, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t xmax, std::size_t omax, std::size_t m, std::size_t* ww, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
 {
     auto n = hh.dimension;
     auto vhh = hh.vectorVar;
@@ -1844,14 +1844,14 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSetV
 	t = listVarsArrayHistoryEvientAlignedTop_u(xmax, omax, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, tww1, tww2, ts1, ts2, ts3, s);
     else
 	t = listVarsArrayHistoryVarientAlignedTop_u(xmax, omax, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, tww1, tww2, ts1, ts2, ts3, s);
-    auto qq = std::make_unique<SizeListList>();
+    auto qq = std::make_unique<DoubleSizeListPairList>();
     for (std::size_t i = 0; i < t; i++)
-	qq->push_back(SizeList{vhh[tww1[i]],vhh[tww2[i]]});
+	qq->push_back(DoubleSizeListPair(ts1[i],SizeList{vhh[tww1[i]],vhh[tww2[i]]}));
     delete[] ts3;
     delete[] ts2;
     delete[] ts1;
     delete[] tww2;
     delete[] tww1;
     delete[] pww;
-    return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(qq),s);
+    return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq),s);
 }

@@ -16,6 +16,8 @@ namespace Alignment
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<SizeList> SizeListList;
+    typedef std::pair<double, SizeList> DoubleSizeListPair;
+    typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
     typedef std::unordered_set<std::size_t> SizeUSet;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
@@ -298,7 +300,7 @@ namespace Alignment
 namespace Alignment
 {
     // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> V.Vector Variable -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> (V.Vector (V.Vector Variable),Integer)
-    std::tuple<std::unique_ptr<SizeListList>, std::size_t> parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, std::size_t, std::size_t*, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
+    std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, std::size_t, std::size_t*, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 }
 
 
