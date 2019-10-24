@@ -567,7 +567,7 @@ void Alignment::HistoryRepa::transpose()
 	{
 	    iz = i*z;
 	    for (std::size_t j = 0; j < z; j++)
-		arr1[iz+j] = arr[j*n+i];
+		arr1[j*n + i] = arr[iz + j];
 	}
 	evient = true;
     }
@@ -846,8 +846,6 @@ std::unique_ptr<HistogramRepaRed> Alignment::historyRepasRed(const HistoryRepa& 
     auto rr = hr.arr;
     if (!n || !rr || !z)
 	return std::make_unique<HistogramRepaRed>();
-    if (!hr.evient)
-	return std::make_unique<HistogramRepaRed>();
     double f = 1.0 / z;
     auto pr = std::make_unique<HistogramRepaRed>();
     pr->dimension = n;
@@ -869,12 +867,20 @@ std::unique_ptr<HistogramRepaRed> Alignment::historyRepasRed(const HistoryRepa& 
     auto rr1 = pr->arr;
     for (std::size_t j = 0; j < sz; j++)
 	rr1[j] = 0.0;
-    for (std::size_t j = 0; j < z; j++)
-    {
-	std::size_t jn = j*n;
+    if (hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    for (std::size_t i = 0; i < n; i++)
+		rr1[xx[i] + rr[jn+i]] += f;
+	}
+    else
 	for (std::size_t i = 0; i < n; i++)
-	    rr1[xx[i] + rr[jn+i]] += f;
-    }
+	{
+	    std::size_t iz = i*z;
+	    for (std::size_t j = 0; j < z; j++)
+		rr1[xx[i] + rr[iz+j]] += f;
+	}
     return pr;
 }
 
