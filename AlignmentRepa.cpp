@@ -488,7 +488,7 @@ std::unique_ptr<HistogramRepa> Alignment::histogramRepaRedsIndependent(double z,
 //    return *_mapVarInt;
 //}
 
-HistoryRepa::HistoryRepa() : _mapVarInt(0), dimension(0), vectorVar(0), shape(0), size(0), arr(0)
+HistoryRepa::HistoryRepa() : _mapVarInt(0), dimension(0), vectorVar(0), shape(0), size(0), evient(false), arr(0)
 {
 }
 
@@ -520,7 +520,7 @@ std::ostream& operator<<(std::ostream& out, const HistoryRepa& hr)
 	if (i) out << ",";
 	out << (std::size_t)s;
     }
-    out << "]," << z << ",[";
+    out << "]," << z << "," << (bool)hr.evient << ",[";
     for (std::size_t j = 0; j < n*z; j++)
     {
 	if (j) out << ",";
@@ -540,6 +540,41 @@ SizeSizeUMap& Alignment::HistoryRepa::mapVarInt() const
 	    const_cast<HistoryRepa*>(this)->_mapVarInt->insert_or_assign(vectorVar[i], i);
     }
     return *_mapVarInt;
+}
+
+void Alignment::HistoryRepa::transpose()
+{
+    if (!dimension || !size || !arr)
+	return;
+    auto n = dimension;
+    auto z = size;
+    auto arr1 = new unsigned char[z*n];
+    if (evient)
+    {
+	std::size_t jn;
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    jn = j*n;
+	    for (std::size_t i = 0; i < n; i++)
+		arr1[i*z+j] = arr[jn+i];
+	}
+	evient = false;
+    }
+    else
+    {
+	std::size_t iz;
+	for (std::size_t i = 0; i < n; i++)
+	{
+	    iz = i*z;
+	    for (std::size_t j = 0; j < z; j++)
+		arr1[iz+j] = arr[j*n+i];
+	}
+	evient = true;
+    }
+    auto arr2 = arr;
+    arr = arr1;
+    delete[] arr2;
+    return;
 }
 
 // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
@@ -571,6 +606,7 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	for (auto& w : xx)
 	    yy.insert_or_assign(w, j++);
     }
+    hr->evient = true;
     hr->arr = new unsigned char[z*n];
     auto rr = hr->arr;
     auto hm = sorted(hh.map_u());
@@ -610,6 +646,8 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
 	    yy.push_back(w);
     }
     auto hh = std::make_unique<History>();
+    if (!hr.evient)
+	return hh;
     auto& hm = hh->map_u();
     hm.reserve(z);
     for (std::size_t j = 0; j < z; j++)
@@ -634,6 +672,8 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     auto hr1 = std::make_unique<HistoryRepa>();
     if (!rr)
 	return hr1;
+    if (!hr.evient)
+	return hr1;
     hr1->dimension = n;
     hr1->vectorVar = new std::size_t[n];
     auto vv1 = hr1->vectorVar;
@@ -645,6 +685,7 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
 	sh1[i] = sh[i];
     }
     hr1->size = z1;
+    hr1->evient = hr.evient;
     hr1->arr = new unsigned char[z1*n];
     auto rr1 = hr1->arr;
     std::size_t k = 0;
@@ -671,6 +712,8 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasHistoryRepasHistoryRepaSelec
     auto z = hr.size;
     auto rr = hr.arr;
     if (!rr)
+	return std::make_unique<HistoryRepa>();
+    if (!hr.evient)
 	return std::make_unique<HistoryRepa>();
     auto m = ss.dimension;
     auto kk = ss.vectorVar;
@@ -710,6 +753,8 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     auto hr1 = std::make_unique<HistoryRepa>();
     if (!rr)
 	return hr1;
+    if (!hr.evient)
+	return hr1;
     hr1->dimension = m;
     hr1->vectorVar = new std::size_t[m];
     auto vkk = hr1->vectorVar;
@@ -725,6 +770,7 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
 	skk[i] = svv[p];
     }
     hr1->size = z;
+    hr1->evient = hr.evient;
     hr1->arr = new unsigned char[z*m];
     auto rr1 = hr1->arr;
     std::size_t k = 0;
@@ -751,6 +797,8 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     auto rr = hr.arr;
     auto ar = std::make_unique<HistogramRepa>();
     if (!rr)
+	return ar;
+    if (!hr.evient)
 	return ar;
     ar->dimension = m;
     ar->vectorVar = new std::size_t[m];
@@ -797,6 +845,8 @@ std::unique_ptr<HistogramRepaRed> Alignment::historyRepasRed(const HistoryRepa& 
     auto z = hr.size;
     auto rr = hr.arr;
     if (!n || !rr || !z)
+	return std::make_unique<HistogramRepaRed>();
+    if (!hr.evient)
 	return std::make_unique<HistogramRepaRed>();
     double f = 1.0 / z;
     auto pr = std::make_unique<HistogramRepaRed>();
@@ -1110,6 +1160,8 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
     auto z = hr.size;
     auto rr = hr.arr;
     auto hr1 = std::make_unique<HistoryRepa>();
+    if (!hr.evient)
+	return hr1;
     auto n1 = n;
     for (auto& ll : fr.layers)
 	n1 += ll.size();
@@ -1136,6 +1188,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	}
     hr1->size = z;
     auto& mkk = hr1->mapVarInt();
+    hr1->evient = hr.evient;
     hr1->arr = new unsigned char[z*p];
     auto rr1 = hr1->arr;
     for (std::size_t j = 0; j < z; j++)
@@ -1317,7 +1370,7 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
     return df;
 }
 
-std::size_t listVarsArrayHistoriesAlignedTop_u(
+std::size_t listVarsArrayHistoryEvientAlignedTop_u(
     const std::size_t xmax, const std::size_t omax, const std::size_t n, unsigned char* svv, const std::size_t m, const std::size_t z1, const std::size_t z2,
     std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
     std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
@@ -1343,7 +1396,7 @@ std::size_t listVarsArrayHistoriesAlignedTop_u(
     std::size_t ij;
     std::size_t pi;
     std::size_t pj;
-    std::size_t nj;
+    std::size_t jn;
     std::size_t si;
     std::size_t sj;
     std::size_t u;
@@ -1377,8 +1430,8 @@ std::size_t listVarsArrayHistoriesAlignedTop_u(
 		    aa[i] = 1.0;
 		for (j = 0; j < z1; j++)
 		{
-		    nj = n*j;
-		    aa[sj*phh1[nj+pi] + phh1[nj+pj]] += 1.0;
+		    jn = n*j;
+		    aa[sj*phh1[jn+pi] + phh1[jn+pj]] += 1.0;
 		}
 		for (a1 = 0.0, i = 0; i<u; i++)
 		    a1 += alngam(aa[i]);
@@ -1386,9 +1439,187 @@ std::size_t listVarsArrayHistoriesAlignedTop_u(
 		    aa[i] = 1.0;
 		for (j = 0; j < z2; j++)
 		{
-		    nj = n*j;
-		    aa[sj*phh2[nj+pi] + phh2[nj+pj]] += f;
+		    jn = n*j;
+		    aa[sj*phh2[jn+pi] + phh2[jn+pj]] += f;
 		}
+		for (b1 = 0.0, i = 0; i<u; i++)
+		    b1 += alngam(aa[i]);
+		for (a2 = 0.0, b2 = 0.0, i = 0; i<si; i++)
+		{
+		    x1 = zf*xx1[pi][i];
+		    x2 = zf*xx2[pi][i];
+		    for (j = 0; j<sj; j++)
+		    {
+			a2 += alngam(x1*xx1[pj][j] + 1.0);
+			b2 += alngam(x2*xx2[pj][j] + 1.0);
+		    }
+		}
+		if (t<omax)
+		{
+		    tww1[t] = pi;
+		    tww2[t] = pj;
+		    ts1[t] = a1 - a2 - b1 + b2;
+		    ts2[t] = b2 - b1;
+		    ts3[t] = -u;
+		    t++;
+		    if (t == omax)
+		    {
+			for (t1 = ts1[0], t2 = ts2[0], t3 = ts3[0], tm = 0, i = 1; i<omax; i++)
+			{
+			    x1 = ts1[i];
+			    if (t1>x1)
+			    {
+				t1 = x1;
+				t2 = ts2[i];
+				t3 = ts3[i];
+				tm = i;
+			    }
+			    else if (t1 == x1)
+			    {
+				x2 = ts2[i];
+				if (t2>x2)
+				{
+				    t2 = x2;
+				    t3 = ts3[i];
+				    tm = i;
+				}
+				else if (t2 == x2)
+				{
+				    x3 = ts3[i];
+				    if (t3>x3)
+				    {
+					t3 = x3;
+					tm = i;
+				    }
+				}
+			    }
+			}
+		    }
+		}
+		else
+		{
+		    x1 = a1 - a2 - b1 + b2;
+		    x2 = b2 - b1;
+		    x3 = -u;
+		    if (t1<x1 || (t1 == x1 && t2<x2) || (t1 == x1 && t2 == x2 && t3<x3))
+		    {
+			tww1[tm] = pi;
+			tww2[tm] = pj;
+			ts1[tm] = x1;
+			ts2[tm] = x2;
+			ts3[tm] = x3;
+			for (t1 = ts1[0], t2 = ts2[0], t3 = ts3[0], tm = 0, i = 1; i<omax; i++)
+			{
+			    x1 = ts1[i];
+			    if (t1>x1)
+			    {
+				t1 = x1;
+				t2 = ts2[i];
+				t3 = ts3[i];
+				tm = i;
+			    }
+			    else if (t1 == x1)
+			    {
+				x2 = ts2[i];
+				if (t2>x2)
+				{
+				    t2 = x2;
+				    t3 = ts3[i];
+				    tm = i;
+				}
+				else if (t2 == x2)
+				{
+				    x3 = ts3[i];
+				    if (t3>x3)
+				    {
+					t3 = x3;
+					tm = i;
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+    delete[] xx2;
+    delete[] xx1;
+    delete[] aa;
+    return t;
+}
+
+std::size_t listVarsArrayHistoryVarientAlignedTop_u(
+    const std::size_t xmax, const std::size_t omax, const std::size_t n, unsigned char* svv, const std::size_t m, const std::size_t z1, const std::size_t z2,
+    std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
+    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
+{
+    std::size_t t = 0;
+    double* aa = new double[xmax];
+    double** xx1 = new double*[n];
+    double** xx2 = new double*[n];
+    double zf = (double)z1;
+    double f = (double)z1 / (double)z2;
+    double t1;
+    double t2;
+    std::size_t t3;
+    std::size_t tm;
+    double x1;
+    double x2;
+    std::size_t x3;
+    double a1;
+    double a2;
+    double b1;
+    double b2;
+    std::size_t ii;
+    std::size_t ij;
+    std::size_t pi;
+    std::size_t pj;
+    std::size_t qi;
+    std::size_t qj;
+    std::size_t si;
+    std::size_t sj;
+    std::size_t u;
+    std::size_t i;
+    std::size_t j;
+    std::size_t k;
+    std::size_t a;
+
+    s = 0;
+
+    for (k = 1, a = svv[0], xx1[0] = pxx1, xx2[0] = pxx2; k<n; k++)
+    {
+	xx1[k] = pxx1 + a;
+	xx2[k] = pxx2 + a;
+	a += svv[k];
+    }
+
+    for (ii = 0; ii<m - 1; ii++)
+    {
+	pi = ppww[ii];
+	si = svv[pi];
+	for (ij = ii + 1; ij<m; ij++)
+	{
+	    pj = ppww[ij];
+	    sj = svv[pj];
+	    u = si*sj;
+	    if (u <= xmax)
+	    {
+		s++;
+		for (i = 0; i<u; i++)
+		    aa[i] = 1.0;
+		qi = z1*pi;
+		qj = z1*pj;
+		for (j = 0; j < z1; j++)
+		    aa[sj*phh1[qi + j] + phh1[qj + j]] += 1.0;
+		for (a1 = 0.0, i = 0; i<u; i++)
+		    a1 += alngam(aa[i]);
+		for (i = 0; i<u; i++)
+		    aa[i] = 1.0;
+		qi = z2*pi;
+		qj = z2*pj;
+		for (j = 0; j < z2; j++)
+		    aa[sj*phh2[qi + j] + phh2[qj + j]] += f;
 		for (b1 = 0.0, i = 0; i<u; i++)
 		    b1 += alngam(aa[i]);
 		for (a2 = 0.0, b2 = 0.0, i = 0; i<si; i++)
@@ -1519,7 +1750,11 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSetV
     double* ts2 = new double[omax];
     std::size_t* ts3 = new std::size_t[omax];
     std::size_t s = 0;
-    auto t = listVarsArrayHistoriesAlignedTop_u(xmax,omax,n,svv,m,z,zrr,pww,phh1,pxx1,phh2,pxx2,tww1,tww2,ts1,ts2,ts3,s);
+    std::size_t t = 0;
+    if (hh.evient)
+	t = listVarsArrayHistoryEvientAlignedTop_u(xmax, omax, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, tww1, tww2, ts1, ts2, ts3, s);
+    else
+	t = listVarsArrayHistoryVarientAlignedTop_u(xmax, omax, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, tww1, tww2, ts1, ts2, ts3, s);
     auto qq = std::make_unique<SizeListList>();
     for (std::size_t i = 0; i < t; i++)
 	qq->push_back(SizeList{vhh[tww1[i]],vhh[tww2[i]]});

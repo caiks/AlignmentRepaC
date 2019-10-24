@@ -12,6 +12,7 @@ void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
     auto vv = hr.vectorVar;
     auto sh = hr.shape;
     auto z = hr.size;
+    auto evient = hr.evient;
     auto rr = hr.arr;
     out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
     for (std::size_t i = 0; i < n; i++)
@@ -20,6 +21,7 @@ void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
 	out.write(reinterpret_cast<char*>(&sh[i]), 1);
     }
     out.write(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+    out.write(reinterpret_cast<char*>(&evient), 1);
     out.write(reinterpret_cast<char*>(hr.arr), z*n);
 }
 
@@ -41,6 +43,7 @@ std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in,
     }
     std::size_t z;
     in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+    in.read(reinterpret_cast<char*>(&hr->evient), 1);
     hr->size = z;
     hr->arr = new unsigned char[z*n];
     in.read(reinterpret_cast<char*>(hr->arr), z*n);

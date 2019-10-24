@@ -26,17 +26,36 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasShuffle_u(const HistoryRepa&
 	sh1[i] = sh[i];
     }
     hr1->size = z;
+    hr1->evient = hr.evient;
     hr1->arr = new unsigned char[z*n];
     auto rr1 = hr1->arr;
     memcpy(rr1, rr, z*n);
     srand(s);
-    for (std::size_t i = 0; i < n; i++)
+    if (hr.evient)
 	for (std::size_t j = z-1; j != 0; j--)
 	{
-	    auto k = rand() % (j+1);
-	    auto x = rr1[k*n + i];
-	    rr1[k*n + i] = rr1[j*n + i];
-	    rr1[j*n + i] = x;
+	    auto jn = j*n;
+	    auto j1 = j+1;
+	    for (std::size_t i = 0; i < n; i++)
+	    {
+		auto k = rand() % j1;
+		auto kn = k*n;
+		auto x = rr1[kn + i];
+		rr1[kn + i] = rr1[jn + i];
+		rr1[jn + i] = x;
+	    }
+	}
+    else
+	for (std::size_t i = 0; i < n; i++)
+	{
+	    auto iz = i*z;
+	    for (std::size_t j = z - 1; j != 0; j--)
+	    {
+		auto k = rand() % (j + 1);
+		auto x = rr1[iz + k];
+		rr1[iz + k] = rr1[iz + j];
+		rr1[iz + j] = x;
+	    }
 	}
     return hr1;
 }

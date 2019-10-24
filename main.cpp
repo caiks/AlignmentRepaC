@@ -495,7 +495,7 @@ int main(int argc, char **argv)
 //	    << hr.mapVarInt() << endl << endl;
 //    }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -903,8 +903,8 @@ int main(int argc, char **argv)
 	cout << "rpln(aall(trim(rraa(uu,br))))" << endl;
 	rpln(cout, sorted(*aall(*trim(*rraa(*uu, *ur, *br))))); cout << endl;
 
-	auto hrs = hrshuffle(*hr,17);
-	cout << "hrs = hrshuffle(17,hr)" << endl;
+	auto hrs = hrshuffle(*hr,7);
+	cout << "hrs = hrshuffle(7,hr)" << endl;
 	rpln(cout, sorted(*aall(*trim(*hraa(*uu, *ur, *hrs))))); cout << endl;
 
 	br = hrred(*hrs, *ur, VarList{ rain });
@@ -1630,7 +1630,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;

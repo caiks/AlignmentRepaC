@@ -173,6 +173,9 @@ namespace Alignment
 
     public: unsigned char* shape;
     public: std::size_t size;
+
+    public: void transpose();
+    public: unsigned char evient;
     public: unsigned char* arr;
     };
 
