@@ -578,7 +578,7 @@ void Alignment::HistoryRepa::transpose()
 }
 
 // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
-std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const System& uu, const SystemRepa& ur, const History& hh)
+std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const System& uu, const SystemRepa& ur, const History& hh, unsigned char evient)
 {
     auto& vvi = ur.mapVarSize();
     auto ww = historiesSetVar(hh);
@@ -620,8 +620,11 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	    j++;
 	}
     }
+    if (!evient)
+	hr->transpose();
     return hr;
 }
+
 
 // systemsHistoryRepasHistory_u :: System -> HistoryRepa -> Maybe History
 std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
@@ -646,8 +649,6 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
 	    yy.push_back(w);
     }
     auto hh = std::make_unique<History>();
-    if (!hr.evient)
-	return hh;
     auto& hm = hh->map_u();
     hm.reserve(z);
     for (std::size_t j = 0; j < z; j++)
@@ -655,7 +656,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
 	std::vector<VarValPair> ss;
 	ss.reserve(n);
 	for (std::size_t i = 0; i < n; i++)
-	    ss.push_back(VarValPair(ww[i], mm[i][rr[j*n+i]]));
+	    ss.push_back(VarValPair(ww[i], mm[i][rr[hr.evient ? j*n+i : i*z+j]]));
 	hm.insert_or_assign(Id(j+1), State(ss));
     }
     return hh;
@@ -672,8 +673,6 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     auto hr1 = std::make_unique<HistoryRepa>();
     if (!rr)
 	return hr1;
-    if (!hr.evient)
-	return hr1;
     hr1->dimension = n;
     hr1->vectorVar = new std::size_t[n];
     auto vv1 = hr1->vectorVar;
@@ -689,15 +688,26 @@ std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u
     hr1->arr = new unsigned char[z1*n];
     auto rr1 = hr1->arr;
     std::size_t k = 0;
-    for (std::size_t p = 0; p < z1; p++)
-    {
-	std::size_t jn = ll[p]*n;
+    if (hr.evient)
+	for (std::size_t p = 0; p < z1; p++)
+	{
+	    std::size_t jn = ll[p]*n;
+	    for (std::size_t i = 0; i < n; i++)
+	    {
+		rr1[k] = rr[jn+i];
+		k++;
+	    }
+	}
+    else
 	for (std::size_t i = 0; i < n; i++)
 	{
-	    rr1[k] = rr[jn+i];
-	    k++;
+	    std::size_t iz = i*z;
+	    for (std::size_t p = 0; p < z1; p++)
+	    {
+		rr1[k] = rr[iz + ll[p]];
+		k++;
+	    }
 	}
-    }
     return hr1;
 }
 
@@ -713,8 +723,6 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasHistoryRepasHistoryRepaSelec
     auto rr = hr.arr;
     if (!rr)
 	return std::make_unique<HistoryRepa>();
-    if (!hr.evient)
-	return std::make_unique<HistoryRepa>();
     auto m = ss.dimension;
     auto kk = ss.vectorVar;
     auto y = ss.size;
@@ -723,21 +731,66 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasHistoryRepasHistoryRepaSelec
     for (std::size_t i = 0; i < m; i++)
 	pkk[i] = mvv[kk[i]];
     SizeList ll;
-    for (std::size_t j = 0; j < z; j++)
-    {
-	std::size_t jn = j*n;
-	bool any = false;
-	for (std::size_t k = 0; !any && k < y; k++)
+    if (ss.evient && hr.evient)
+	for (std::size_t j = 0; j < z; j++)
 	{
-	    std::size_t km = k*m;
-	    bool all = true;
-	    for (std::size_t i = 0; all && i < m; i++)
-		all = rr1[km + i] == rr[jn + pkk[i]];
-	    any = all;
+	    std::size_t jn = j*n;
+	    bool any = false;
+	    for (std::size_t k = 0; !any && k < y; k++)
+	    {
+		std::size_t km = k*m;
+		bool all = true;
+		for (std::size_t i = 0; all && i < m; i++)
+		    all = rr1[km + i] == rr[jn + pkk[i]];
+		any = all;
+	    }
+	    if (any)
+		ll.push_back(j);
 	}
-	if (any)
-	    ll.push_back(j);
-    }
+    else if (ss.evient && !hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    bool any = false;
+	    for (std::size_t k = 0; !any && k < y; k++)
+	    {
+		std::size_t km = k*m;
+		bool all = true;
+		for (std::size_t i = 0; all && i < m; i++)
+		    all = rr1[km + i] == rr[pkk[i]*z + j];
+		any = all;
+	    }
+	    if (any)
+		ll.push_back(j);
+	}
+    else if (!ss.evient && hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    bool any = false;
+	    for (std::size_t k = 0; !any && k < y; k++)
+	    {
+		bool all = true;
+		for (std::size_t i = 0; all && i < m; i++)
+		    all = rr1[i*y + k] == rr[jn + pkk[i]];
+		any = all;
+	    }
+	    if (any)
+		ll.push_back(j);
+	}
+    else
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    bool any = false;
+	    for (std::size_t k = 0; !any && k < y; k++)
+	    {
+		bool all = true;
+		for (std::size_t i = 0; all && i < m; i++)
+		    all = rr1[i*y + k] == rr[pkk[i]*z + j];
+		any = all;
+	    }
+	    if (any)
+		ll.push_back(j);
+	}
     delete[] pkk;
     return hrsel(ll.size(),ll.data(),hr);
 }
@@ -752,8 +805,6 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     auto rr = hr.arr;
     auto hr1 = std::make_unique<HistoryRepa>();
     if (!rr)
-	return hr1;
-    if (!hr.evient)
 	return hr1;
     hr1->dimension = m;
     hr1->vectorVar = new std::size_t[m];
@@ -774,15 +825,26 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
     hr1->arr = new unsigned char[z*m];
     auto rr1 = hr1->arr;
     std::size_t k = 0;
-    for (std::size_t j = 0; j < z; j++)
-    {
-	std::size_t jn = j*n;
+    if (hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    for (std::size_t i = 0; i < m; i++)
+	    {
+		rr1[k] = rr[jn + pkk[i]];
+		k++;
+	    }
+	}
+    else
 	for (std::size_t i = 0; i < m; i++)
 	{
-	    rr1[k] = rr[jn + pkk[i]];
-	    k++;
+	    std::size_t iz = pkk[i]*z;
+	    for (std::size_t j = 0; j < z; j++)
+	    {
+		rr1[k] = rr[iz + j];
+		k++;
+	    }
 	}
-    }
     delete[] pkk;
     return hr1;
 }
@@ -797,8 +859,6 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     auto rr = hr.arr;
     auto ar = std::make_unique<HistogramRepa>();
     if (!rr)
-	return ar;
-    if (!hr.evient)
 	return ar;
     ar->dimension = m;
     ar->vectorVar = new std::size_t[m];
@@ -821,13 +881,21 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, 
     auto rr1 = ar->arr;
     for (std::size_t j = 0; j < w; j++)
 	rr1[j] = 0.0;
-    if (m > 0)
+    if (m > 0 && hr.evient)
 	for (std::size_t j = 0; j < z; j++)
 	{
 	    std::size_t jn = j*n;
-	    std::size_t k = rr[jn+pkk[0]];
+	    std::size_t k = rr[jn + pkk[0]];
 	    for (std::size_t i = 1; i < m; i++)
-		k = skk[i]*k + rr[jn+pkk[i]];
+		k = skk[i]*k + rr[jn + pkk[i]];
+	    rr1[k] += f;
+	}
+    else if (m > 0 && !hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t k = rr[pkk[0]*z + j];
+	    for (std::size_t i = 1; i < m; i++)
+		k = skk[i]*k + rr[pkk[i]*z + j];
 	    rr1[k] += f;
 	}
     else
@@ -1166,8 +1234,6 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
     auto z = hr.size;
     auto rr = hr.arr;
     auto hr1 = std::make_unique<HistoryRepa>();
-    if (!hr.evient)
-	return hr1;
     auto n1 = n;
     for (auto& ll : fr.layers)
 	n1 += ll.size();
@@ -1215,18 +1281,35 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	    auto ar = tr->arr;
 	    for (std::size_t i = 0; i < m; i++)
 		pkk[i] = mkk[ww[i]];
-	    if (m > 0)
-		for (std::size_t j = 0; j < z; j++)
-		{
-		    std::size_t jp = j*p;
-		    std::size_t k = rr1[jp + pkk[0]];
-		    for (std::size_t i = 1; i < m; i++)
-			k = sh[i] * k + rr1[jp + pkk[i]];
-		    rr1[jp+q] = ar[k];
-		}
+	    if (hr.evient)
+	    {
+		if (m > 0)
+		    for (std::size_t j = 0; j < z; j++)
+		    {
+			std::size_t jp = j*p;
+			std::size_t k = rr1[jp + pkk[0]];
+			for (std::size_t i = 1; i < m; i++)
+			    k = sh[i] * k + rr1[jp + pkk[i]];
+			rr1[jp+q] = ar[k];
+		    }
+		else
+		    for (std::size_t j = 0; j < z; j++)
+			rr1[j*p+q] = 0;
+	    }
 	    else
-		for (std::size_t j = 0; j < z; j++)
-		    rr1[j*p+q] = 0;
+	    {
+		if (m > 0)
+		    for (std::size_t j = 0; j < z; j++)
+		    {
+			std::size_t k = rr1[pkk[0]*z + j];
+			for (std::size_t i = 1; i < m; i++)
+			    k = sh[i] * k + rr1[pkk[i]*z + j];
+			rr1[q*z + j] = ar[k];
+		    }
+		else
+		    for (std::size_t j = 0; j < z; j++)
+			rr1[q*z + j] = 0;
+	    }
 	    q++;
 	}
     delete[] pkk;

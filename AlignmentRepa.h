@@ -180,7 +180,7 @@ namespace Alignment
     };
 
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
-    std::unique_ptr<HistoryRepa> systemsHistoriesHistoryRepa_u(const System&, const SystemRepa&, const History&);
+    std::unique_ptr<HistoryRepa> systemsHistoriesHistoryRepa_u(const System&, const SystemRepa&, const History&, unsigned char evient = false);
 
     // systemsHistoryRepasHistory_u :: System -> HistoryRepa -> Maybe History
     std::unique_ptr<History> systemsHistoryRepasHistory_u(const System&, const SystemRepa&, const HistoryRepa&);
