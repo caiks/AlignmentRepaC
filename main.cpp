@@ -1118,7 +1118,7 @@ int main(int argc, char **argv)
 	    auto prs = hrpr(*hrs);
 	    std::size_t xmax = 81;
 	    std::size_t omax = 5;
-	    auto xx = cross(xmax, omax, m, ww1.data(), *hr, *pr, *hrs, *prs);
+	    auto xx = cross(xmax, omax, ww1, *hr, *pr, *hrs, *prs);
 	    auto s = std::get<1>(xx);
 	    cout << "s" << endl
 		<< s << endl << endl;
@@ -1373,7 +1373,7 @@ int main(int argc, char **argv)
 	    auto prs = hrpr(*hrs);
 	    std::size_t xmax = 81;
 	    std::size_t omax = 5;
-	    auto xx = cross(xmax, omax, m, ww1.data(), *hr, *pr, *hrs, *prs);
+	    auto xx = cross(xmax, omax, ww1, *hr, *pr, *hrs, *prs);
 	    auto s = std::get<1>(xx);
 	    cout << "s" << endl
 		<< s << endl << endl;
