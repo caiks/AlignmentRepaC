@@ -1358,12 +1358,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 		rr1[jp+i] = rr[jn+i];
 	}
     else
-	for (std::size_t i = 0; i < n; i++)
-	{
-	    std::size_t iz = i*z;
-	    for (std::size_t j = 0; j < z; j++)
-		rr1[iz+j] = rr[iz+j];
-	}
+	memcpy(rr1, rr, z*n);
     std::size_t* pkk = new std::size_t[mmax];
     auto q = n;
     for (auto& ll : fr.layers)
