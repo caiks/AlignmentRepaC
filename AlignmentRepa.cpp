@@ -239,7 +239,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
 }
 
 // setVarsHistogramRepasReduce_u :: Set.Set Variable -> HistogramRepa -> HistogramRepa
-std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(std::size_t m, std::size_t* kk, const HistogramRepa& ar)
+std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(std::size_t m, const std::size_t* kk, const HistogramRepa& ar)
 {
     auto n = ar.dimension;
     auto svv = ar.shape;
@@ -663,7 +663,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
 }
 
 // eventsHistoryRepasHistoryRepaSelection_u :: [Int] -> HistoryRepa -> HistoryRepa
-std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u(std::size_t z1, std::size_t* ll, const HistoryRepa& hr)
+std::unique_ptr<HistoryRepa> Alignment::eventsHistoryRepasHistoryRepaSelection_u(std::size_t z1, const std::size_t* ll, const HistoryRepa& hr)
 {
     auto n = hr.dimension;
     auto vv = hr.vectorVar;
@@ -796,7 +796,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasHistoryRepasHistoryRepaSelec
 }
 
 // setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
-std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(std::size_t m, std::size_t* kk, const HistoryRepa& hr)
+std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(std::size_t m, const std::size_t* kk, const HistoryRepa& hr)
 {
     auto n = hr.dimension;
     auto svv = hr.shape;
@@ -850,7 +850,7 @@ std::unique_ptr<HistoryRepa> Alignment::setVarsHistoryRepasHistoryRepaReduced_u(
 }
 
 // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
-std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, std::size_t m, std::size_t* kk, const HistoryRepa& hr)
+std::unique_ptr<HistogramRepa> Alignment::setVarsHistoryRepasReduce_u(double f, std::size_t m, const std::size_t* kk, const HistoryRepa& hr)
 {
     auto n = hr.dimension;
     auto svv = hr.shape;

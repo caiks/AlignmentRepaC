@@ -82,7 +82,7 @@ namespace Alignment
     std::unique_ptr<Histogram> systemsHistogramRepasHistogram_u(const System&, const SystemRepa&, const HistogramRepa&);
 
     // setVarsHistogramRepasReduce_u :: Set.Set Variable -> HistogramRepa -> HistogramRepa
-    std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(std::size_t m, std::size_t* kk, const HistogramRepa&);
+    std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(std::size_t m, const std::size_t* kk, const HistogramRepa&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepa&);
@@ -188,16 +188,16 @@ namespace Alignment
     std::unique_ptr<History> systemsHistoryRepasHistory_u(const System&, const SystemRepa&, const HistoryRepa&);
 
     // eventsHistoryRepasHistoryRepaSelection :: [Int] -> HistoryRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> eventsHistoryRepasHistoryRepaSelection_u(std::size_t, std::size_t*, const HistoryRepa&);
+    std::unique_ptr<HistoryRepa> eventsHistoryRepasHistoryRepaSelection_u(std::size_t, const std::size_t*, const HistoryRepa&);
 
     // historyRepasHistoryRepasHistoryRepaSelection_u :: HistoryRepa -> HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasHistoryRepasHistoryRepaSelection_u(const HistoryRepa&, const HistoryRepa&);
 
     // setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
-    std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(std::size_t, std::size_t*, const HistoryRepa&);
+    std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(std::size_t, const std::size_t*, const HistoryRepa&);
 
     // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
-    std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, std::size_t, std::size_t*, const HistoryRepa&);
+    std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, std::size_t, const std::size_t*, const HistoryRepa&);
 
     // historyRepasRed :: HistoryRepa -> HistogramRepaRed
     std::unique_ptr<HistogramRepaRed> historyRepasRed(const HistoryRepa&);
