@@ -1130,6 +1130,20 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
     return tt;
 }
 
+std::ostream& operator<<(std::ostream& out, const FudRepa& fr)
+{
+    out << "[";
+    for (std::size_t i = 0; i < fr.layers.size(); i++)
+    {
+	out << (i ? "," : "") << "[";
+	for (std::size_t j = 0; j < fr.layers[i].size(); j++)
+	    out << (j ? "," : "") << *fr.layers[i][j];
+	out << "]";
+    }
+    out << "]";
+    return out;
+}
+
 // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
 // cf listVariablesListTransformRepasSort :: V.Vector Variable -> V.Vector TransformRepa -> V.Vector
 std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(const SizeUSet& vv, const TransformRepaPtrList& ff)
@@ -1224,6 +1238,78 @@ std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const Sys
     return ff;
 }
 
+// fudRepasSetVar :: FudRepa -> Set.Set Variable
+std::unique_ptr<SizeUSet> Alignment::fudRepasSetVar(const FudRepa& fr)
+{
+    std::size_t l = 0;
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	    l += tt->dimension + 1;
+    auto vv = std::make_unique<SizeUSet>(l);
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	{
+	    vv->insert(tt->derived);
+	    auto n = tt->dimension;
+	    auto xx = tt->vectorVar;
+	    for (std::size_t i = 0; i < n; i++)
+		vv->insert(xx[i]);
+	}
+    return vv;
+}
+
+// fudRepasDerived :: FudRepa -> Set.Set Variable
+std::unique_ptr<SizeUSet> Alignment::fudRepasDerived(const FudRepa& fr)
+{
+    std::size_t l = 0;
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	    l += tt->dimension + 1;
+    auto vv = std::make_unique<SizeUSet>(l);
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	{
+	    vv->insert(tt->derived);
+	    auto n = tt->dimension;
+	    auto xx = tt->vectorVar;
+	    for (std::size_t i = 0; i < n; i++)
+		vv->insert(xx[i]);
+	}
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	{
+	    auto n = tt->dimension;
+	    auto xx = tt->vectorVar;
+	    for (std::size_t i = 0; i < n; i++)
+		vv->erase(xx[i]);
+	}
+    return vv;
+}
+
+// fudRepasUnderlying :: FudRepa -> Set.Set Variable
+std::unique_ptr<SizeUSet> Alignment::fudRepasUnderlying(const FudRepa& fr)
+{
+    std::size_t l = 0;
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	    l += tt->dimension + 1;
+    auto vv = std::make_unique<SizeUSet>(l);
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	{
+	    vv->insert(tt->derived);
+	    auto n = tt->dimension;
+	    auto xx = tt->vectorVar;
+	    for (std::size_t i = 0; i < n; i++)
+		vv->insert(xx[i]);
+	}
+    for (auto& ll : fr.layers)
+	for (auto& tt : ll)
+	    vv->erase(tt->derived);
+    return vv;
+}
+
+
 // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
 // cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
@@ -1263,13 +1349,21 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
     hr1->evient = hr.evient;
     hr1->arr = new unsigned char[z*p];
     auto rr1 = hr1->arr;
-    for (std::size_t j = 0; j < z; j++)
-    {
-	std::size_t jn = j*n;
-	std::size_t jp = j*p;
+    if (hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    std::size_t jp = j*p;
+	    for (std::size_t i = 0; i < n; i++)
+		rr1[jp+i] = rr[jn+i];
+	}
+    else
 	for (std::size_t i = 0; i < n; i++)
-	    rr1[jp+i] = rr[jn+i];
-    }
+	{
+	    std::size_t iz = i*z;
+	    for (std::size_t j = 0; j < z; j++)
+		rr1[iz+j] = rr[iz+j];
+	}
     std::size_t* pkk = new std::size_t[mmax];
     auto q = n;
     for (auto& ll : fr.layers)
@@ -1304,11 +1398,11 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 			std::size_t k = rr1[pkk[0]*z + j];
 			for (std::size_t i = 1; i < m; i++)
 			    k = sh[i] * k + rr1[pkk[i]*z + j];
-			rr1[q*z + j] = ar[k];
+			rr1[q*z+j] = ar[k];
 		    }
 		else
 		    for (std::size_t j = 0; j < z; j++)
-			rr1[q*z + j] = 0;
+			rr1[q*z+j] = 0;
 	    }
 	    q++;
 	}

@@ -874,7 +874,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1129,7 +1129,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1512,7 +1512,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -1617,6 +1617,9 @@ int main(int argc, char **argv)
 	auto fffr = systemsFudsFudRepa_u;
 	auto frff = systemsFudRepasFud_u;
 	auto frmul = historyRepasFudRepasMultiply_u;
+	auto frvars = fudRepasSetVar;
+	auto frder = fudRepasDerived;
+	auto frund = fudRepasUnderlying;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -1743,6 +1746,14 @@ int main(int argc, char **argv)
 		cout << " " << fr->layers[i][j]->derived;
 	    cout << endl;
 	}
+	cout << "fr" << endl
+	    << *fr << endl << endl;
+	cout << "frder(fr)" << endl
+	    << sorted(*frder(*fr)) << endl << endl;
+	cout << "frund(fr)" << endl
+	    << sorted(*frund(*fr)) << endl << endl;
+	cout << "frvars(fr)" << endl
+	    << sorted(*frvars(*fr)) << endl << endl;
 	cout << "frff(uu1, fr)" << endl
 	    << *frff(*uu1, *ur2, *fr) << endl << endl;
 
@@ -1755,6 +1766,14 @@ int main(int argc, char **argv)
 		cout << " " << fr->layers[i][j]->derived;
 	    cout << endl;
 	}
+	cout << "fr" << endl
+	    << *fr << endl << endl;
+	cout << "frder(fr)" << endl
+	    << sorted(*frder(*fr)) << endl << endl;
+	cout << "frund(fr)" << endl
+	    << sorted(*frund(*fr)) << endl << endl;
+	cout << "frvars(fr)" << endl
+	    << sorted(*frvars(*fr)) << endl << endl;
 	cout << "frff(uu1, fr)" << endl
 	    << *frff(*uu1, *ur2, *fr) << endl << endl;
 
@@ -1764,6 +1783,15 @@ int main(int argc, char **argv)
 	    << *hrhh(*uu, *ur2, *hr) << endl << endl;
 
 	auto hr1 = frmul(*hr, *fr);
+	cout << "hr1 = frmul(hr,fr)" << endl;
+	cout << "hrhh(uu2,hr1)" << endl
+	    << *hrhh(*uu2, *ur2, *hr1) << endl << endl;
+	cout << "rpln(aall(hraa(uu2,hr1)))" << endl;
+	rpln(cout, sorted(*aall(*hraa(*uu2, *ur2, *hr1)))); cout << endl;
+
+	hr->transpose();
+	cout << "hr.transpose()" << endl;
+	hr1 = frmul(*hr, *fr);
 	cout << "hr1 = frmul(hr,fr)" << endl;
 	cout << "hrhh(uu2,hr1)" << endl
 	    << *hrhh(*uu2, *ur2, *hr1) << endl << endl;

@@ -270,9 +270,21 @@ namespace Alignment
     // systemsFudRepasFud_u :: System -> FudRepa -> Fud
     std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const SystemRepa&, const FudRepa&);
 
+    // fudRepasSetVar :: FudRepa -> Set.Set Variable
+    std::unique_ptr<SizeUSet> fudRepasSetVar(const FudRepa&);
+
+    // fudRepasDerived :: FudRepa -> Set.Set Variable
+    std::unique_ptr<SizeUSet> fudRepasDerived(const FudRepa&);
+
+    // fudRepasUnderlying :: FudRepa -> Set.Set Variable
+    std::unique_ptr<SizeUSet> fudRepasUnderlying(const FudRepa&);
+
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
 }
+
+std::ostream& operator<<(std::ostream& out, const Alignment::FudRepa&);
+
 
 namespace Alignment
 {
