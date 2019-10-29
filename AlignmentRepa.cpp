@@ -1,5 +1,7 @@
 ﻿#include "AlignmentApprox.h"
 #include "AlignmentRepa.h"
+
+#include <cstring>
 #include <iostream>
 
 using namespace Alignment;
