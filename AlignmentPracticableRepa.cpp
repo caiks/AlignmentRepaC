@@ -75,11 +75,6 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
 	auto t = append(xmax, omax, vv1, *xx1, hh, hhx, hhrr, hhrrx);
 	auto& xa = std::get<0>(t);
 	s += std::get<1>(t);
-    /**/
-	std::cout << "s = " << s << std::endl;
-    	for (auto& pp : *xa)
-		std::cout << pp.first << "," << pp.second << std::endl;
-    /**/
 	xx.insert(xx.end(), xa->begin(), xa->end());
 	xx1->clear();
 	xx1->reserve(xa->size());
@@ -89,10 +84,6 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
     if (!xx.size())
 	return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(xx1), s);
     std::sort(xx.begin(), xx.end());
-    /**/
-    for (auto& pp : xx)
-	std::cout << pp.first << "," << pp.second << std::endl;
-    /**/
     xx1->reserve(bmax / mmax);
     std::size_t start = xx.size() - 1;
     std::size_t end = xx.size() > bmax/mmax ? xx.size() - bmax/mmax : 0;

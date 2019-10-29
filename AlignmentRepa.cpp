@@ -2538,7 +2538,7 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     for (std::size_t i = 0; i < t; i++)
     {
 	SizeList ll;
-	ll.push_back(vhh[tww1[i]]);
+	ll.push_back(ww[tww1[i]]);
 	for (auto& jj : vdd[tww2[i]])
 	    ll.push_back(jj);
 	qq->push_back(DoubleSizeListPair(ts1[i], ll));
