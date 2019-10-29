@@ -75,6 +75,11 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
 	auto t = append(xmax, omax, vv1, *xx1, hh, hhx, hhrr, hhrrx);
 	auto& xa = std::get<0>(t);
 	s += std::get<1>(t);
+    /**/
+	std::cout << "s = " << s << std::endl;
+    	for (auto& pp : *xa)
+		std::cout << pp.first << "," << pp.second << std::endl;
+    /**/
 	xx.insert(xx.end(), xa->begin(), xa->end());
 	xx1->clear();
 	xx1->reserve(xa->size());

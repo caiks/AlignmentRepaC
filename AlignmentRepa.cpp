@@ -1553,7 +1553,7 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
 std::size_t listVarsArrayHistoryEvientAlignedTop_u(
     std::size_t xmax, std::size_t omax, std::size_t n, unsigned char* svv, std::size_t m, std::size_t z1, std::size_t z2,
     std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
-    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
+    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, long long* ts3, std::size_t& s)
 {
     std::size_t t = 0;
     double* aa = new double[xmax];
@@ -1563,11 +1563,11 @@ std::size_t listVarsArrayHistoryEvientAlignedTop_u(
     double f = (double)z1 / (double)z2;
     double t1;
     double t2;
-    std::size_t t3;
+    long long t3;
     std::size_t tm;
     double x1;
     double x2;
-    std::size_t x3;
+    long long x3;
     double a1;
     double a2;
     double b1;
@@ -1640,7 +1640,7 @@ std::size_t listVarsArrayHistoryEvientAlignedTop_u(
 		    tww2[t] = pj;
 		    ts1[t] = a1 - a2 - b1 + b2;
 		    ts2[t] = b2 - b1;
-		    ts3[t] = -u;
+		    ts3[t] = -(long long)u;
 		    t++;
 		    if (t == omax)
 		    {
@@ -1680,7 +1680,7 @@ std::size_t listVarsArrayHistoryEvientAlignedTop_u(
 		{
 		    x1 = a1 - a2 - b1 + b2;
 		    x2 = b2 - b1;
-		    x3 = -u;
+		    x3 = -(long long)u;
 		    if (t1<x1 || (t1 == x1 && t2<x2) || (t1 == x1 && t2 == x2 && t3<x3))
 		    {
 			tww1[tm] = pi;
@@ -1732,7 +1732,7 @@ std::size_t listVarsArrayHistoryEvientAlignedTop_u(
 std::size_t listVarsArrayHistoryVarientAlignedTop_u(
     std::size_t xmax, std::size_t omax, std::size_t n, unsigned char* svv, std::size_t m, std::size_t z1, std::size_t z2,
     std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
-    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
+    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, long long* ts3, std::size_t& s)
 {
     std::size_t t = 0;
     double* aa = new double[xmax];
@@ -1742,11 +1742,11 @@ std::size_t listVarsArrayHistoryVarientAlignedTop_u(
     double f = (double)z1 / (double)z2;
     double t1;
     double t2;
-    std::size_t t3;
+    long long t3;
     std::size_t tm;
     double x1;
     double x2;
-    std::size_t x3;
+    long long x3;
     double a1;
     double a2;
     double b1;
@@ -1818,7 +1818,7 @@ std::size_t listVarsArrayHistoryVarientAlignedTop_u(
 		    tww2[t] = pj;
 		    ts1[t] = a1 - a2 - b1 + b2;
 		    ts2[t] = b2 - b1;
-		    ts3[t] = -u;
+		    ts3[t] = -(long long)u;
 		    t++;
 		    if (t == omax)
 		    {
@@ -1858,7 +1858,7 @@ std::size_t listVarsArrayHistoryVarientAlignedTop_u(
 		{
 		    x1 = a1 - a2 - b1 + b2;
 		    x2 = b2 - b1;
-		    x3 = -u;
+		    x3 = -(long long)u;
 		    if (t1<x1 || (t1 == x1 && t2<x2) || (t1 == x1 && t2 == x2 && t3<x3))
 		    {
 			tww1[tm] = pi;
@@ -1929,7 +1929,7 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     std::size_t* tww2 = new std::size_t[omax];
     double* ts1 = new double[omax];
     double* ts2 = new double[omax];
-    std::size_t* ts3 = new std::size_t[omax];
+    long long* ts3 = new long long[omax];
     std::size_t s = 0;
     std::size_t t = 0;
     if (hh.evient)
@@ -2001,20 +2001,20 @@ inline std::size_t isdup(std::size_t e, std::size_t pi, std::size_t* pj, std::si
 inline std::size_t hash(std::size_t n, std::size_t e, std::size_t pi, std::size_t* pj)
 {
     std::size_t h;
-    long long i;
+    std::size_t i;
     std::size_t j;
-    long long mk;
+    std::size_t mk;
     std::size_t pk;
     std::size_t pl;
 
-    for (i = -1, h = 0, mk = -1, pk = n; i<e; i++, mk = pk, pk = n)
+    for (i = 0, h = 0, mk = n, pk = n; i<=e; i++, mk = pk, pk = n)
     {
-	if (mk<pi)
+	if (mk==n || mk<pi)
 	    pk = pi;
 	for (j = 0; j<e; j++)
 	{
 	    pl = pj[j];
-	    if (mk<pl && pl<pk)
+	    if (pl<pk && (mk==n || mk<pl))
 		pk = pl;
 	}
 	h = n*h + pk;
@@ -2025,7 +2025,7 @@ inline std::size_t hash(std::size_t n, std::size_t e, std::size_t pi, std::size_
 std::size_t listVarsListTuplesArrayHistoryEvientAlignedTop_u(
     unsigned char dense, std::size_t xmax, std::size_t omax, std::size_t n, unsigned char* svv, std::size_t m, std::size_t d, std::size_t e, std::size_t z1, std::size_t z2,
     std::size_t* ppww, std::size_t* ppdd, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
-    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
+    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, long long* ts3, std::size_t& s)
 {
     std::size_t t = 0;
     std::size_t findm = 0;
@@ -2038,13 +2038,13 @@ std::size_t listVarsListTuplesArrayHistoryEvientAlignedTop_u(
     double f = (double)z1 / (double)z2;
     double t1;
     double t2;
-    std::size_t t3;
+    long long t3;
     std::size_t tm;
     double x1;
     double x2;
     double y1;
     double y2;
-    std::size_t x3;
+    long long x3;
     std::size_t x4;
     double c;
     double a1;
@@ -2173,7 +2173,7 @@ std::size_t listVarsListTuplesArrayHistoryEvientAlignedTop_u(
 			x1 = a1 - a2 - b1 + b2;
 			x2 = b2 - b1;
 		    }
-		    x3 = -u;
+		    x3 = -(long long)u;
 		    tww1[t] = ii;
 		    tww2[t] = ij;
 		    ts1[t] = x1;
@@ -2197,7 +2197,7 @@ std::size_t listVarsListTuplesArrayHistoryEvientAlignedTop_u(
 			x1 = a1 - a2 - b1 + b2;
 			x2 = b2 - b1;
 		    }
-		    x3 = -u;
+		    x3 = -(long long)u;
 		    if (t1<x1 || (t1 == x1 && t2<x2) || (t1 == x1 && t2 == x2 && t3<x3))
 		    {
 			tww1[tm] = ii;
@@ -2259,7 +2259,7 @@ std::size_t listVarsListTuplesArrayHistoryEvientAlignedTop_u(
 std::size_t listVarsListTuplesArrayHistoryVarientAlignedTop_u(
     unsigned char dense, std::size_t xmax, std::size_t omax, std::size_t n, unsigned char* svv, std::size_t m, std::size_t d, std::size_t e, std::size_t z1, std::size_t z2,
     std::size_t* ppww, std::size_t* ppdd, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
-    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, std::size_t* ts3, std::size_t& s)
+    std::size_t* tww1, std::size_t* tww2, double* ts1, double* ts2, long long* ts3, std::size_t& s)
 {
     std::size_t t = 0;
     std::size_t findm = 0;
@@ -2272,13 +2272,13 @@ std::size_t listVarsListTuplesArrayHistoryVarientAlignedTop_u(
     double f = (double)z1 / (double)z2;
     double t1;
     double t2;
-    std::size_t t3;
+    long long t3;
     std::size_t tm;
     double x1;
     double x2;
     double y1;
     double y2;
-    std::size_t x3;
+    long long x3;
     std::size_t x4;
     double c;
     double a1;
@@ -2415,7 +2415,7 @@ std::size_t listVarsListTuplesArrayHistoryVarientAlignedTop_u(
 			x1 = a1 - a2 - b1 + b2;
 			x2 = b2 - b1;
 		    }
-		    x3 = -u;
+		    x3 = -(long long)u;
 		    tww1[t] = ii;
 		    tww2[t] = ij;
 		    ts1[t] = x1;
@@ -2439,7 +2439,7 @@ std::size_t listVarsListTuplesArrayHistoryVarientAlignedTop_u(
 			x1 = a1 - a2 - b1 + b2;
 			x2 = b2 - b1;
 		    }
-		    x3 = -u;
+		    x3 = -(long long)u;
 		    if (t1<x1 || (t1 == x1 && t2<x2) || (t1 == x1 && t2 == x2 && t3<x3))
 		    {
 			tww1[tm] = ii;
@@ -2527,7 +2527,7 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     std::size_t* tww2 = new std::size_t[omax];
     double* ts1 = new double[omax];
     double* ts2 = new double[omax];
-    std::size_t* ts3 = new std::size_t[omax];
+    long long* ts3 = new long long[omax];
     std::size_t s = 0;
     std::size_t t = 0;
     if (hh.evient)
