@@ -18,7 +18,7 @@ void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
     for (std::size_t i = 0; i < n; i++)
     {
 	out.write(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
-	out.write(reinterpret_cast<char*>(&sh[i]), 1);
+	out.write(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
     }
     out.write(reinterpret_cast<char*>(&z), sizeof(std::size_t));
     out.write(reinterpret_cast<char*>(&evient), 1);
@@ -34,12 +34,12 @@ std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in,
     hr->dimension = n;
     hr->vectorVar = new std::size_t[n];
     auto vv = hr->vectorVar;
-    hr->shape = new unsigned char[n];
+    hr->shape = new std::size_t[n];
     auto sh = hr->shape;
     for (std::size_t i = 0; i < n; i++)
     {
 	in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
-	in.read(reinterpret_cast<char*>(&sh[i]), 1);
+	in.read(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
     }
     std::size_t z;
     in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
@@ -66,10 +66,10 @@ void Alignment::transformRepasPersistent(const TransformRepa& tr, std::ostream& 
 	out.write(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
 	auto s = sh[i];
 	sz *= s;
-	out.write(reinterpret_cast<char*>(&s), 1);
+	out.write(reinterpret_cast<char*>(&s), sizeof(std::size_t));
     }
     out.write(reinterpret_cast<char*>(&w), sizeof(std::size_t));
-    out.write(reinterpret_cast<char*>(&u), 1);
+    out.write(reinterpret_cast<char*>(&u), sizeof(std::size_t));
     out.write(reinterpret_cast<char*>(tr.arr), sz);
 }
 
@@ -82,22 +82,22 @@ std::unique_ptr<TransformRepa> Alignment::persistentsTransformRepa(std::istream&
     tr->dimension = n;
     tr->vectorVar = new std::size_t[n];
     auto vv = tr->vectorVar;
-    tr->shape = new unsigned char[n];
+    tr->shape = new std::size_t[n];
     auto sh = tr->shape;
     std::size_t sz = 1;
     for (std::size_t i = 0; i < n; i++)
     {
 	in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
 	unsigned char s;
-	in.read(reinterpret_cast<char*>(&s), 1);
+	in.read(reinterpret_cast<char*>(&s), sizeof(std::size_t));
 	sz *= s;
 	sh[i] = s;
     }
     std::size_t w;
     in.read(reinterpret_cast<char*>(&w), sizeof(std::size_t));
     tr->derived = w;
-    unsigned char u;
-    in.read(reinterpret_cast<char*>(&u), 1);
+    std::size_t u;
+    in.read(reinterpret_cast<char*>(&u), sizeof(std::size_t));
     tr->valency = u;
     tr->arr = new unsigned char[sz];
     in.read(reinterpret_cast<char*>(tr->arr), sz);

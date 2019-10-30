@@ -3,9 +3,9 @@
 using namespace Alignment;
 
 // parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui ::
-//   Integer->Integer->Integer->Integer->System->Set.Set Variable->Fud ->
-//   HistoryRepa->HistogramRepaRed->HistoryRepa->HistogramRepaRed ->
-//   ([Set.Set Variable],Integer)
+//   Integer -> Integer -> Integer -> Integer -> [Variable] -> Fud ->
+//   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
+//   ([[Variable]],Integer)
 std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui(std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, const SizeList& vv, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
 {
     auto frvars = fudRepasSetVar;
@@ -91,3 +91,25 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
 	xx1->push_back(xx[i].second);
     return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(xx1), s);
 }
+
+
+// parametersSystemsPartitionerMaxRollByMRepa_ui ::
+//   Integer -> Integer -> Integer -> [Variable] -> HistoryRepa -> HistoryRepa -> 
+//   ([[Variable]],Integer)
+std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSystemsPartitionerMaxRollByMRepa_ui(std::size_t mmax, std::size_t umax, std::size_t pmax, const SizeList& kk, const HistoryRepa& hh, const HistoryRepa& hhrr)
+{
+    auto hrred = [](const HistoryRepa& hr, const SizeList& kk)
+    {
+	return setVarsHistoryRepasReduce_u(1.0, kk.size(), kk.data(), hr);
+    };
+
+    auto aa = hrred(hh, kk);
+    auto aarr = hrred(hhrr, kk);
+    double y1 = aa->facLn() - aarr->facLn();
+
+    std::size_t s = 0;
+    auto xx1 = std::make_unique<SizeListList>();
+
+    return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(xx1), s);
+}
+

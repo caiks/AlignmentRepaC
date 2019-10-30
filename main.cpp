@@ -28,7 +28,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -54,8 +54,8 @@ int main(int argc, char **argv)
 	cout << "ur.mapVarSize()" << endl
 	    << ur->mapVarSize() << endl << endl;
 
-	ur->listVarUCharPair.push_back(VarUCharPair(Variable(98), 3));
-	ur->listVarUCharPair.push_back(VarUCharPair(Variable(99), 5));
+	ur->listVarSizePair.push_back(VarSizePair(Variable(98), 3));
+	ur->listVarSizePair.push_back(VarSizePair(Variable(99), 5));
 
 	cout << "ur" << endl
 	    << *ur << endl << endl;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 	    << *bb1 << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -478,7 +478,7 @@ int main(int argc, char **argv)
 	    << *xr << endl << endl;
     }
 
-//    if (false)
+//    if (true)
 //    {
 //	auto suit = Variable("suit");
 //	auto rank = Variable("rank");
@@ -495,7 +495,7 @@ int main(int argc, char **argv)
 //	    << hr.mapVarInt() << endl << endl;
 //    }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -684,7 +684,7 @@ int main(int argc, char **argv)
 	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ })) << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -874,7 +874,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1129,7 +1129,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1383,7 +1383,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1799,7 +1799,7 @@ int main(int argc, char **argv)
 	rpln(cout, sorted(*aall(*hraa(*uu2, *ur2, *hr1)))); cout << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1993,7 +1993,7 @@ int main(int argc, char **argv)
 	    << *drdf(*uu1, *ur1, *dr) << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2042,7 +2042,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2104,7 +2104,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -2357,7 +2357,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -2610,7 +2610,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2712,7 +2712,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (false)
+    if (true)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2814,7 +2814,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (false)
+    if (true)
     {
 	cout << "sizeof(std::size_t): " << sizeof(std::size_t) << endl;
 	cout << "sizeof(Variable): " << sizeof(Variable) << endl;

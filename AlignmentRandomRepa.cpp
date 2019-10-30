@@ -19,7 +19,7 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasShuffle_u(const HistoryRepa&
     hr1->dimension = n;
     hr1->vectorVar = new std::size_t[n];
     auto vv1 = hr1->vectorVar;
-    hr1->shape = new unsigned char[n];
+    hr1->shape = new std::size_t[n];
     auto sh1 = hr1->shape;
     for (std::size_t i = 0; i < n; i++)
     {

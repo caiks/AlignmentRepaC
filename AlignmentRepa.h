@@ -9,8 +9,8 @@
 
 namespace Alignment
 {
-    typedef std::pair<Variable, unsigned char> VarUCharPair;
-    typedef std::vector<VarUCharPair> VarUCharPairList;
+    typedef std::pair<Variable, std::size_t> VarSizePair;
+    typedef std::vector<VarSizePair> VarSizePairList;
     typedef std::unordered_map<std::size_t, std::size_t> SizeSizeUMap;
     typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
@@ -33,7 +33,7 @@ namespace Alignment
 
     private: SystemRepa& operator=(const SystemRepa &);
 
-    public: VarUCharPairList listVarUCharPair;
+    public: VarSizePairList listVarSizePair;
 
     public: VarSizeUMap& mapVarSize() const;
     private: VarSizeUMap* _mapVarSize;
@@ -71,7 +71,7 @@ namespace Alignment
     public: SizeSizeUMap& mapVarInt() const;
     private: SizeSizeUMap* _mapVarInt;
 
-    public: unsigned char* shape;
+    public: std::size_t* shape;
     public: double* arr;
 
     public: double size() const;
@@ -113,7 +113,7 @@ namespace Alignment
     public: SizeSizeUMap& mapVarInt() const;
     private: SizeSizeUMap* _mapVarInt;
 
-    public: unsigned char* shape;
+    public: std::size_t* shape;
     public: double* arr;
     };
 
@@ -125,35 +125,6 @@ namespace Alignment
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepaRed&);
-
-
-//namespace Alignment
-//{
-//    // data HistogramRepaVec = HistogramRepaVec {
-//    //   histogramRepaVecsVectorVar :: !(V.Vector Variable),
-//    //   histogramRepaVecsMapVarInt::Map.Map Variable Int,
-//    //   histogramRepaVecsSize :: !Double,
-//    //   histogramRepaVecsShape :: !VShape,
-//    //   histogramRepaVecsArray :: !(V.Vector(UV.Vector Double))
-//
-//    class HistogramRepaVec
-//    {
-//    public: HistogramRepaVec();
-//    private: HistogramRepaVec(const HistogramRepaVec &);
-//    public: ~HistogramRepaVec();
-//
-//    private: HistogramRepaVec& operator=(const HistogramRepaVec &);
-//
-//    public: VarList vectorVar;
-//
-//    public: VarSizeUMap& mapVarInt() const;
-//    private: VarSizeUMap* _mapVarInt;
-//
-//    public: double size;
-//    public: SizeList shape;
-//    public: DoubleListList arr;
-//    };
-//}
 
 namespace Alignment
 {
@@ -177,7 +148,7 @@ namespace Alignment
     public: SizeSizeUMap& mapVarInt() const;
     private: SizeSizeUMap* _mapVarInt;
 
-    public: unsigned char* shape;
+    public: std::size_t* shape;
     public: std::size_t size;
 
     public: void transpose();
@@ -235,9 +206,9 @@ namespace Alignment
     private: SizeSizeUMap* _mapVarInt;
 
     public: std::size_t derived;
-    public: unsigned char valency;
+    public: std::size_t valency;
 
-    public: unsigned char* shape;
+    public: std::size_t* shape;
     public: unsigned char* arr;
     };
 
