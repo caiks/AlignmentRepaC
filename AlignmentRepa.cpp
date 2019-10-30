@@ -1976,10 +1976,10 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq),s);
 }
 
-inline void incIndex(std::size_t n, std::size_t* svv, std::size_t* ivv)
+inline void incIndex(std::size_t n, unsigned char* svv, unsigned char* ivv)
 {
     long long k;
-    std::size_t y;
+    unsigned char y;
 
     for (k = n - 1; k >= 0; k--)
     {
@@ -2086,10 +2086,10 @@ std::size_t listVarsListTuplesArrayHistoryEvientAlignedTop_u(
     std::size_t pk;
     std::size_t jn;
     std::size_t si;
-    std::size_t* sj = new std::size_t[e];
-    std::size_t* yj = new std::size_t[e];
-    std::size_t sk;
-    std::size_t yk;
+    unsigned char* sj = new unsigned char[e];
+    unsigned char* yj = new unsigned char[e];
+    unsigned char sk;
+    unsigned char yk;
     std::size_t u;
     std::size_t u1;
     std::size_t i;
@@ -2322,10 +2322,10 @@ std::size_t listVarsListTuplesArrayHistoryVarientAlignedTop_u(
     std::size_t* qj = new std::size_t[e];
     std::size_t qk;
     std::size_t si;
-    std::size_t* sj = new std::size_t[e];
-    std::size_t* yj = new std::size_t[e];
-    std::size_t sk;
-    std::size_t yk;
+    unsigned char* sj = new unsigned char[e];
+    unsigned char* yj = new unsigned char[e];
+    unsigned char sk;
+    unsigned char yk;
     std::size_t u;
     std::size_t u1;
     std::size_t i;
