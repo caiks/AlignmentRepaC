@@ -2560,3 +2560,285 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s);
 }
 
+
+inline std::size_t toIndexPerm(std::size_t n, std::size_t* ppp, std::size_t* svv, std::size_t* ivv)
+{
+    std::size_t k;
+    std::size_t p;
+    std::size_t a;
+
+    for (k = 1, a = ivv[ppp[0]]; k<n; k++)
+    {
+	p = ppp[k];
+	a = svv[p] * a + ivv[p];
+    }
+    return a;
+}
+
+void listListVarsArrayHistoryPairsPartitionIndependent_u(
+    double z, std::size_t v, std::size_t n, std::size_t* svv, std::size_t m, std::size_t r,
+    std::size_t* lyy, std::size_t* syy, std::size_t* pppp, double* aa1, double* aa2,
+    double* bb1, double* bb2)
+{
+    std::size_t i;
+    std::size_t j;
+    std::size_t k;
+    std::size_t a;
+    double f;
+    double x1 = 0;
+    double x2 = 0;
+    std::size_t** ppp = new std::size_t*[m];
+    double* pxx1 = new double[r];
+    double* pxx2 = new double[r];
+    double** xx1 = new double*[m];
+    double** xx2 = new double*[m];
+    std::size_t* ivv = new std::size_t[n];
+    std::size_t* iyy = new std::size_t[m];
+
+    for (k = 1, a = lyy[0], ppp[0] = pppp; k<m; k++)
+    {
+	ppp[k] = pppp + a;
+	a += lyy[k];
+    }
+
+    for (k = 1, a = syy[0], xx1[0] = pxx1, xx2[0] = pxx2; k<m; k++)
+    {
+	xx1[k] = pxx1 + a;
+	xx2[k] = pxx2 + a;
+	a += syy[k];
+    }
+
+    for (i = 0; i<r; i++)
+    {
+	pxx1[i] = 0.0;
+	pxx2[i] = 0.0;
+    }
+
+    for (i = 0; i<n; i++)
+    {
+	ivv[i] = 0;
+    }
+
+    for (j = 0; j<v; j++)
+    {
+	for (k = 0; k<m; k++)
+	{
+	    i = toIndexPerm(lyy[k], ppp[k], svv, ivv);
+	    xx1[k][i] += aa1[j];
+	    xx2[k][i] += aa2[j];
+	}
+	incIndex(n, svv, ivv);
+    }
+
+    if (z != 1)
+    {
+	f = 1 / z;
+	for (k = 0; k<m; k++)
+	{
+	    a = syy[k];
+	    for (i = 0; i<a; i++)
+	    {
+		xx1[k][i] *= f;
+		xx2[k][i] *= f;
+	    }
+	}
+    }
+
+    for (i = 0; i<m; i++)
+    {
+	iyy[i] = 0;
+    }
+
+    if (z != 1)
+    {
+	for (j = 0; j<v; j++)
+	{
+	    for (k = 0, x1 = z, x2 = z; k<m; k++)
+	    {
+		a = iyy[k];
+		x1 *= xx1[k][a];
+		x2 *= xx2[k][a];
+	    }
+	    bb1[j] = x1;
+	    bb2[j] = x2;
+	    incIndex(m, syy, iyy);
+	}
+    }
+    else
+    {
+	for (j = 0; j<v; j++)
+	{
+	    for (k = 1, a = iyy[0], x1 = xx1[0][a], x2 = xx2[0][a]; k<m; k++)
+	    {
+		a = iyy[k];
+		x1 *= xx1[k][a];
+		x2 *= xx2[k][a];
+	    }
+	    bb1[j] = x1;
+	    bb2[j] = x2;
+	    incIndex(m, syy, iyy);
+	}
+    }
+    delete[] iyy;
+    delete[] ivv;
+    delete[] xx2;
+    delete[] xx1;
+    delete[] pxx2;
+    delete[] pxx1;
+    delete[] ppp;
+}
+
+
+std::size_t listListVarsArrayHistoryPairsSetTuplePartitionTop_u(
+    std::size_t pmax, double z, std::size_t v, std::size_t n, std::size_t* svv, std::size_t q, double y1,
+    std::size_t* qm, std::size_t* ql, std::size_t* qs, std::size_t* qp, double* aa1, double* aa2,
+    std::size_t* tt)
+{
+    std::size_t t = 0;
+    double* bb1 = new double[v];
+    double* bb2 = new double[v];
+    double* ts1 = new double[pmax];
+    double* ts2 = new double[pmax];
+    long long* ts3 = new long long[pmax];
+    double t1;
+    double t2;
+    long long t3;
+    std::size_t tm;
+    double x1;
+    double x2;
+    long long x3;
+    std::size_t p;
+    std::size_t m;
+    std::size_t r;
+    std::size_t i;
+    double a2;
+    double b2;
+    double c;
+
+    for (p = 0; p < q; p++)
+    {
+	m = qm[p];
+	c = pow((double)v, 1.0 / ((double)m));
+
+	for (r = 0, i = 0; i<m; i++)
+	{
+	    r += (qs + n*p)[i];
+	}
+
+	listListVarsArrayHistoryPairsPartitionIndependent_u(z, v, n, svv, m, r, ql + n*p, qs + n*p, qp + n*p, aa1, aa2, bb1, bb2);
+
+	for (a2 = 0.0, b2 = 0.0, i = 0; i<v; i++)
+	{
+	    a2 += alngam(bb1[i] + 1.0);
+	    b2 += alngam(bb2[i] + 1.0);
+	}
+
+	if (t < pmax)
+	{
+	    tt[t] = p;
+	    ts1[t] = (y1 - a2 + b2) / c;
+	    ts2[t] = b2;
+	    ts3[t] = -(long long)m;
+	    t++;
+	    if (t == pmax)
+	    {
+		for (t1 = ts1[0], t2 = ts2[0], t3 = ts3[0], tm = 0, i = 1; i < pmax; i++)
+		{
+		    x1 = ts1[i];
+		    if (t1 > x1)
+		    {
+			t1 = x1;
+			t2 = ts2[i];
+			t3 = ts3[i];
+			tm = i;
+		    }
+		    else if (t1 == x1)
+		    {
+			x2 = ts2[i];
+			if (t2 > x2)
+			{
+			    t2 = x2;
+			    t3 = ts3[i];
+			    tm = i;
+			}
+			else if (t2 == x2)
+			{
+			    x3 = ts3[i];
+			    if (t3 > x3)
+			    {
+				t3 = x3;
+				tm = i;
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	else
+	{
+	    x1 = (y1 - a2 + b2) / c;
+	    x2 = b2;
+	    x3 = -(long long)m;
+	    if (t1 < x1 || (t1 == x1 && t2 < x2) || (t1 == x1 && t2 == x2 && t3 < x3))
+	    {
+		tt[tm] = p;
+		ts1[tm] = x1;
+		ts2[tm] = x2;
+		ts3[tm] = x3;
+		for (t1 = ts1[0], t2 = ts2[0], t3 = ts3[0], tm = 0, i = 1; i < pmax; i++)
+		{
+		    x1 = ts1[i];
+		    if (t1 > x1)
+		    {
+			t1 = x1;
+			t2 = ts2[i];
+			t3 = ts3[i];
+			tm = i;
+		    }
+		    else if (t1 == x1)
+		    {
+			x2 = ts2[i];
+			if (t2 > x2)
+			{
+			    t2 = x2;
+			    t3 = ts3[i];
+			    tm = i;
+			}
+			else if (t2 == x2)
+			{
+			    x3 = ts3[i];
+			    if (t3 > x3)
+			    {
+				t3 = x3;
+				tm = i;
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    }
+    delete[] ts3;
+    delete[] ts2;
+    delete[] ts1;
+    delete[] bb2;
+    delete[] bb1;
+    return t;
+}
+
+
+
+// parametersHistogramRepaVecsSetTuplePartitionTopByM_u ::
+//   Integer -> Integer -> Integer -> HistogramRepaVec -> Double -> Double -> ([[[Variable]]],Integer)
+std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersHistogramRepaVecsSetTuplePartitionTopByM_u(std::size_t mmax, std::size_t umax, std::size_t pmax, const HistogramRepa& aa, const HistogramRepa& aarr, double z, double y1)
+{
+    auto n = aa.dimension;
+    auto vvv = aa.vectorVar;
+    auto svv = aa.shape;
+
+    auto qq = std::make_unique<SizeListListList>();
+    std::size_t s = 0;
+
+    return std::tuple<std::unique_ptr<SizeListListList>, std::size_t>(std::move(qq), s);
+}
+

@@ -16,6 +16,7 @@ namespace Alignment
     typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<SizeList> SizeListList;
+    typedef std::vector<SizeListList> SizeListListList;
     typedef std::pair<double, SizeList> DoubleSizeListPair;
     typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
     typedef std::unordered_set<std::size_t> SizeUSet;
@@ -291,6 +292,11 @@ namespace Alignment
 
     // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Set.Set Variable -> V.Vector (Set.Set Variable) -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> (V.Vector ((Double, V.Vector Variable)),Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
+
+    // parametersHistogramRepaVecsSetTuplePartitionTopByM_u ::
+    //   Integer -> Integer -> Integer -> HistogramRepaVec -> Double -> ([[[Variable]]],Integer)
+    std::tuple<std::unique_ptr<SizeListListList>, std::size_t> parametersHistogramRepaVecsSetTuplePartitionTopByM_u(std::size_t, std::size_t, std::size_t, const HistogramRepa&, const HistogramRepa&, double, double);
+
 }
 
 

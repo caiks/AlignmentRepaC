@@ -95,21 +95,20 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
 
 // parametersSystemsPartitionerMaxRollByMRepa_ui ::
 //   Integer -> Integer -> Integer -> [Variable] -> HistoryRepa -> HistoryRepa -> 
-//   ([[Variable]],Integer)
-std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSystemsPartitionerMaxRollByMRepa_ui(std::size_t mmax, std::size_t umax, std::size_t pmax, const SizeList& kk, const HistoryRepa& hh, const HistoryRepa& hhrr)
+//   ([[[Variable]]],Integer)
+std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersSystemsPartitionerMaxRollByMRepa_ui(std::size_t mmax, std::size_t umax, std::size_t pmax, const SizeList& kk, const HistoryRepa& hh, const HistoryRepa& hhrr)
 {
-    auto hrred = [](const HistoryRepa& hr, const SizeList& kk)
+    auto hrred = [](double f, const HistoryRepa& hr, const SizeList& kk)
     {
-	return setVarsHistoryRepasReduce_u(1.0, kk.size(), kk.data(), hr);
+	return setVarsHistoryRepasReduce_u(f, kk.size(), kk.data(), hr);
     };
+    auto rrvqqy = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
 
-    auto aa = hrred(hh, kk);
-    auto aarr = hrred(hhrr, kk);
+    auto z = (double)hh.size;
+    auto zr = (double)hhrr.size;
+    auto aa = hrred(1.0, hh, kk);
+    auto aarr = hrred(z/zr, hhrr, kk);
     double y1 = aa->facLn() - aarr->facLn();
-
-    std::size_t s = 0;
-    auto xx1 = std::make_unique<SizeListList>();
-
-    return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(xx1), s);
+    return rrvqqy(mmax, umax, pmax, *aa, *aarr, z, y1);
 }
 

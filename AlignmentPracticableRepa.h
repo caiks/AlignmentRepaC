@@ -14,7 +14,7 @@ namespace Alignment
     // parametersSystemsPartitionerMaxRollByMRepa_ui ::
     //   Integer -> Integer -> Integer -> [Variable] -> HistoryRepa -> HistoryRepa -> 
     //   ([[Variable]],Integer)
-    std::tuple<std::unique_ptr<SizeListList>, std::size_t> parametersSystemsPartitionerMaxRollByMRepa_ui(std::size_t, std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistoryRepa&);
+    std::tuple<std::unique_ptr<SizeListListList>, std::size_t> parametersSystemsPartitionerMaxRollByMRepa_ui(std::size_t, std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistoryRepa&);
 
 }
 
