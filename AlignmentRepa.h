@@ -73,6 +73,10 @@ namespace Alignment
 
     public: unsigned char* shape;
     public: double* arr;
+
+    public: double size() const;
+    public: double facLn() const;
+
     };
 
     // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa

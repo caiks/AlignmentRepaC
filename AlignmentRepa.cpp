@@ -138,6 +138,34 @@ SizeSizeUMap& Alignment::HistogramRepa::mapVarInt() const
     return *_mapVarInt;
 }
 
+double Alignment::HistogramRepa::size() const
+{
+    auto n = dimension;
+    auto sh = shape;
+    auto rr = arr;
+    std::size_t v = 1;
+    for (std::size_t i = 0; i < n; i++)
+	v *= sh[i];
+    double a = 0.0;
+    for (std::size_t j = 0; j < v; j++)
+	a += rr[j];
+    return a;
+}
+
+double Alignment::HistogramRepa::facLn() const
+{
+    auto n = dimension;
+    auto sh = shape;
+    auto rr = arr;
+    std::size_t v = 1;
+    for (std::size_t i = 0; i < n; i++)
+	v *= sh[i];
+    double a = 0.0;
+    for (std::size_t j = 0; j < v; j++)
+	a += alngam(rr[j] + 1.0);
+    return a;
+}
+
 // systemsHistogramsHistogramRepa_u :: System -> Histogram -> Maybe HistogramRepa
 std::unique_ptr<HistogramRepa> Alignment::systemsHistogramsHistogramRepa_u(const System& uu, const SystemRepa& ur, const Histogram& aa)
 {
