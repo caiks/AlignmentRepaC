@@ -28,7 +28,7 @@ using namespace std;
 
 int main(int argc, char **argv)
 {
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 	    << *bb1 << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -478,7 +478,7 @@ int main(int argc, char **argv)
 	    << *xr << endl << endl;
     }
 
-//    if (true)
+//    if (false)
 //    {
 //	auto suit = Variable("suit");
 //	auto rank = Variable("rank");
@@ -495,7 +495,7 @@ int main(int argc, char **argv)
 //	    << hr.mapVarInt() << endl << endl;
 //    }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -684,7 +684,7 @@ int main(int argc, char **argv)
 	    << *araa(*uu, *ur, *hrred(*hr, *ur, VarList{ })) << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto regcart = histogramRegularCartesian_u;
 	auto regsing = histogramRegularUnitSingleton_u;
@@ -874,7 +874,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1129,7 +1129,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1383,7 +1383,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1512,7 +1512,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -1799,7 +1799,7 @@ int main(int argc, char **argv)
 	rpln(cout, sorted(*aall(*hraa(*uu2, *ur2, *hr1)))); cout << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto lluu = listsSystem_u;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -1993,7 +1993,7 @@ int main(int argc, char **argv)
 	    << *drdf(*uu1, *ur1, *dr) << endl << endl;
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2042,7 +2042,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2104,7 +2104,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -2357,7 +2357,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -2610,7 +2610,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2712,7 +2712,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	auto fsys = fudsSystemImplied;
 	auto dfund = decompFudsUnderlying;
@@ -2814,12 +2814,249 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	cout << "sizeof(std::size_t): " << sizeof(std::size_t) << endl;
 	cout << "sizeof(Variable): " << sizeof(Variable) << endl;
     }
 
+    if (false)
+    {
+	std::size_t mmax = 2;
+	std::size_t n = 8;
+	SizeListList mm{ SizeList{0} };
+	for (std::size_t i = 2; i <= n; i++)
+	{
+	    SizeListList mm1;
+	    for (auto& xx : mm)
+		for (std::size_t j = 0; j < i; j++)
+		    if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+		    {
+			SizeList yy(xx);
+			yy.push_back(j);
+			mm1.push_back(yy);
+		    }
+	    mm = mm1;
+	}
+	cout << "mm" << endl
+	    << mm << endl << endl;
+	cout << "mm.size()" << endl
+	    << mm.size() << endl << endl;
+    }
+
+    if (false)
+    {
+	std::size_t mmax = 4;
+	std::size_t n = 8;
+	SizeListList mm{ SizeList{ 0 } };
+	for (std::size_t i = 2; i <= n; i++)
+	{
+	    SizeListList mm1;
+	    for (auto& xx : mm)
+		for (std::size_t j = 0; j < i; j++)
+		    if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+		    {
+			SizeList yy(xx);
+			yy.push_back(j);
+			mm1.push_back(yy);
+		    }
+	    mm = mm1;
+	}
+	cout << "mm" << endl
+	    << mm << endl << endl;
+	cout << "mm.size()" << endl
+	    << mm.size() << endl << endl;
+    }
+
+
+    if (false)
+    {
+	std::size_t mmax = 2;
+	std::size_t n = 8;
+	auto start = chrono::system_clock::now();
+	for (std::size_t k = 0; k < 1000; k++)
+	{
+	    SizeListList mm{ SizeList{ 0 } };
+	    for (std::size_t i = 2; i <= n; i++)
+	    {
+		SizeListList mm1;
+		for (auto& xx : mm)
+		    for (std::size_t j = 0; j < i; j++)
+			if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+			{
+			    SizeList yy(xx);
+			    yy.push_back(j);
+			    mm1.push_back(yy);
+			}
+		mm = mm1;
+	    }
+	}
+	auto end = chrono::system_clock::now();
+	cout << "partition " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	// partition 0.202803s
+    }
+
+    if (false)
+    {
+	std::size_t mmax = 4;
+	std::size_t n = 8;
+	auto start = chrono::system_clock::now();
+	for (std::size_t k = 0; k < 1000; k++)
+	{
+	    SizeListList mm{ SizeList{ 0 } };
+	    for (std::size_t i = 2; i <= n; i++)
+	    {
+		SizeListList mm1;
+		for (auto& xx : mm)
+		    for (std::size_t j = 0; j < i; j++)
+			if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+			{
+			    SizeList yy(xx);
+			    yy.push_back(j);
+			    mm1.push_back(yy);
+			}
+		mm = mm1;
+	    }
+	}
+	auto end = chrono::system_clock::now();
+	cout << "partition " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	// partition 3.02644s
+    }
+
+    if (false)
+    {
+	std::size_t mmax = 4;
+	std::size_t n = 8;
+	auto start = chrono::system_clock::now();
+	for (std::size_t k = 0; k < 1000; k++)
+	{
+	    auto mm = std::unique_ptr<SizeListList>{new SizeListList{ SizeList{ 0 } } };
+	    for (std::size_t i = 2; i <= n; i++)
+	    {
+		auto mm1 = std::unique_ptr<SizeListList>{ new SizeListList{} };
+		for (auto& xx : *mm)
+		    for (std::size_t j = 0; j < i; j++)
+			if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+			{
+			    SizeList yy(xx);
+			    yy.push_back(j);
+			    mm1->push_back(yy);
+			}
+		mm = std::move(mm1);
+	    }
+	}
+	auto end = chrono::system_clock::now();
+	cout << "partition " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	// partition 2.26203s
+    }
+
+    if (false)
+    {
+	std::size_t mmax = 4;
+	std::size_t n = 8;
+
+	auto mm = std::unique_ptr<SizeListList>{ new SizeListList{ SizeList{ 0 } } };
+	for (std::size_t i = 2; i <= n; i++)
+	{
+	    auto mm1 = std::unique_ptr<SizeListList>{ new SizeListList{} };
+	    for (auto& xx : *mm)
+		for (std::size_t j = 0; j < i; j++)
+		    if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+		    {
+			SizeList yy(xx);
+			yy.push_back(j);
+			mm1->push_back(yy);
+		    }
+	    mm = std::move(mm1);
+	}
+	std::vector<std::map<std::size_t, std::set<std::size_t>>> qq(mm->size() - 1);
+	for (std::size_t i = 0; i < mm->size() - 1; i++)
+	{
+	    auto& pp = qq[i];
+	    auto& ll = (*mm)[i + 1];
+	    for (std::size_t j = 0; j < n; j++)
+		pp[ll[j]].insert(j);
+	}
+	cout << "qq" << endl
+	    << qq << endl << endl;
+	cout << "qq.size()" << endl
+	    << qq.size() << endl << endl;
+    }
+
+    if (true)
+    {
+	std::size_t mmax = 2;
+	std::size_t n = 8;
+	auto start = chrono::system_clock::now();
+	for (std::size_t k = 0; k < 1000; k++)
+	{
+	    auto mm = std::unique_ptr<SizeListList>{ new SizeListList{ SizeList{ 0 } } };
+	    for (std::size_t i = 2; i <= n; i++)
+	    {
+		auto mm1 = std::unique_ptr<SizeListList>{ new SizeListList{} };
+		for (auto& xx : *mm)
+		    for (std::size_t j = 0; j < i; j++)
+			if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+			{
+			    SizeList yy(xx);
+			    yy.push_back(j);
+			    mm1->push_back(yy);
+			}
+		mm = std::move(mm1);
+	    }
+	    std::vector<std::map<std::size_t, std::set<std::size_t>>> qq(mm->size() - 1);
+	    for (std::size_t i = 0; i < mm->size() - 1; i++)
+	    {
+		auto& pp = qq[i];
+		auto& ll = (*mm)[i + 1];
+		for (std::size_t j = 0; j < n; j++)
+		    pp[ll[j]].insert(j);
+	    }
+	}
+	auto end = chrono::system_clock::now();
+	cout << "partition " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	// partition 0.499206s
+    }
+
+    if (false)
+    {
+	std::size_t mmax = 4;
+	std::size_t n = 8;
+	auto start = chrono::system_clock::now();
+	for (std::size_t k = 0; k < 1000; k++)
+	{
+	    auto mm = std::unique_ptr<SizeListList>{ new SizeListList{ SizeList{ 0 } } };
+	    for (std::size_t i = 2; i <= n; i++)
+	    {
+		auto mm1 = std::unique_ptr<SizeListList>{ new SizeListList{} };
+		for (auto& xx : *mm)
+		    for (std::size_t j = 0; j < i; j++)
+			if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+			{
+			    SizeList yy(xx);
+			    yy.push_back(j);
+			    mm1->push_back(yy);
+			}
+		mm = std::move(mm1);
+	    }
+	    std::vector<std::map<std::size_t, std::set<std::size_t>>> qq(mm->size() - 1);
+	    for (std::size_t i = 0; i < mm->size() - 1; i++)
+	    {
+		auto& pp = qq[i];
+		auto& ll = (*mm)[i + 1];
+		for (std::size_t j = 0; j < n; j++)
+		    pp[ll[j]].insert(j);
+	    }
+	}
+	auto end = chrono::system_clock::now();
+	cout << "partition " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+
+	// partition 12.4958s
+    }
 
     return 0;
 }
