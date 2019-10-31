@@ -20,6 +20,9 @@ namespace Alignment
     typedef std::pair<double, SizeList> DoubleSizeListPair;
     typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
     typedef std::unordered_set<std::size_t> SizeUSet;
+    typedef std::set<std::size_t> SizeSet;
+    typedef std::map<std::size_t, SizeSet> SizeSizeSetMap;
+    typedef std::vector<SizeSizeSetMap> SizeSizeSetMapList;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
 }

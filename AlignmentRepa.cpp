@@ -2835,10 +2835,127 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
     auto n = aa.dimension;
     auto vvv = aa.vectorVar;
     auto svv = aa.shape;
-
-    auto qq = std::make_unique<SizeListListList>();
-    std::size_t s = 0;
-
-    return std::tuple<std::unique_ptr<SizeListListList>, std::size_t>(std::move(qq), s);
+    std::size_t v = 1;
+    for (std::size_t i = 0; i < n; i++)
+	v *= svv[i];
+    auto mm = std::unique_ptr<SizeListList>{ new SizeListList{ SizeList{ 0 } } };
+    for (std::size_t i = 2; i <= n; i++)
+    {
+	auto mm1 = std::unique_ptr<SizeListList>{ new SizeListList{} };
+	for (auto& xx : *mm)
+	    for (std::size_t j = 0; j < i; j++)
+		if (j < mmax && j <= *max_element(xx.begin(), xx.end()) + 1)
+		{
+		    SizeList yy(xx);
+		    yy.push_back(j);
+		    mm1->push_back(yy);
+		}
+	mm = std::move(mm1);
+    }
+    auto q0 = mm->size() - 1;
+    SizeSizeSetMapList qq0(q0);
+    for (std::size_t i = 0; i < q0; i++)
+    {
+	auto& nn = qq0[i];
+	auto& ll = (*mm)[i + 1];
+	for (std::size_t j = 0; j < n; j++)
+	    nn[ll[j]].insert(j);
+    }
+    SizeListList rr0(q0);
+    for (std::size_t i = 0; i < q0; i++)
+    {
+	auto& nn = qq0[i];
+	auto& ll = rr0[i];
+	for (auto& cc : nn)
+	{
+	    std::size_t sv = 1;
+	    for (auto& p : cc.second)
+		sv *= svv[p];
+	    ll.push_back(sv);
+	}
+    }
+    auto tt1 = std::make_unique<SizeListListList>();
+    tt1->reserve(mmax*pmax);
+    std::size_t q1 = 0;
+    for (std::size_t m = 2; m <= mmax; m++)
+    {
+	SizeListListList qq;
+	SizeListList rr;
+	for (std::size_t i = 0; i < q0; i++)
+	{
+	    auto& nn0 = qq0[i];
+	    if (nn0.size() == m)
+	    {
+		auto& ll = rr0[i];
+		bool all = true;
+		for (std::size_t k = 0; all && k < m; k++)
+		    all = ll[k] <= umax;
+		if (all)
+		{
+		    rr.push_back(ll);
+		    SizeListList nn;
+		    nn.reserve(m);
+		    for (auto& cc0 : nn0)
+			nn.push_back(SizeList(cc0.second.begin(), cc0.second.end()));
+		    qq.push_back(nn);
+		}
+	    }
+	}
+	std::size_t q = qq.size();
+	q1 += q;
+	std::size_t* qm = new std::size_t[q];
+	std::size_t* ql = new std::size_t[q*n];
+	std::size_t* qs = new std::size_t[q*n];
+	std::size_t* qp = new std::size_t[q*n];
+	std::size_t j = 0;
+	for (std::size_t i = 0; i < q; i++)
+	{
+	    qm[i] = m;
+	    auto& nn = qq[i];
+	    auto& ll = rr[i];
+	    for (std::size_t k = 0; k < m; k++)
+	    {
+		auto& cc = nn[k];
+		std::size_t c = cc.size();
+		ql[i*n + k] = c;
+		qs[i*n + k] = ll[k];
+		for (std::size_t d = 0; d < c; d++)
+		{
+		    qp[j] = cc[d];
+		    j++;
+		}
+	    }
+	    for (std::size_t k = m; k < n; k++)
+	    {
+		ql[i*n + k] = 0;
+		qs[i*n + k] = 0;
+	    }
+	}
+	std::size_t* tt = new std::size_t[pmax];
+	std::size_t t = listListVarsArrayHistoryPairsSetTuplePartitionTop_u(pmax, z, v, n, svv, q, y1, qm, ql, qs, qp, aa.arr, aarr.arr, tt);
+	for (std::size_t i = 0; i < t; i++)
+	{
+	    auto& nn0 = qq[tt[i]];
+	    SizeListList nn;
+	    nn.reserve(m);
+	    for (std::size_t k = 0; k < m; k++)
+	    {
+		auto& cc0 = nn0[k];
+		std::size_t c = cc0.size();
+		SizeList cc;
+		cc.reserve(c);
+		for (std::size_t d = 0; d < c; d++)
+		    cc.push_back(vvv[cc0[d]]);
+		nn.push_back(cc);
+	    }
+	    tt1->push_back(nn);
+	}
+	delete[] tt;
+	delete[] qp;
+	delete[] qs;
+	delete[] ql;
+	delete[] qm;
+    }
+    return std::tuple<std::unique_ptr<SizeListListList>, std::size_t>(std::move(tt1), q1);
 }
 
