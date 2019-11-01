@@ -112,3 +112,23 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
     return rrvqqy(mmax, umax, pmax, *aa, *aarr, z, y1);
 }
 
+
+// parametersRollerMaximumRollExcludedSelfRepa_i ::
+//   [[Variable]] -> -> HistogramRepa -> -> HistogramRepa ->
+//   ([[[Int]]],Integer)
+std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersRollerMaximumRollExcludedSelfRepa_i(const SizeListList& pp, const HistogramRepa& aa, const HistogramRepa& aarr, double z)
+{
+    auto t = histogramRepaVecsRollMax(pp, aa, aarr, z);
+    auto tt = std::move(std::get<0>(t));
+    auto s = std::get<1>(t);
+    auto tt1 = std::make_unique<SizeListListList>();
+    bool any = false;
+    for (auto& vv : *tt)
+	if (*max_element(vv.begin(), vv.end()) < vv.size() - 1)
+	{
+	    tt1->push_back(*tt);
+	    break;
+	}
+    return std::tuple<std::unique_ptr<SizeListListList>, std::size_t>(std::move(tt1), s);
+}
+

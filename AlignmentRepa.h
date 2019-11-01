@@ -297,8 +297,11 @@ namespace Alignment
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
     // parametersHistogramRepaVecsSetTuplePartitionTopByM_u ::
-    //   Integer -> Integer -> Integer -> HistogramRepaVec -> Double -> ([[[Variable]]],Integer)
+    //   Integer -> Integer -> Integer -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[[Variable]]],Integer)
     std::tuple<std::unique_ptr<SizeListListList>, std::size_t> parametersHistogramRepaVecsSetTuplePartitionTopByM_u(std::size_t, std::size_t, std::size_t, const HistogramRepa&, const HistogramRepa&, double, double);
+
+    // histogramRepaVecsRollMax :: [[Variable]] -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[Variable]],Integer)
+    std::tuple<std::unique_ptr<SizeListList>, std::size_t> histogramRepaVecsRollMax(const SizeListList&, const HistogramRepa&, const HistogramRepa&, double);
 
 }
 

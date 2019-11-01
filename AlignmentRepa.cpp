@@ -2560,7 +2560,6 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s);
 }
 
-
 inline std::size_t toIndexPerm(std::size_t n, std::size_t* ppp, std::size_t* svv, std::size_t* ivv)
 {
     std::size_t k;
@@ -2573,6 +2572,28 @@ inline std::size_t toIndexPerm(std::size_t n, std::size_t* ppp, std::size_t* svv
 	a = svv[p] * a + ivv[p];
     }
     return a;
+}
+
+void listListVarsArrayHistoryPairsPartition_u(
+    std::size_t v, std::size_t n, std::size_t* svv, std::size_t* ppp, double* aa1, double* aa2,
+    double* bb1, double* bb2)
+{
+    std::size_t i;
+    std::size_t j;
+    std::size_t* ivv = new std::size_t[n];
+
+    for (i = 0; i<n; i++)
+	ivv[i] = 0;
+
+    for (j = 0; j<v; j++)
+    {
+	i = toIndexPerm(n, ppp, svv, ivv);
+	bb1[i] = aa1[j];
+	bb2[i] = aa2[j];
+	incIndex(n, svv, ivv);
+    }
+
+    delete[] ivv;
 }
 
 void listListVarsArrayHistoryPairsPartitionIndependent_u(
@@ -2687,6 +2708,7 @@ void listListVarsArrayHistoryPairsPartitionIndependent_u(
     delete[] pxx1;
     delete[] ppp;
 }
+
 
 
 std::size_t listListVarsArrayHistoryPairsSetTuplePartitionTop_u(
@@ -2829,7 +2851,7 @@ std::size_t listListVarsArrayHistoryPairsSetTuplePartitionTop_u(
 
 
 // parametersHistogramRepaVecsSetTuplePartitionTopByM_u ::
-//   Integer -> Integer -> Integer -> HistogramRepaVec -> Double -> Double -> ([[[Variable]]],Integer)
+//   Integer -> Integer -> Integer -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[[Variable]]],Integer)
 std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersHistogramRepaVecsSetTuplePartitionTopByM_u(std::size_t mmax, std::size_t umax, std::size_t pmax, const HistogramRepa& aa, const HistogramRepa& aarr, double z, double y1)
 {
     auto n = aa.dimension;
@@ -2943,3 +2965,311 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
     return std::tuple<std::unique_ptr<SizeListListList>, std::size_t>(std::move(tt1), q1);
 }
 
+inline std::size_t toIndex(std::size_t n, std::size_t* svv, std::size_t* ivv)
+{
+    std::size_t k;
+    std::size_t a;
+
+    for (k = 1, a = ivv[0]; k<n; k++)
+	a = svv[k] * a + ivv[k];
+    return a;
+}
+
+inline std::size_t toIndexInsert(std::size_t u, std::size_t r, std::size_t q, std::size_t n, std::size_t* svv, std::size_t* ivv)
+{
+    std::size_t k;
+    std::size_t a;
+
+    for (k = 0, a = 0; k<u; k++)
+	a = svv[k] * a + ivv[k];
+    a = r*a + q;
+    for (; k<n; k++)
+	a = svv[k] * a + ivv[k];
+    return a;
+}
+
+std::size_t arrayHistoryPairsRollMax_u(
+    std::size_t v, std::size_t n, std::size_t* svvy, std::size_t d, std::size_t nd,
+    double* aay, double* aaxy, double* bby, double* bbxy,
+    std::size_t* ppm)
+{
+    std::size_t srchd = 0;
+    double fm;
+
+    std::size_t* ivv = new std::size_t[n];
+    std::size_t* syy = new std::size_t[n];
+    std::size_t* svv = new std::size_t[n];
+    std::size_t* szz = new std::size_t[n];
+    double* aa = new double[v];
+    double* aax = new double[v];
+    double* bb = new double[v];
+    double* bbx = new double[v];
+    double* aaz = new double[v];
+    double* aaxz = new double[v];
+    double* bbz = new double[v];
+    double* bbxz = new double[v];
+    double* ff = new double[nd];
+    std::size_t minv;
+    std::size_t vc;
+    std::size_t* ppc = new std::size_t[nd];
+    double fc;
+    std::size_t ww;
+    std::size_t sw;
+    std::size_t tw;
+    double fw;
+    std::size_t x;
+    std::size_t y;
+    std::size_t r;
+    std::size_t i;
+    std::size_t j;
+    std::size_t k;
+    std::size_t q;
+    std::size_t w;
+    std::size_t p;
+    std::size_t s;
+    std::size_t is;
+    std::size_t t;
+    std::size_t it;
+    std::size_t m;
+    std::size_t u;
+    double f;
+    double c;
+
+    for (j = 0; j < v; j++)
+    {
+	aa[j] = aay[j];
+	aax[j] = aaxy[j];
+	bb[j] = bby[j];
+	bbx[j] = bbxy[j];
+    }
+
+    for (i = 0; i < nd; i++)
+	ff[i] = 0.0;
+
+    for (minv = 1, i = 0; i < n; i++)
+    {
+	minv *= 2;
+	svv[i] = svvy[i];
+	for (j = 0; j < d; j++)
+	{
+	    p = d*i + j;
+	    ppm[p] = j;
+	    ppc[p] = j;
+	}
+    }
+
+    vc = v;
+
+    for (i = 0; i < n; i++)
+	ivv[i] = 0;
+    for (fc = 0.0, i = 0; i < vc; i++)
+    {
+	f = alngam(aa[i] + 1.0) - alngam(aax[i] + 1.0)
+	    - alngam(bb[i] + 1.0) + alngam(bbx[i] + 1.0);
+	fc += f;
+	for (k = 0; k < n; k++)
+	    ff[d*k + ivv[k]] += f;
+	incIndex(n, svv, ivv);
+    }
+
+    m = n - 1;
+
+    for (q = 0; vc > minv; q++)
+    {
+	for (x = 0, w = 0; w < n; w++)
+	{
+	    r = svv[w];
+	    if (r > 2)
+	    {
+		for (i = 0; i < w; i++)
+		    syy[i] = svv[i];
+		for (; i < m; i++)
+		    syy[i] = svv[i + 1];
+		p = d * w;
+		y = vc / r;
+		c = 1.0 / pow((double)(y*(r - 1)), 1.0 / ((double)n));
+		for (s = 1; s < r; s++)
+		    for (t = 0; t < s; t++)
+		    {
+			for (i = 0; i < m; i++)
+			    ivv[i] = 0;
+			for (f = fc - ff[p + s] - ff[p + t], i = 0; i < y; i++)
+			{
+			    is = toIndexInsert(w, r, s, m, syy, ivv);
+			    it = toIndexInsert(w, r, t, m, syy, ivv);
+			    f += alngam(aa[is] + aa[it] + 1.0) - alngam(aax[is] + aax[it] + 1.0)
+				- alngam(bb[is] + bb[it] + 1.0) + alngam(bbx[is] + bbx[it] + 1.0);
+			    incIndex(m, syy, ivv);
+			}
+			f *= c;
+			srchd++;
+			if ((x == 0) || (f > fw))
+			{
+			    x++;
+			    ww = w;
+			    sw = s;
+			    tw = t;
+			    fw = f;
+			}
+		    }
+	    }
+	}
+	for (i = 0; i < n; i++)
+	    szz[i] = svv[i];
+	r = svv[ww] - 1;
+	szz[ww] = r;
+	vc /= r + 1;
+	vc *= r;
+	for (i = 0; i < nd; i++)
+	    ff[i] = 0.0;
+	for (i = 0; i < n; i++)
+	    ivv[i] = 0;
+	for (fc = 0.0, j = 0; j < vc; j++)
+	{
+	    u = ivv[ww];
+	    if ((u < tw) || (u > tw && u < sw))
+	    {
+		i = toIndex(n, svv, ivv);
+		aaz[j] = aa[i];
+		aaxz[j] = aax[i];
+		bbz[j] = bb[i];
+		bbxz[j] = bbx[i];
+	    }
+	    else if (u == tw)
+	    {
+		i = toIndex(n, svv, ivv);
+		aaz[j] = aa[i];
+		aaxz[j] = aax[i];
+		bbz[j] = bb[i];
+		bbxz[j] = bbx[i];
+		ivv[ww] = sw;
+		i = toIndex(n, svv, ivv);
+		aaz[j] += aa[i];
+		aaxz[j] += aax[i];
+		bbz[j] += bb[i];
+		bbxz[j] += bbx[i];
+		ivv[ww] = tw;
+	    }
+	    else
+	    {
+		ivv[ww]++;
+		i = toIndex(n, svv, ivv);
+		aaz[j] = aa[i];
+		aaxz[j] = aax[i];
+		bbz[j] = bb[i];
+		bbxz[j] = bbx[i];
+		ivv[ww]--;
+	    }
+	    f = alngam(aaz[j] + 1.0) - alngam(aaxz[j] + 1.0)
+		- alngam(bbz[j] + 1.0) + alngam(bbxz[j] + 1.0);
+	    fc += f;
+	    for (k = 0; k < n; k++)
+		ff[d*k + ivv[k]] += f;
+	    incIndex(n, szz, ivv);
+	}
+	for (j = 0; j < vc; j++)
+	{
+	    aa[j] = aaz[j];
+	    aax[j] = aaxz[j];
+	    bb[j] = bbz[j];
+	    bbx[j] = bbxz[j];
+	}
+	svv[ww] = r;
+	for (j = 0; j < d; j++)
+	{
+	    p = d*ww + j;
+	    u = ppc[p];
+	    if (u == sw)
+		ppc[p] = tw;
+	    else if (u > sw)
+		ppc[p] = u - 1;
+	}
+	if (q == 0 || fw > fm)
+	{
+	    fm = fw;
+	    for (i = 0; i < nd; i++)
+		ppm[i] = ppc[i];
+	}
+    }
+
+    delete[] ppc;
+    delete[] ff;
+    delete[] bbxz;
+    delete[] bbz;
+    delete[] aaxz;
+    delete[] aaz;
+    delete[] bbx;
+    delete[] bb;
+    delete[] aax;
+    delete[] aa;
+    delete[] szz;
+    delete[] svv;
+    delete[] syy;
+    delete[] ivv;
+    return srchd;
+}
+
+
+
+// histogramRepaVecsRollMax :: [[Variable]] -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[Variable]],Integer)
+std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::histogramRepaVecsRollMax(const SizeListList& pp, const HistogramRepa& aa, const HistogramRepa& aarr, double z)
+{
+    auto n = aa.dimension;
+    auto svv = aa.shape;
+    std::size_t v = 1;
+    for (std::size_t i = 0; i < n; i++)
+	v *= svv[i];
+    auto m = pp.size();
+    std::size_t* ppp = new std::size_t[n];
+    std::size_t* lyy = new std::size_t[m];
+    std::size_t* syy = new std::size_t[m];
+    std::size_t r = 0;
+    std::size_t d = 0;
+    std::size_t j = 0;
+    for (std::size_t k = 0; k < m; k++)
+    {
+	auto& cc = pp[k];
+	auto e = cc.size();
+	lyy[k] = e;
+	std::size_t sz = 1;
+	for (std::size_t c = 0; c < e; c++)
+	{
+	    auto p = cc[c];
+	    ppp[j] = p;
+	    j++;
+	    sz *= svv[p];
+	}
+	syy[k] = sz;
+	r += sz;
+	if (d < sz)
+	    d = sz;
+    }
+    double* aay = new double[v];
+    double* bby = new double[v];
+    double* aaxy = new double[v];
+    double* bbxy = new double[v];
+    listListVarsArrayHistoryPairsPartition_u(v, n, svv, ppp, aa.arr, aarr.arr, aay, bby);
+    listListVarsArrayHistoryPairsPartitionIndependent_u(z, v, n, svv, m, r, lyy, syy, ppp, aa.arr, aarr.arr, aaxy, bbxy);
+    std::size_t* ppm = new std::size_t[m*d];
+    auto s = arrayHistoryPairsRollMax_u(v, m, syy, d, m*d, aay, aaxy, bby, bbxy, ppm);
+    auto tt1 = std::make_unique<SizeListList>();
+    tt1->reserve(m);
+    for (std::size_t k = 0; k < m; k++)
+    {
+	SizeList cc;
+	auto e = syy[k];
+	cc.reserve(e);
+	for (std::size_t c = 0; c < e; c++)
+	    cc.push_back(ppm[d*k + c]);
+	tt1->push_back(cc);
+    }
+    delete[] ppm;
+    delete[] bbxy;
+    delete[] aaxy;
+    delete[] bby;
+    delete[] aay;
+    delete[] syy;
+    delete[] lyy;
+    delete[] ppp;
+    return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(tt1), s);
+}
