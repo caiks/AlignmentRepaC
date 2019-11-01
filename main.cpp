@@ -3217,7 +3217,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet cc;
 		    for (std::size_t k = 0; k < nn[i].size(); k++)
-			cc.insert((ur->listVarSizePair[nn[i][k]]).first);
+			cc.insert(ww[nn[i][k]]);
 		    cout << (i?",":"") << cc;
 		}
 		cout << endl;
@@ -3248,7 +3248,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet cc;
 		    for (std::size_t k = 0; k < nn[i].size(); k++)
-			cc.insert((ur->listVarSizePair[nn[i][k]]).first);
+			cc.insert(ww[nn[i][k]]);
 		    cout << (i ? "," : "") << cc;
 		}
 		cout << endl;
@@ -3279,7 +3279,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet cc;
 		    for (std::size_t k = 0; k < nn[i].size(); k++)
-			cc.insert((ur->listVarSizePair[nn[i][k]]).first);
+			cc.insert(ww[nn[i][k]]);
 		    cout << (i ? "," : "") << cc;
 		}
 		cout << endl;
@@ -3310,7 +3310,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet cc;
 		    for (std::size_t k = 0; k < nn[i].size(); k++)
-			cc.insert((ur->listVarSizePair[nn[i][k]]).first);
+			cc.insert(ww[nn[i][k]]);
 		    cout << (i ? "," : "") << cc;
 		}
 		cout << endl;
@@ -3341,7 +3341,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet cc;
 		    for (std::size_t k = 0; k < nn[i].size(); k++)
-			cc.insert((ur->listVarSizePair[nn[i][k]]).first);
+			cc.insert(ww[nn[i][k]]);
 		    cout << (i ? "," : "") << cc;
 		}
 		cout << endl;
@@ -3372,7 +3372,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet cc;
 		    for (std::size_t k = 0; k < nn[i].size(); k++)
-			cc.insert((ur->listVarSizePair[nn[i][k]]).first);
+			cc.insert(ww[nn[i][k]]);
 		    cout << (i ? "," : "") << cc;
 		}
 		cout << endl;

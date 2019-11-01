@@ -2833,7 +2833,6 @@ std::size_t listListVarsArrayHistoryPairsSetTuplePartitionTop_u(
 std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersHistogramRepaVecsSetTuplePartitionTopByM_u(std::size_t mmax, std::size_t umax, std::size_t pmax, const HistogramRepa& aa, const HistogramRepa& aarr, double z, double y1)
 {
     auto n = aa.dimension;
-    auto vvv = aa.vectorVar;
     auto svv = aa.shape;
     std::size_t v = 1;
     for (std::size_t i = 0; i < n; i++)
@@ -2934,22 +2933,7 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
 	std::size_t* tt = new std::size_t[pmax];
 	std::size_t t = listListVarsArrayHistoryPairsSetTuplePartitionTop_u(pmax, z, v, n, svv, q, y1, qm, ql, qs, qp, aa.arr, aarr.arr, tt);
 	for (std::size_t i = 0; i < t; i++)
-	{
-	    auto& nn0 = qq[tt[i]];
-	    SizeListList nn;
-	    nn.reserve(m);
-	    for (std::size_t k = 0; k < m; k++)
-	    {
-		auto& cc0 = nn0[k];
-		std::size_t c = cc0.size();
-		SizeList cc;
-		cc.reserve(c);
-		for (std::size_t d = 0; d < c; d++)
-		    cc.push_back(vvv[cc0[d]]);
-		nn.push_back(cc);
-	    }
-	    tt1->push_back(nn);
-	}
+	    tt1->push_back(qq[tt[i]]);
 	delete[] tt;
 	delete[] qp;
 	delete[] qs;
