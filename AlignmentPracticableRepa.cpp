@@ -3,9 +3,9 @@
 using namespace Alignment;
 
 // parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui ::
-//   Integer -> Integer -> Integer -> Integer -> [Variable] -> Fud ->
+//   Integer -> Integer -> Integer -> Integer -> [VariableRepa] -> Fud ->
 //   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
-//   ([[Variable]],Integer)
+//   ([[VariableRepa]],Integer)
 std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui(std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, const SizeList& vv, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
 {
     auto frvars = fudRepasSetVar;
@@ -94,8 +94,8 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
 
 
 // parametersSystemsPartitionerMaxRollByMRepa_ui ::
-//   Integer -> Integer -> Integer -> [Variable] -> HistoryRepa -> HistoryRepa -> 
-//   ([[[Variable]]],Integer)
+//   Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistoryRepa -> 
+//   ([[[VariableRepa]]],Integer)
 std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersSystemsPartitionerMaxRollByMRepa_ui(std::size_t mmax, std::size_t umax, std::size_t pmax, const SizeList& kk, const HistoryRepa& hh, const HistoryRepa& hhrr)
 {
     auto hrred = [](double f, const HistoryRepa& hr, const SizeList& kk)
@@ -114,7 +114,7 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
 
 
 // parametersRollerMaximumRollExcludedSelfRepa_i ::
-//   [[Variable]] -> -> HistogramRepa -> -> HistogramRepa ->
+//   [[VariableRepa]] -> -> HistogramRepa -> -> HistogramRepa ->
 //   ([[[Int]]],Integer)
 std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parametersRollerMaximumRollExcludedSelfRepa_i(const SizeListList& pp, const HistogramRepa& aa, const HistogramRepa& aarr, double z)
 {
@@ -130,5 +130,82 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
 	    break;
 	}
     return std::tuple<std::unique_ptr<SizeListListList>, std::size_t>(std::move(tt1), s);
+}
+
+// parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui ::
+//   Integer -> Integer -> [VariableRepa] -> Fud ->
+//   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
+//   ([(Double, [VariableRepa]],Integer)
+std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui(std::size_t wmax, std::size_t omax, const SizeList& vv, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+{
+    auto frdef = fudRepasDefinitions;
+    auto frvars = fudRepasSetVar;
+    auto frder = fudRepasDerived;
+    auto append = parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u;
+
+    std::size_t s = 0;
+    SizeListList xx1;
+    DoubleSizeListPairList xx;
+    xx.reserve(omax * 10);
+    auto vvf = frvars(fr);
+    for (auto& w : vv)
+	vvf->erase(w);
+    SizeList yy;
+    yy.reserve(vvf->size());
+    yy.insert(yy.end(), vvf->begin(), vvf->end());
+    SizeSizePairList cc;
+    auto dd = frdef(fr);
+    auto p = dd->size();
+    for (auto& pp : *dd)
+    {
+	auto& w = pp.first;
+	auto& m = pp.second->dimension;
+	auto& zz = pp.second->vectorVar;
+	SizeUSet uu1(p);
+	SizeUSet uu2(m);
+	for (std::size_t i = 0; i < m; i++)
+	    uu2.insert(zz[i]);
+	while (uu2.size())
+	{
+	    SizeList uu3;
+	    uu3.reserve(uu2.size());
+	    uu3.insert(uu3.end(), uu2.begin(), uu2.end());
+	    for (auto& v : uu3)
+	    {
+		uu2.erase(v);
+		if (uu1.find(v) == uu1.end() || dd->find(v) == dd->end())
+		    break;
+		uu1.insert(v);
+		auto& tt = (*dd)[v];
+		auto& m1 = tt->dimension;
+		auto& zz1 = tt->vectorVar;
+		for (std::size_t i = 0; i < m1; i++)
+		    uu2.insert(zz1[i]);
+	    }
+	}
+	for (auto& v : uu1)
+	    cc.push_back(SizeSizePair(w, v));
+    }
+    auto wwf = frder(fr);
+    xx1.reserve(wwf->size());
+    for (auto& w : *wwf)
+	xx1.push_back(SizeList{ w });
+    while (xx1.size())
+    {
+	auto t = append(wmax, omax, cc, yy, xx1, hh, hhx, hhrr, hhrrx);
+	auto& xa = std::get<0>(t);
+	s += std::get<1>(t);
+	xx.insert(xx.end(), xa->begin(), xa->end());
+	xx1.clear();
+	xx1.reserve(xa->size());
+	for (auto& pp : *xa)
+	    xx1.push_back(pp.second);
+    }
+    std::sort(xx.begin(), xx.end());
+    auto xx2 = std::make_unique<DoubleSizeListPairList>();
+    xx2->reserve(1);
+    if (xx.size())
+	xx2->push_back(xx.back());
+    return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(xx2), s);
 }
 

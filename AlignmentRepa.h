@@ -17,6 +17,8 @@ namespace Alignment
     typedef std::vector<std::size_t> SizeList;
     typedef std::vector<SizeList> SizeListList;
     typedef std::vector<SizeListList> SizeListListList;
+    typedef std::pair<std::size_t, std::size_t> SizeSizePair;
+    typedef std::vector<SizeSizePair> SizeSizePairList;
     typedef std::pair<double, SizeList> DoubleSizeListPair;
     typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
     typedef std::unordered_set<std::size_t> SizeUSet;
@@ -56,8 +58,8 @@ std::ostream& operator<<(std::ostream& out, const Alignment::SystemRepa&);
 namespace Alignment
 {
     // data HistogramRepa = HistogramRepa {
-    //   histogramRepasVectorVar :: !(V.Vector Variable),
-    //   histogramRepasMapVarInt::Map.Map Variable Int,
+    //   histogramRepasVectorVar :: !(V.Vector VariableRepa),
+    //   histogramRepasMapVarInt::Map.Map VariableRepa Int,
     //   histogramRepasArray :: !(Array U VShape Double)
 
     class HistogramRepa
@@ -89,7 +91,7 @@ namespace Alignment
     // systemsHistogramRepasHistogram_u :: System -> HistogramRepa -> Maybe Histogram
     std::unique_ptr<Histogram> systemsHistogramRepasHistogram_u(const System&, const SystemRepa&, const HistogramRepa&);
 
-    // setVarsHistogramRepasReduce_u :: Set.Set Variable -> HistogramRepa -> HistogramRepa
+    // setVarsHistogramRepasReduce_u :: [VariableRepa] -> HistogramRepa -> HistogramRepa
     std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(std::size_t m, const std::size_t* kk, const HistogramRepa&);
 }
 
@@ -98,8 +100,8 @@ std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepa&);
 namespace Alignment
 {
     // data HistogramRepaRed = HistogramRepaRed{
-    //   histogramRepaRedsVectorVar :: !(V.Vector Variable),
-    //   histogramRepaRedsMapVarInt::Map.Map Variable Int,
+    //   histogramRepaRedsVectorVar :: !(V.Vector VariableRepa),
+    //   histogramRepaRedsMapVarInt::Map.Map VariableRepa Int,
     //   histogramRepaRedsShape :: !VShape,
     //   histogramRepaRedsVectorArray :: !(V.Vector(UV.Vector Double)) }
 
@@ -133,8 +135,8 @@ std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepaRed&);
 namespace Alignment
 {
     // data HistoryRepa = HistoryRepa {
-    //   historyRepasVectorVar :: !(V.Vector Variable),
-    //   historyRepasMapVarInt::Map.Map Variable Int,
+    //   historyRepasVectorVar :: !(V.Vector VariableRepa),
+    //   historyRepasMapVarInt::Map.Map VariableRepa Int,
     //   historyRepasShape :: !VShape,
     //   historyRepasArray :: !(Array U DIM2 Int)
 
@@ -172,10 +174,10 @@ namespace Alignment
     // historyRepasHistoryRepasHistoryRepaSelection_u :: HistoryRepa -> HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasHistoryRepasHistoryRepaSelection_u(const HistoryRepa&, const HistoryRepa&);
 
-    // setVarsHistoryRepasHistoryRepaReduced_u :: Set.Set Variable -> HistoryRepa -> HistoryRepa
+    // setVarsHistoryRepasHistoryRepaReduced_u :: [VariableRepa] -> HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> setVarsHistoryRepasHistoryRepaReduced_u(std::size_t, const std::size_t*, const HistoryRepa&);
 
-    // setVarsHistoryRepasReduce_u :: Double -> Set.Set Variable -> HistoryRepa -> HistogramRepa
+    // setVarsHistoryRepasReduce_u :: Double -> [VariableRepa] -> HistoryRepa -> HistogramRepa
     std::unique_ptr<HistogramRepa> setVarsHistoryRepasReduce_u(double, std::size_t, const std::size_t*, const HistoryRepa&);
 
     // historyRepasRed :: HistoryRepa -> HistogramRepaRed
@@ -189,9 +191,9 @@ std::ostream& operator<<(std::ostream& out, const Alignment::HistoryRepa&);
 namespace Alignment
 {
     // data TransformRepa = TransformRepa{
-    //   transformRepasVectorVar :: !(V.Vector Variable),
-    //   transformRepasMapVarInt::Map.Map Variable Int,
-    //   transformRepasVarDerived :: !Variable,
+    //   transformRepasVectorVar :: !(V.Vector VariableRepa),
+    //   transformRepasMapVarInt::Map.Map VariableRepa Int,
+    //   transformRepasVarDerived :: !VariableRepa,
     //   transformRepasValency :: !Int,
     //   transformRepasArray :: !(Array U VShape Int) }
 
@@ -231,6 +233,7 @@ namespace Alignment
     typedef std::shared_ptr<TransformRepa> TransformRepaPtr;
     typedef std::vector<TransformRepaPtr> TransformRepaPtrList;
     typedef std::vector<TransformRepaPtrList> TransformRepaPtrListList;
+    typedef std::map<std::size_t, TransformRepaPtr> SizeTransformRepaPtrMap;
 }
 
 namespace Alignment
@@ -240,7 +243,7 @@ namespace Alignment
 	TransformRepaPtrListList layers;
     };
 
-    // setVariablesListTransformRepasFudRepa_u :: Set.Set Variable -> V.Vector TransformRepa -> FudRepa
+    // setVariablesListTransformRepasFudRepa_u :: [VariableRepa] -> [TransformRepa] -> FudRepa
     std::unique_ptr<FudRepa> setVariablesListTransformRepasFudRepa_u(const SizeUSet&, const TransformRepaPtrList&);
 
     // systemsFudsFudRepa_u :: System -> Fud -> FudRepa
@@ -249,14 +252,17 @@ namespace Alignment
     // systemsFudRepasFud_u :: System -> FudRepa -> Fud
     std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const SystemRepa&, const FudRepa&);
 
-    // fudRepasSetVar :: FudRepa -> Set.Set Variable
+    // fudRepasSetVar :: FudRepa -> [VariableRepa]
     std::unique_ptr<SizeUSet> fudRepasSetVar(const FudRepa&);
 
-    // fudRepasDerived :: FudRepa -> Set.Set Variable
+    // fudRepasDerived :: FudRepa -> [VariableRepa]
     std::unique_ptr<SizeUSet> fudRepasDerived(const FudRepa&);
 
-    // fudRepasUnderlying :: FudRepa -> Set.Set Variable
+    // fudRepasUnderlying :: FudRepa -> [VariableRepa]
     std::unique_ptr<SizeUSet> fudRepasUnderlying(const FudRepa&);
+
+    // fudRepasDefinitions :: FudRepa -> Map.Map VariableRepa TransformRepa
+    std::unique_ptr<SizeTransformRepaPtrMap> fudRepasDefinitions(const FudRepa&);
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
@@ -290,18 +296,21 @@ namespace Alignment
 
 namespace Alignment
 {
-    // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> V.Vector Variable -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> (V.Vector ((Double, V.Vector Variable)),Integer)
+    // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->([(Double, [VariableRepa])],Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
-    // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Set.Set Variable -> V.Vector (Set.Set Variable) -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> (V.Vector ((Double, V.Vector Variable)),Integer)
+    // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa])],Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
     // parametersHistogramRepaVecsSetTuplePartitionTopByM_u ::
-    //   Integer -> Integer -> Integer -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[[Variable]]],Integer)
+    //   Integer -> Integer -> Integer -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[[VariableRepa]]],Integer)
     std::tuple<std::unique_ptr<SizeListListList>, std::size_t> parametersHistogramRepaVecsSetTuplePartitionTopByM_u(std::size_t, std::size_t, std::size_t, const HistogramRepa&, const HistogramRepa&, double, double);
 
-    // histogramRepaVecsRollMax :: [[Variable]] -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[Variable]],Integer)
+    // histogramRepaVecsRollMax :: [[VariableRepa]] -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[VariableRepa]],Integer)
     std::tuple<std::unique_ptr<SizeListList>, std::size_t> histogramRepaVecsRollMax(const SizeListList&, const HistogramRepa&, const HistogramRepa&, double);
+
+    // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u :: Integer -> Integer -> [(Variable, Variable)] -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa]], Integer)
+    std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u(std::size_t, std::size_t, const SizeSizePairList&, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
 }
 
