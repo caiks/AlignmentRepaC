@@ -252,6 +252,9 @@ namespace Alignment
     // systemsFudRepasFud_u :: System -> FudRepa -> Fud
     std::unique_ptr<Fud> systemsFudRepasFud_u(const System&, const SystemRepa&, const FudRepa&);
 
+    // fudRepasSize :: FudRepa -> Integer
+    std::size_t fudRepasSize(const FudRepa&);
+
     // fudRepasSetVar :: FudRepa -> [VariableRepa]
     std::unique_ptr<SizeUSet> fudRepasSetVar(const FudRepa&);
 

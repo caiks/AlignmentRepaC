@@ -138,57 +138,53 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
 //   ([(Double, [VariableRepa]],Integer)
 std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui(std::size_t wmax, std::size_t omax, const SizeList& vv, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
 {
-    auto frdef = fudRepasDefinitions;
-    auto frvars = fudRepasSetVar;
-    auto frder = fudRepasDerived;
+    auto fsize = fudRepasSize;
     auto append = parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u;
 
-    std::size_t s = 0;
-    SizeListList xx1;
-    DoubleSizeListPairList xx;
-    xx.reserve(omax * 10);
-    auto vvf = frvars(fr);
-    for (auto& w : vv)
-	vvf->erase(w);
+    auto l = fsize(fr);
+    SizeUSet wwf;
+    wwf.reserve(l);
     SizeList yy;
-    yy.reserve(vvf->size());
-    yy.insert(yy.end(), vvf->begin(), vvf->end());
-    SizeSizePairList cc;
-    auto dd = frdef(fr);
-    auto p = dd->size();
-    for (auto& pp : *dd)
+    yy.reserve(l);
+    SizeSizeSetMap mm;
+    bool first = true;
+    for (auto& ll : fr.layers)
     {
-	auto& w = pp.first;
-	auto& m = pp.second->dimension;
-	auto& zz = pp.second->vectorVar;
-	SizeUSet uu1(p);
-	SizeUSet uu2(m);
-	for (std::size_t i = 0; i < m; i++)
-	    uu2.insert(zz[i]);
-	while (uu2.size())
+	for (auto& tt : ll)
 	{
-	    SizeList uu3;
-	    uu3.reserve(uu2.size());
-	    uu3.insert(uu3.end(), uu2.begin(), uu2.end());
-	    for (auto& v : uu3)
+	    auto& w = tt->derived;
+	    yy.push_back(w);
+	    wwf.insert(w);
+	    auto& nn = mm[w];
+	    if (!first)
 	    {
-		uu2.erase(v);
-		if (uu1.find(v) == uu1.end() || dd->find(v) == dd->end())
-		    break;
-		uu1.insert(v);
-		auto& tt = (*dd)[v];
-		auto& m1 = tt->dimension;
-		auto& zz1 = tt->vectorVar;
-		for (std::size_t i = 0; i < m1; i++)
-		    uu2.insert(zz1[i]);
+		auto m = tt->dimension;
+		auto& zz = tt->vectorVar;
+		for (std::size_t i = 0; i < m; i++)
+		{
+		    auto& v = zz[i];
+		    wwf.erase(v);
+		    auto it = mm.find(v);
+		    if (it != mm.end())
+			nn.insert(it->second.begin(), it->second.end());
+		}
 	    }
 	}
-	for (auto& v : uu1)
+	first = false;
+    }
+    SizeSizePairList cc;
+    for (auto& pp : mm)
+    {
+	auto& w = pp.first;
+	for (auto& v : pp.second)
 	    cc.push_back(SizeSizePair(w, v));
     }
-    auto wwf = frder(fr);
-    xx1.reserve(wwf->size());
-    for (auto& w : *wwf)
+    std::size_t s = 0;
+    DoubleSizeListPairList xx;
+    xx.reserve(omax * 10);
+    SizeListList xx1;
+    xx1.reserve(wwf.size());
+    for (auto& w : wwf)
 	xx1.push_back(SizeList{ w });
     while (xx1.size())
     {

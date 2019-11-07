@@ -1247,6 +1247,15 @@ std::unique_ptr<Fud> Alignment::systemsFudRepasFud_u(const System& uu, const Sys
     return ff;
 }
 
+// fudRepasSize :: FudRepa -> Integer
+std::size_t Alignment::fudRepasSize(const FudRepa& fr)
+{
+    std::size_t l = 0;
+    for (auto& ll : fr.layers)
+	    l += ll.size();
+    return l;
+}
+
 // fudRepasSetVar :: FudRepa -> [VariableRepa]
 std::unique_ptr<SizeUSet> Alignment::fudRepasSetVar(const FudRepa& fr)
 {
