@@ -26,7 +26,7 @@ namespace Alignment
     //   Integer -> Integer -> [VariableRepa] -> Fud ->
     //   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
     //   ([(Double, [VariableRepa]],Integer)
-    std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui(std::size_t, std::size_t, const SizeList&, const FudRepa&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
+    std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui(std::size_t, std::size_t, const FudRepa&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
 
 }

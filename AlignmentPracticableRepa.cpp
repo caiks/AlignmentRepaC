@@ -136,7 +136,7 @@ std::tuple<std::unique_ptr<SizeListListList>, std::size_t> Alignment::parameters
 //   Integer -> Integer -> [VariableRepa] -> Fud ->
 //   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
 //   ([(Double, [VariableRepa]],Integer)
-std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui(std::size_t wmax, std::size_t omax, const SizeList& vv, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui(std::size_t wmax, std::size_t omax, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
 {
     auto fsize = fudRepasSize;
     auto append = parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u;
@@ -164,6 +164,7 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 		{
 		    auto& v = zz[i];
 		    wwf.erase(v);
+		    nn.insert(v);
 		    auto it = mm.find(v);
 		    if (it != mm.end())
 			nn.insert(it->second.begin(), it->second.end());

@@ -3445,23 +3445,6 @@ int main(int argc, char **argv)
 	{
 	    return systemsHistoryRepasHistory_u(uu, ur, hr);
 	};
-	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
-	{
-	    return eventsHistoryRepasHistoryRepaSelection_u(ll.size(), (std::size_t*)ll.data(), hr);
-	};
-	auto hrhrsel = [](const HistoryRepa& hr, const HistoryRepa& ss)
-	{
-	    return historyRepasHistoryRepasHistoryRepaSelection_u(ss, hr);
-	};
-	auto hrhrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
-	{
-	    auto& vvi = ur.mapVarSize();
-	    std::size_t m = kk.size();
-	    SizeList kk1;
-	    for (std::size_t i = 0; i < m; i++)
-		kk1.push_back(vvi[kk[i]]);
-	    return setVarsHistoryRepasHistoryRepaReduced_u(m, kk1.data(), hr);
-	};
 	auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
 	{
 	    auto& vvi = ur.mapVarSize();
@@ -3566,14 +3549,18 @@ int main(int argc, char **argv)
     if (true)
     {
 	auto sysreg = systemRegular_u;
+	auto sys = histogramsSystemImplied;
+	auto uunion = pairSystemsUnion;
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
 	auto reframe = histogramsMapVarsFrame_u;
 	auto mul = pairHistogramsMultiply;
 	auto add = pairHistogramsAdd_u;
 	auto resize = histogramsResize;
+	auto scalar = histogramScalar_u;
 	auto regpivot = histogramRegularUnitPivot_u;
 	auto regcart = histogramRegularCartesian_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
 	typedef std::pair<int, ValList> IntValListPair;
 	typedef std::vector<IntValListPair> IntValListPairList;
 	auto llhh = [](const VarList& vv, const IntValListPairList& ee)
@@ -3613,6 +3600,42 @@ int main(int argc, char **argv)
 	    return setVarsHistogramsReduce(vv, aa);
 	};
 	auto ind = histogramsIndependent;
+	auto cdaa = [](const SizeListList& ll)
+	{
+	    auto llss = listsState;
+	    auto llaa = listsHistogram_u;
+	    std::vector<StateRationalPair> qq;
+	    qq.reserve(ll.size());
+	    for (auto& mm : ll)
+	    {
+		std::vector<VarValPair> ss;
+		ss.reserve(mm.size());
+		for (int i = 0; i < mm.size(); i++)
+		    ss.push_back(VarValPair(Variable(i+1), Value((int)mm[i])));
+		qq.push_back(StateRationalPair(*llss(ss), 1));
+	    }
+	    return llaa(qq);
+	};
+	auto cdtt = [cdaa](const SizeList& pp, const SizeListList& ll)
+	{
+	    auto aa = cdaa(ll);
+	    auto vv = histogramsSetVar(*aa);
+	    VarVarUMap nn;
+	    std::size_t i = 0;
+	    for (auto& v : *vv)
+	    {
+		if (i < pp.size())
+		    nn.insert_or_assign(v,Variable((int)pp[i]));
+		i++;
+	    }
+	    auto bb = histogramsMapVarsFrame_u(*aa, nn);
+	    VarUSet ww;
+	    if (pp.size())
+		ww.insert(Variable(pp.back()));
+	    return histogramsSetVarsTransform(*bb, ww);
+	};
+	auto llff = setTransformsFud_u;
+	auto fsys = fudsSystemImplied;
 	auto aarr = systemsHistogramsHistogramRepa_u;
 	auto rraa = systemsHistogramRepasHistogram_u;
 	auto uuur = systemsSystemRepa;
@@ -3633,34 +3656,14 @@ int main(int argc, char **argv)
 	{
 	    return systemsHistoryRepasHistory_u(uu, ur, hr);
 	};
-	auto hrsel = [](const HistoryRepa& hr, const SizeList& ll)
+	auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const SizeList& kk)
 	{
-	    return eventsHistoryRepasHistoryRepaSelection_u(ll.size(), (std::size_t*)ll.data(), hr);
-	};
-	auto hrhrsel = [](const HistoryRepa& hr, const HistoryRepa& ss)
-	{
-	    return historyRepasHistoryRepasHistoryRepaSelection_u(ss, hr);
-	};
-	auto hrhrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
-	{
-	    auto& vvi = ur.mapVarSize();
-	    std::size_t m = kk.size();
-	    SizeList kk1;
-	    for (std::size_t i = 0; i < m; i++)
-		kk1.push_back(vvi[kk[i]]);
-	    return setVarsHistoryRepasHistoryRepaReduced_u(m, kk1.data(), hr);
-	};
-	auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
-	{
-	    auto& vvi = ur.mapVarSize();
-	    std::size_t m = kk.size();
-	    SizeList kk1;
-	    for (std::size_t i = 0; i < m; i++)
-		kk1.push_back(vvi[kk[i]]);
-	    return setVarsHistoryRepasReduce_u(1.0, m, kk1.data(), hr);
+	    return setVarsHistoryRepasReduce_u(1.0, kk.size(), kk.data(), hr);
 	};
 	auto hrpr = historyRepasRed;
 	auto hrshuffle = historyRepasShuffle_u;
+	auto frmul = historyRepasFudRepasMultiply_u;
+	auto fffr = systemsFudsFudRepa_u;
 	auto tupler = parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui;
 	auto rrvqqy = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
 	auto parter = parametersSystemsPartitionerMaxRollByMRepa_ui;
@@ -3687,7 +3690,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3 * 3, 100, 2, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3697,7 +3700,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3 * 3, 100, 1, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3707,7 +3710,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3 * 3*3, 100, 1000, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3717,7 +3720,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3 * 3 * 3, 100, 2, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3727,7 +3730,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3 * 3 * 3, 100, 1, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3737,7 +3740,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 
 	    t = tupler(3 * 3, 100, 1000, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
@@ -3748,7 +3751,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3, 100, 2, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3758,7 +3761,7 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	    t = tupler(3 * 3, 100, 1, 1, vv, FudRepa(), *hr, *pr, *hrs, *prs);
 	    pp.clear();
 	    for (auto& kk : *std::get<0>(t))
@@ -3768,8 +3771,283 @@ int main(int argc, char **argv)
 		    qq.insert((ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
-	    cout << pp << endl;
+	    cout << pp << endl << endl;
 	}
+
+	cout << endl;
+	{
+		auto uu = sysreg(3, 4);
+		auto ur = uuur(*uu);
+		auto vv = SizeList{ 0,1,2,3 };
+		auto aa = resize(150, *regdiag(3, 4));
+		auto hr = aahr(*uu, *ur, *aa);
+		auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+		aa = add(*resize(150, *regdiag(3, 4)), *rr);
+		hr = aahr(*uu, *ur, *aa);
+		auto hrs = hrshuffle(*hr, 1);
+
+		auto t = parter(4, 3*3*3, 20, vv, *hr, *hrs);
+		for (auto& nn : *std::get<0>(t))
+		{
+		    std::vector<VarSet> pp;
+		    for (auto& kk : nn)
+		    {
+			VarSet qq;
+			for (std::size_t i = 0; i < kk.size(); i++)
+			    qq.insert((ur->listVarSizePair[kk[i]]).first);
+			pp.push_back(qq);
+		    }
+		    cout << pp << endl;
+		}
+		cout << endl;
+
+		t = parter(4, 3 * 3 * 3, 1, vv, *hr, *hrs);
+		for (auto& nn : *std::get<0>(t))
+		{
+		    std::vector<VarSet> pp;
+		    for (auto& kk : nn)
+		    {
+			VarSet qq;
+			for (std::size_t i = 0; i < kk.size(); i++)
+			    qq.insert((ur->listVarSizePair[kk[i]]).first);
+			pp.push_back(qq);
+		    }
+		    cout << pp << endl;
+		}
+	}
+
+	cout << endl;
+	{
+	    auto aa = resize(900, *mul(*regpivot(3, 3), *reframe(*regcart(1, 1), VarVarUMap{ { Variable(1), Variable(4) } })));
+	    auto uu = sys(*aa);
+	    auto ur = uuur(*uu);
+	    auto vv = SizeList{ 0,1,2,3 };
+	    auto hr = aahr(*uu, *ur, *aa);
+	    auto rr = add(*hraa(*uu, *ur, *hrshuffle(*hr, 1)), *hraa(*uu, *ur, *hrshuffle(*hr, 2)));
+	    auto hrs = aahr(*uu, *ur, *rr);
+
+	    auto z = (double)hr->size;
+	    auto ar = hrred(*hr, *ur, vv);
+	    auto ars = hrred(*hrs, *ur, vv);
+	    double y1 = ar->facLn() - ars->facLn();
+	    auto t = rrvqqy(4, 3 * 3 * 3, 1, *ar, *ars, z, y1);
+	    for (auto& nn : *std::get<0>(t))
+	    {
+		cout << "partition " << nn << endl;
+		auto t2 = roller(nn, *ar, *ars, z);
+		cout << "roll " << *std::get<0>(t2) << endl;
+	    }
+	    cout << endl;
+	    t = rrvqqy(4, 3 * 3 * 3, 20, *ar, *ars, z, y1);
+	    for (auto& nn : *std::get<0>(t))
+	    {
+		cout << "partition " << nn << endl;
+		auto t2 = roller(nn, *ar, *ars, z);
+		cout << "roll " << *std::get<0>(t2) << endl;
+	    }
+	}
+
+	cout << endl;
+	{
+	    cout << *cdaa(SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) << endl;
+	    cout << *cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) << endl;
+	    cout << *cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) << endl;
+	}
+
+	cout << endl;
+	{
+	    auto uu = sysreg(3, 3);
+	    auto ur = uuur(*uu);
+	    auto vv = SizeList{ 0,1,2};
+	    auto aa = mul(*scalar(81), *regpivot(3, 3));
+	    auto hr = aahr(*uu, *ur, *aa);
+	    auto hrs = hrshuffle(*hr, 17);
+	    auto pr = hrpr(*hr);
+	    auto prs = hrpr(*hrs);
+
+	    {
+		auto t = deriveder(3 * 3 * 3, 100, FudRepa(), *hr, *pr, *hrs, *prs);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 100, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 100, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,2 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 100, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 3,17 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 100, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,2 } }), cdtt(SizeList{ 3,17 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 100, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 3,17 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 3,18 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 100, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 3,17 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 3,18 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 1, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	    {
+		auto ff = llff(TransformPtrList{ cdtt(SizeList{ 1,15 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 2,16 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 15,17 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }), cdtt(SizeList{ 16,18 }, SizeListList{ SizeList{ 1,1 },SizeList{ 2,2 }, SizeList{ 3,3 } }) });
+		auto uu1 = uunion(*uu, *fsys(*ff));
+		auto ur1 = uuur(*uu1);
+		auto fr = fffr(*uu1, *ur1, *ff);
+		auto hr1 = frmul(*hr, *fr);
+		auto hrs1 = frmul(*hrs, *fr);
+		auto pr1 = hrpr(*hr1);
+		auto prs1 = hrpr(*hrs1);
+		auto t = deriveder(3 * 3 * 3, 1, *fr, *hr1, *pr1, *hrs1, *prs1);
+		std::vector<VarSet> pp;
+		for (auto& kk : *std::get<0>(t))
+		{
+		    VarSet qq;
+		    for (std::size_t i = 0; i < kk.second.size(); i++)
+			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+		    pp.push_back(qq);
+		}
+		cout << pp << endl << endl;
+	    }
+
+	}
+
 
     }
 
