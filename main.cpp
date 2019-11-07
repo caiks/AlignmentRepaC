@@ -6,6 +6,7 @@
 #include "AlignmentAesonRepa.h"
 #include "AlignmentRandomRepa.h"
 #include "AlignmentPracticableRepa.h"
+#include "AlignmentPracticableIORepa.h"
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
 #include "rapidjson/reader.h"
