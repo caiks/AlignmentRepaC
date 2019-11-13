@@ -3640,6 +3640,7 @@ int main(int argc, char **argv)
 	auto aarr = systemsHistogramsHistogramRepa_u;
 	auto rraa = systemsHistogramRepasHistogram_u;
 	auto uuur = systemsSystemRepa;
+	auto uruu = systemsRepasSystem;
 	auto araa = systemsHistogramRepasHistogram_u;
 	auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
 	{
@@ -3665,11 +3666,13 @@ int main(int argc, char **argv)
 	auto hrshuffle = historyRepasShuffle_u;
 	auto frmul = historyRepasFudRepasMultiply_u;
 	auto fffr = systemsFudsFudRepa_u;
+	auto frff = systemsFudRepasFud_u;
 	auto tupler = parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui;
 	auto rrvqqy = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
 	auto parter = parametersSystemsPartitionerMaxRollByMRepa_ui;
 	auto roller = parametersRollerMaximumRollExcludedSelfRepa_i;
 	auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui;
+	auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
 
 	{
 	    auto uu = sysreg(3, 4);
@@ -4047,9 +4050,38 @@ int main(int argc, char **argv)
 		cout << pp << endl << endl;
 	    }
 
+
+
 	}
 
-
+	cout << endl;
+	{
+	    auto uu = sysreg(3, 4);
+	    auto ur = uuur(*uu);
+	    auto vv = SizeList{ 0,1,2,3 };
+	    auto aa = resize(900, *mul(*regpivot(3, 3), *reframe(*regcart(1, 1), VarVarUMap{ { Variable(1), Variable(4) } })));
+	    auto hr = aahr(*uu, *ur, *aa);
+	    auto rr = add(*hraa(*uu, *ur, *hrshuffle(*hr, 1)), *hraa(*uu, *ur, *hrshuffle(*hr, 2)));
+	    auto hrs = aahr(*uu, *ur, *rr);
+	    hr->transpose();
+	    hrs->transpose();
+	    auto t = layerer(27, 3, 27, 2, 2, 2, 9, 1, vv, *hr, *hrs, 1, *ur);
+	    auto& fr = std::get<0>(t);
+	    auto& mm = std::get<1>(t);
+	    if (mm->size())
+	    {
+		auto& a = mm->back().first;
+		auto& kk = mm->back().second;
+		VarSet qq;
+		for (std::size_t i = 0; i < kk.size(); i++)
+		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		cout << "a = " << a << endl;
+		cout << "kk = " << qq << endl;
+	    }
+	    uruu(*ur, *uu);
+	    auto ff = frff(*uu, *ur, *fr);
+	    cout << "ff = " << *ff << endl;
+	}
     }
 
     return 0;
