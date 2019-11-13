@@ -4081,6 +4081,141 @@ int main(int argc, char **argv)
 	    uruu(*ur, *uu);
 	    auto ff = frff(*uu, *ur, *fr);
 	    cout << "ff = " << *ff << endl;
+	    /*
+	    >>> layerer
+	    >>> layer       fud: 1  layer: 1
+	    substrate cardinality: 4
+	    fud cardinality: 0
+	    tupler  searched: 5     rate: inf
+	    tupler 0s
+	    tuple cardinality: 1
+	    max tuple algn: 586.053
+	    layer cardinality: 2
+	    parter  searched: 3     rate: inf
+	    parter 0s
+	    roller  searched: 158   rate: inf
+	    roller 0s
+	    der vars algn density: 154.389
+	    dervarser       searched: 2     rate: inf
+	    dervarser 0s
+	    application 0.109203s
+	    <<< layer 0.109203s
+	    >>> layer       fud: 1  layer: 2
+	    substrate cardinality: 4
+	    fud cardinality: 2
+	    tupler  searched: 25    rate: inf
+	    tupler 0s
+	    tuple cardinality: 1
+	    max tuple algn: 471.452
+	    layer cardinality: 2
+	    parter  searched: 3     rate: inf
+	    parter 0s
+	    roller  searched: 34    rate: inf
+	    roller 0s
+	    der vars algn density: 154.389
+	    dervarser       searched: 4     rate: inf
+	    dervarser 0s
+	    application 0.109203s
+	    <<< layer 0.109203s
+	    <<< layerer 0.249606s
+	    a = 154.389
+	    kk = {<<1,1>,1>,<<1,1>,2>}
+	    ff = {
+	    ({({(1,1),(2,1),(<<1,1>,1>,0)},1 % 1),({(1,1),(2,2),(<<1,1>,1>,0)},1 % 1),({(1,1),(2,3),(<<1,1>,1>,1)},1 % 1),({(1,2),(2,1),(<<1,1>,1>,1)},1 % 1),({(1,2),(2,2),(<<1,1>,1>,1)},1 % 1),({(1,2),(2,3),(<<1,1>,1>,1)},1 % 1),({(1,3),(2,1),(<<1,1>,1>,1)},1 % 1),({(1,3),(2,2),(<<1,1>,1>,1)},1 % 1),({(1,3),(2,3),(<<1,1>,1>,1)},1 % 1)},{<<1,1>,1>}),
+	    ({({(3,1),(<<1,1>,2>,0)},1 % 1),({(3,2),(<<1,1>,2>,1)},1 % 1),({(3,3),(<<1,1>,2>,1)},1 % 1)},{<<1,1>,2>})}
+*/
+	}
+	cout << endl;
+	{
+	    auto uu = sysreg(3, 4);
+	    auto ur = uuur(*uu);
+	    auto vv = SizeList{ 0,1,2,3 };
+	    auto aa = resize(150, *regdiag(3, 4));
+	    auto hr = aahr(*uu, *ur, *aa);
+	    auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+	    aa = add(*resize(1500, *regdiag(3, 4)), *rr);
+	    hr = aahr(*uu, *ur, *aa);
+	    rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+	    auto hrs = aahr(*uu, *ur, *rr);
+	    hr->transpose();
+	    hrs->transpose();
+	    auto t = layerer(27, 3, 27, 2, 2, 2, 9, 1, vv, *hr, *hrs, 1, *ur);
+	    auto& fr = std::get<0>(t);
+	    auto& mm = std::get<1>(t);
+	    if (mm->size())
+	    {
+		auto& a = mm->back().first;
+		auto& kk = mm->back().second;
+		VarSet qq;
+		for (std::size_t i = 0; i < kk.size(); i++)
+		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		cout << "a = " << a << endl;
+		cout << "kk = " << qq << endl;
+	    }
+	    uruu(*ur, *uu);
+	    auto ff = frff(*uu, *ur, *fr);
+	    cout << "ff = " << *ff << endl;
+	    /*
+	    >>> layerer
+	    >>> layer       fud: 1  layer: 1
+	    substrate cardinality: 4
+	    fud cardinality: 0
+	    tupler  searched: 10    rate: inf
+	    tupler 0s
+	    tuple cardinality: 1
+	    max tuple algn: 2853.7
+	    layer cardinality: 2
+	    parter  searched: 3     rate: inf
+	    parter 0s
+	    roller  searched: 143   rate: inf
+	    roller 0s
+	    der vars algn density: 475.058
+	    dervarser       searched: 2     rate: inf
+	    dervarser 0s
+	    application 0.109203s
+	    <<< layer 0.109203s
+	    >>> layer       fud: 1  layer: 2
+	    substrate cardinality: 4
+	    fud cardinality: 2
+	    tupler  searched: 29    rate: inf
+	    tupler 0s
+	    tuple cardinality: 1
+	    max tuple algn: 2200
+	    layer cardinality: 2
+	    parter  searched: 3     rate: inf
+	    parter 0s
+	    roller  searched: 143   rate: inf
+	    roller 0s
+	    der vars algn density: 883.399
+	    dervarser       searched: 10    rate: inf
+	    dervarser 0s
+	    application 0.109203s
+	    <<< layer 0.109203s
+	    >>> layer       fud: 1  layer: 3
+	    substrate cardinality: 4
+	    fud cardinality: 4
+	    tupler  searched: 53    rate: inf
+	    tupler 0s
+	    tuple cardinality: 1
+	    max tuple algn: 1382.39
+	    layer cardinality: 2
+	    parter  searched: 3     rate: inf
+	    parter 0s
+	    roller  searched: 143   rate: inf
+	    roller 0s
+	    der vars algn density: 883.399
+	    dervarser       searched: 14    rate: inf
+	    dervarser 0s
+	    application 0.0936024s
+	    <<< layer 0.109203s
+	    <<< layerer 0.37441s
+	    a = 883.399
+	    kk = {<<1,1>,1>,<<1,1>,2>,<<1,2>,1>}
+	    ff = {
+	    ({({(2,1),(3,1),(<<1,1>,1>,0)},1 % 1),({(2,1),(3,2),(<<1,1>,1>,1)},1 % 1),({(2,1),(3,3),(<<1,1>,1>,1)},1 % 1),({(2,2),(3,1),(<<1,1>,1>,1)},1 % 1),({(2,2),(3,2),(<<1,1>,1>,1)},1 % 1),({(2,2),(3,3),(<<1,1>,1>,1)},1 % 1),({(2,3),(3,1),(<<1,1>,1>,1)},1 % 1),({(2,3),(3,2),(<<1,1>,1>,1)},1 % 1),({(2,3),(3,3),(<<1,1>,1>,2)},1 % 1)},{<<1,1>,1>}),
+	    ({({(4,1),(<<1,1>,2>,0)},1 % 1),({(4,2),(<<1,1>,2>,1)},1 % 1),({(4,3),(<<1,1>,2>,2)},1 % 1)},{<<1,1>,2>}),
+	    ({({(1,1),(4,1),(<<1,2>,1>,0)},1 % 1),({(1,1),(4,2),(<<1,2>,1>,1)},1 % 1),({(1,1),(4,3),(<<1,2>,1>,1)},1 % 1),({(1,2),(4,1),(<<1,2>,1>,1)},1 % 1),({(1,2),(4,2),(<<1,2>,1>,1)},1 % 1),({(1,2),(4,3),(<<1,2>,1>,1)},1 % 1),({(1,3),(4,1),(<<1,2>,1>,1)},1 % 1),({(1,3),(4,2),(<<1,2>,1>,1)},1 % 1),({(1,3),(4,3),(<<1,2>,1>,2)},1 % 1)},{<<1,2>,1>}),({({(<<1,1>,1>,0),(<<1,2>,2>,0)},1 % 1),({(<<1,1>,1>,1),(<<1,2>,2>,1)},1 % 1),({(<<1,1>,1>,2),(<<1,2>,2>,2)},1 % 1)},{<<1,2>,2>})}
+	    */
 	}
     }
 
