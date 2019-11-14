@@ -11,8 +11,8 @@ const double repaRounding = 1e-6;
 
 // parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
-//   [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa-> HistogramRepaRed -> Integer ->
-//   IO(SystemRepa, FudRepa, [(Double, [VariableRepa]])
+//   [VariableRepa] -> HistoryRepa -> HistoryRepa-> Integer ->
+//   IO (SystemRepa, FudRepa, [(Double, [VariableRepa]])
 std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Alignment::parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, const SizeList& vv, const HistoryRepa& hr, const HistoryRepa& hrs, std::size_t f, SystemRepa& ur)
 {
     auto hrred = [](double f, const HistoryRepa& hr, const SizeList& kk)
@@ -214,4 +214,21 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 }
 
 
+
+// parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
+//   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
+//   Integer -> Integer ->
+//   [VariableRepa] -> HistoryRepa ->
+//   IO (SystemRepa, ApplicationRepa)
+std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const HistoryRepa& hr, SystemRepa& ur)
+{
+    auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
+
+    auto t0 = clk::now();
+    std::cout << ">>> applicationer" << std::endl;
+    auto dr = std::make_unique<ApplicationRepa>();
+
+    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+    return dr;
+}
 

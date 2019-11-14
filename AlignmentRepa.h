@@ -299,6 +299,15 @@ namespace Alignment
 
 namespace Alignment
 {
+    struct ApplicationRepa
+    {
+	Tree<std::size_t> slices;
+	FudRepa fud;
+    };
+}
+
+namespace Alignment
+{
     // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->([(Double, [VariableRepa])],Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
