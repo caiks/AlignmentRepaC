@@ -5,7 +5,7 @@
 using namespace Alignment;
 
 typedef std::chrono::duration<double> sec;
-typedef std::chrono::system_clock clk;
+typedef std::chrono::high_resolution_clock clk;
 
 const double repaRounding = 1e-6;
 
@@ -72,8 +72,10 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	double ymax = 0.0;
 	for (auto& kk : *x2)
 	{
+	    mark = clk::now();
 	    auto ar = hrred(1.0, *hr1, kk);
 	    auto ars = hrred(z/zr, *hrs1, kk);
+	    time["hrred"] += ((sec)(clk::now() - mark)).count();
 	    double y1 = ar->facLn() - ars->facLn();
 	    if (!ll.size() || y1 > ymax)
 		ymax = y1;
@@ -89,6 +91,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 		auto tt4 = roller(nn, *ar, *ars, z);
 		time["roller"] += ((sec)(clk::now() - mark)).count();
 		steps["roller"] += std::get<1>(tt4);
+		mark = clk::now();
 		auto& x4 = std::get<0>(tt4);
 		if (x4->size() != m)
 		    continue;
@@ -178,6 +181,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	std::cout << "parter " << time["parter"] << "s" << std::endl;
 	std::cout << "roller\tsearched: " << steps["roller"] << "\trate: " << ((double)steps["roller"]) / time["roller"] << std::endl;
 	std::cout << "roller " << time["roller"] << "s" << std::endl;
+	std::cout << "hrred " << time["hrred"] << "s" << std::endl;
 	if (ll.size())
 	{
 	    hr1 = frmul(*hr1, gr);
