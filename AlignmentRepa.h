@@ -162,6 +162,9 @@ namespace Alignment
     public: unsigned char* arr;
     };
 
+    typedef std::shared_ptr<HistoryRepa> HistoryRepaPtr;
+    typedef std::vector<HistoryRepaPtr> HistoryRepaPtrList;
+
     // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
     std::unique_ptr<HistoryRepa> systemsHistoriesHistoryRepa_u(const System&, const SystemRepa&, const History&, unsigned char evient = false);
 
@@ -183,6 +186,8 @@ namespace Alignment
     // historyRepasRed :: HistoryRepa -> HistogramRepaRed
     std::unique_ptr<HistogramRepaRed> historyRepasRed(const HistoryRepa&);
 
+    // vectorHistoryRepasConcat_u :: V.Vector HistoryRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> vectorHistoryRepasConcat_u(const HistoryRepaPtrList&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistoryRepa&);

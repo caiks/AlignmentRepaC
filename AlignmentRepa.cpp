@@ -958,6 +958,60 @@ std::unique_ptr<HistogramRepaRed> Alignment::historyRepasRed(const HistoryRepa& 
     return pr;
 }
 
+// vectorHistoryRepasConcat_u :: V.Vector HistoryRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasConcat_u(const HistoryRepaPtrList& ll)
+{
+    auto m = ll.size();
+    auto hr1 = std::make_unique<HistoryRepa>();
+    if (!m)
+	return hr1;
+    auto& hr0 = *ll[0];
+    if (!hr0.arr)
+	return hr1;
+    auto n = hr0.dimension;
+    auto vv = hr0.vectorVar;
+    auto sh = hr0.shape;
+    std::size_t z1 = 0;
+    for (auto& hr : ll)
+	z1 += hr->size;
+    hr1->dimension = n;
+    hr1->vectorVar = new std::size_t[n];
+    auto vv1 = hr1->vectorVar;
+    hr1->shape = new std::size_t[n];
+    auto sh1 = hr1->shape;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	vv1[i] = vv[i];
+	sh1[i] = sh[i];
+    }
+    hr1->size = z1;
+    hr1->evient = true;
+    hr1->arr = new unsigned char[z1*n];
+    auto rr1 = hr1->arr;
+    std::size_t y = 0;
+    for (std::size_t k = 0; k < m; k++)
+    {
+	auto rr2 = rr1 + y*n;
+	auto& hr = ll[k];
+	auto z = hr->size;
+	auto rr = hr->arr;
+	if (hr->evient)
+	    memcpy(rr2, rr, z*n);
+	else
+	{
+	    std::size_t iz;
+	    for (std::size_t i = 0; i < n; i++)
+	    {
+		iz = i*z;
+		for (std::size_t j = 0; j < z; j++)
+		    rr2[j*n + i] = rr[iz + j];
+	    }
+	}
+	y += z;
+    }
+    return hr1;
+}
+
 
 TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
 {

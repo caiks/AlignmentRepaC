@@ -1,4 +1,5 @@
-﻿#include "AlignmentPracticableIORepa.h"
+﻿#include "AlignmentRandomRepa.h"
+#include "AlignmentPracticableIORepa.h"
 #include <chrono>
 #include <ctime>
 
@@ -222,10 +223,12 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const HistoryRepa& hr, SystemRepa& ur)
 {
+    auto hrshuffle = historyRepasShuffle_u;
     auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
 
     auto t0 = clk::now();
     std::cout << ">>> applicationer" << std::endl;
+    auto hrs = hrshuffle(hr, seed);
     auto dr = std::make_unique<ApplicationRepa>();
 
     std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
