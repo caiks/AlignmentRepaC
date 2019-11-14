@@ -4086,42 +4086,38 @@ int main(int argc, char **argv)
 	    >>> layer       fud: 1  layer: 1
 	    substrate cardinality: 4
 	    fud cardinality: 0
-	    tupler  searched: 5     rate: 53671.1
-	    tupler 9.316e-05s
+	    tupler  searched: 5     rate: 26615.7
+	    tupler 0.000187859s
 	    tuple cardinality: 1
 	    max tuple algn: 586.053
 	    layer cardinality: 2
-	    parter  searched: 3     rate: 38579.8
-	    parter 7.7761e-05s
-	    roller  searched: 158   rate: 804776
-	    roller 0.000196328s
-	    hrred 5.5049e-05s
-	    trans 1.1548e-05s
+	    parter  searched: 3     rate: 44532.2
+	    parter 6.7367e-05s
+	    roller  searched: 158   rate: 815977
+	    roller 0.000193633s
 	    der vars algn density: 154.389
-	    dervarser       searched: 2     rate: 37109.9
-	    dervarser 5.3894e-05s
-	    application 0.122081s
-	    <<< layer 0.129464s
+	    dervarser       searched: 2     rate: 45977
+	    dervarser 4.35e-05s
+	    application 0.11146s
+	    <<< layer 0.119519s
 	    >>> layer       fud: 1  layer: 2
 	    substrate cardinality: 4
 	    fud cardinality: 2
-	    tupler  searched: 25    rate: 54118.6
-	    tupler 0.000461948s
+	    tupler  searched: 25    rate: 54254.2
+	    tupler 0.000460794s
 	    tuple cardinality: 1
 	    max tuple algn: 471.452
 	    layer cardinality: 2
-	    parter  searched: 3     rate: 53377
-	    parter 5.6204e-05s
-	    roller  searched: 34    rate: 626393
-	    roller 5.4279e-05s
-	    hrred 8.1996e-05s
-	    trans 1.2319e-05s
+	    parter  searched: 3     rate: 57302.2
+	    parter 5.2354e-05s
+	    roller  searched: 34    rate: 664075
+	    roller 5.1199e-05s
 	    der vars algn density: 154.389
 	    dervarser       searched: 4     rate: 41563.2
 	    dervarser 9.6239e-05s
-	    application 0.121466s
-	    <<< layer 0.129362s
-	    <<< layerer 0.277405s
+	    application 0.107381s
+	    <<< layer 0.11536s
+	    <<< layerer 0.251153s
 	    a = 154.389
 	    kk = {<<1,1>,1>,<<1,1>,2>}
 	    ff = {
@@ -4164,61 +4160,55 @@ int main(int argc, char **argv)
 	    >>> layer       fud: 1  layer: 1
 	    substrate cardinality: 4
 	    fud cardinality: 0
-	    tupler  searched: 10    rate: 37538.9
-	    tupler 0.00026639s
+	    tupler  searched: 10    rate: 39121.9
+	    tupler 0.000255611s
 	    tuple cardinality: 1
 	    max tuple algn: 2853.7
 	    layer cardinality: 2
-	    parter  searched: 3     rate: 37466.7
-	    parter 8.0071e-05s
-	    roller  searched: 143   rate: 542293
-	    roller 0.000263695s
-	    hrred 6.0823e-05s
-	    trans 1.2319e-05s
+	    parter  searched: 3     rate: 39359.2
+	    parter 7.6221e-05s
+	    roller  searched: 143   rate: 530673
+	    roller 0.000269469s
 	    der vars algn density: 475.058
-	    dervarser       searched: 2     rate: 37647.8
-	    dervarser 5.3124e-05s
-	    application 0.12153s
-	    <<< layer 0.132117s
+	    dervarser       searched: 2     rate: 41232.9
+	    dervarser 4.8505e-05s
+	    application 0.10771s
+	    <<< layer 0.115672s
 	    >>> layer       fud: 1  layer: 2
 	    substrate cardinality: 4
 	    fud cardinality: 2
-	    tupler  searched: 29    rate: 37055.2
-	    tupler 0.000782617s
+	    tupler  searched: 29    rate: 37367.6
+	    tupler 0.000776073s
 	    tuple cardinality: 1
 	    max tuple algn: 2200
 	    layer cardinality: 2
-	    parter  searched: 3     rate: 25384.6
-	    parter 0.000118182s
-	    roller  searched: 143   rate: 553607
-	    roller 0.000258306s
-	    hrred 4.889e-05s
-	    trans 1.0394e-05s
+	    parter  searched: 3     rate: 42124.8
+	    parter 7.1217e-05s
+	    roller  searched: 143   rate: 555262
+	    roller 0.000257536s
 	    der vars algn density: 883.399
-	    dervarser       searched: 10    rate: 38946
-	    dervarser 0.000256766s
-	    application 0.12275s
-	    <<< layer 0.131427s
+	    dervarser       searched: 10    rate: 39720.1
+	    dervarser 0.000251762s
+	    application 0.106361s
+	    <<< layer 0.118203s
 	    >>> layer       fud: 1  layer: 3
 	    substrate cardinality: 4
 	    fud cardinality: 4
-	    tupler  searched: 53    rate: 41344.7
-	    tupler 0.00128191s
+	    tupler  searched: 53    rate: 41607.1
+	    tupler 0.00127382s
 	    tuple cardinality: 1
 	    max tuple algn: 1382.39
 	    layer cardinality: 2
-	    parter  searched: 3     rate: 48706.8
-	    parter 6.1593e-05s
-	    roller  searched: 143   rate: 612987
-	    roller 0.000233284s
-	    hrred 4.581e-05s
-	    trans 1.1934e-05s
+	    parter  searched: 3     rate: 25220.3
+	    parter 0.000118952s
+	    roller  searched: 143   rate: 600114
+	    roller 0.000238288s
 	    der vars algn density: 883.399
-	    dervarser       searched: 14    rate: 42190
-	    dervarser 0.000331832s
-	    application 0.120692s
-	    <<< layer 0.129493s
-	    <<< layerer 0.416439s
+	    dervarser       searched: 14    rate: 40319
+	    dervarser 0.000347231s
+	    application 0.106129s
+	    <<< layer 0.11497s
+	    <<< layerer 0.373039s
 	    a = 883.399
 	    kk = {<<1,1>,1>,<<1,1>,2>,<<1,2>,1>}
 	    ff = {
