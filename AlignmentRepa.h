@@ -27,6 +27,8 @@ namespace Alignment
     typedef std::vector<SizeSizeSetMap> SizeSizeSetMapList;
     typedef std::vector<double> DoubleList;
     typedef std::vector<std::vector<double>> DoubleListList;
+    typedef Tree<std::size_t> SizeTree;
+    typedef std::pair<std::size_t, std::shared_ptr<SizeTree>> SizeSizeTreePair;
 }
 
 namespace Alignment
@@ -306,10 +308,14 @@ namespace Alignment
 {
     struct ApplicationRepa
     {
-	Tree<std::size_t> slices;
+	SizeTree slices;
 	FudRepa fud;
+	SizeList substrate;
     };
 }
+
+std::ostream& operator<<(std::ostream& out, const Alignment::ApplicationRepa&);
+
 
 namespace Alignment
 {

@@ -1630,6 +1630,12 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
     return df;
 }
 
+std::ostream& operator<<(std::ostream& out, const ApplicationRepa& dr)
+{
+    out << "(" << dr.substrate << "," << dr.fud << "," << dr.slices << ")";
+    return out;
+}
+
 std::size_t listVarsArrayHistoryEvientAlignedTop_u(
     std::size_t xmax, std::size_t omax, std::size_t n, std::size_t* svv, std::size_t m, std::size_t z1, std::size_t z2,
     std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,

@@ -1222,6 +1222,7 @@ int main(int argc, char **argv)
 	};
 	auto hrpr = historyRepasRed;
 	auto hrshuffle = historyRepasShuffle_u;
+	auto hrconcat = vectorHistoryRepasConcat_u;
 	auto cross = parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u;
 
 	auto pressure = Variable("pressure");
@@ -1383,6 +1384,12 @@ int main(int argc, char **argv)
 	    for (auto& mm : tt)
 		cout << mm.first << "," << mm.second << endl;
 	}
+
+	HistoryRepaPtr hr0 = std::move(hr);
+	auto hr2 = hrconcat(HistoryRepaPtrList{ hr0,hr0,hr0 });
+	cout << "hr2 = hrconcat(hr,hr,hr)" << endl;
+	cout << "hraa(uu,hr2)" << endl
+	    << *hraa(*uu, *ur, *hr2) << endl << endl;
     }
 
     if (false)
@@ -3547,7 +3554,7 @@ int main(int argc, char **argv)
 	*/
     }
 
-    if (true)
+    if (false)
     {
 	auto sysreg = systemRegular_u;
 	auto sys = histogramsSystemImplied;
@@ -4218,6 +4225,222 @@ int main(int argc, char **argv)
 	    */
 	}
     }
+
+    if (true)
+    {
+	auto sysreg = systemRegular_u;
+	auto sys = histogramsSystemImplied;
+	auto uunion = pairSystemsUnion;
+	auto uvars = systemsSetVar;
+	auto cart = systemsSetVarsSetStateCartesian_u;
+	auto reframe = histogramsMapVarsFrame_u;
+	auto mul = pairHistogramsMultiply;
+	auto add = pairHistogramsAdd_u;
+	auto resize = histogramsResize;
+	auto scalar = histogramScalar_u;
+	auto regpivot = histogramRegularUnitPivot_u;
+	auto regcart = histogramRegularCartesian_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	typedef std::pair<int, ValList> IntValListPair;
+	typedef std::vector<IntValListPair> IntValListPairList;
+	auto llhh = [](const VarList& vv, const IntValListPairList& ee)
+	{
+	    std::vector<IdStatePair> ii;
+	    for (auto& pp : ee)
+	    {
+		auto i = pp.first;
+		auto& ll = pp.second;
+		auto jj = std::vector<VarValPair>();
+		for (int j = 0; j < ll.size(); j++)
+		    jj.push_back(VarValPair(vv[j], ll[j]));
+		ii.push_back(IdStatePair(Id(i), *listsState(jj)));
+	    }
+	    return listsHistory_u(ii);
+	};
+	auto hhll = historiesList;
+	auto hvars = historiesSetVar;
+	auto hsize = historiesSize;
+	auto hred = [](const History& hh, const VarUSet& vv)
+	{
+	    return setVarsHistoriesReduce(vv, hh);
+	};
+	auto hhaa = historiesHistogram;
+	auto aahh = histogramsHistory_u;
+	auto aall = histogramsList;
+	auto vars = histogramsSetVar;
+	auto size = histogramsSize;
+	auto trim = histogramsTrim;
+	auto unit = setStatesHistogramUnit_u;
+	auto norm = [](const Histogram& aa)
+	{
+	    return histogramsResize(1, aa);
+	};
+	auto ared = [](const Histogram& aa, const VarUSet& vv)
+	{
+	    return setVarsHistogramsReduce(vv, aa);
+	};
+	auto ind = histogramsIndependent;
+	auto cdaa = [](const SizeListList& ll)
+	{
+	    auto llss = listsState;
+	    auto llaa = listsHistogram_u;
+	    std::vector<StateRationalPair> qq;
+	    qq.reserve(ll.size());
+	    for (auto& mm : ll)
+	    {
+		std::vector<VarValPair> ss;
+		ss.reserve(mm.size());
+		for (int i = 0; i < mm.size(); i++)
+		    ss.push_back(VarValPair(Variable(i + 1), Value((int)mm[i])));
+		qq.push_back(StateRationalPair(*llss(ss), 1));
+	    }
+	    return llaa(qq);
+	};
+	auto cdtt = [cdaa](const SizeList& pp, const SizeListList& ll)
+	{
+	    auto aa = cdaa(ll);
+	    auto vv = histogramsSetVar(*aa);
+	    VarVarUMap nn;
+	    std::size_t i = 0;
+	    for (auto& v : *vv)
+	    {
+		if (i < pp.size())
+		    nn.insert_or_assign(v, Variable((int)pp[i]));
+		i++;
+	    }
+	    auto bb = histogramsMapVarsFrame_u(*aa, nn);
+	    VarUSet ww;
+	    if (pp.size())
+		ww.insert(Variable(pp.back()));
+	    return histogramsSetVarsTransform(*bb, ww);
+	};
+	auto llff = setTransformsFud_u;
+	auto fsys = fudsSystemImplied;
+	auto aarr = systemsHistogramsHistogramRepa_u;
+	auto rraa = systemsHistogramRepasHistogram_u;
+	auto uuur = systemsSystemRepa;
+	auto uruu = systemsRepasSystem;
+	auto araa = systemsHistogramRepasHistogram_u;
+	auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa), 1);
+	};
+	auto hraa = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+	{
+	    return historiesHistogram(*systemsHistoryRepasHistory_u(uu, ur, hr));
+	};
+	auto hhhr = [](const System& uu, const SystemRepa& ur, const History& hh)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, ur, hh, 1);
+	};
+	auto hrhh = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+	{
+	    return systemsHistoryRepasHistory_u(uu, ur, hr);
+	};
+	auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const SizeList& kk)
+	{
+	    return setVarsHistoryRepasReduce_u(1.0, kk.size(), kk.data(), hr);
+	};
+	auto hrpr = historyRepasRed;
+	auto hrshuffle = historyRepasShuffle_u;
+	auto frmul = historyRepasFudRepasMultiply_u;
+	auto fffr = systemsFudsFudRepa_u;
+	auto frff = systemsFudRepasFud_u;
+	auto applicationer = parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa;
+
+	{
+	    auto uu = sysreg(3, 4);
+	    auto ur = uuur(*uu);
+	    auto vv = SizeList{ 0,1,2,3 };
+	    auto aa = resize(150, *regdiag(3, 4));
+	    auto hr = aahr(*uu, *ur, *aa);
+	    auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+	    aa = add(*resize(1500, *regdiag(3, 4)), *rr);
+	    hr = aahr(*uu, *ur, *aa);
+	    hr->transpose();
+	    auto dr = applicationer(27, 3, 27, 2, 2, 2, 9, 1, 1, 2, 17, vv, *hr, *ur);
+	    cout << "dr = " << *dr << endl;
+	    /*
+	    >>> applicationer
+	    shuffler 0.000506216s
+	    >>> layerer
+	    >>> layer       fud: 1  layer: 1
+	    substrate cardinality: 4
+	    fud cardinality: 0
+	    tupler  searched: 10    rate: 30998.8
+	    tupler 0.000322593s
+	    tuple cardinality: 1
+	    max tuple algn: 2856.9
+	    layer cardinality: 2
+	    parter  searched: 3     rate: 27733.6
+	    parter 0.000108172s
+	    roller  searched: 143   rate: 625372
+	    roller 0.000228664s
+	    der vars algn density: 680.352
+	    dervarser       searched: 2     rate: 33518.8
+	    dervarser 5.9668e-05s
+	    application 0.117828s
+	    <<< layer 0.126219s
+	    >>> layer       fud: 1  layer: 2
+	    substrate cardinality: 4
+	    fud cardinality: 2
+	    tupler  searched: 28    rate: 42461
+	    tupler 0.000659428s
+	    tuple cardinality: 1
+	    max tuple algn: 1340.42
+	    layer cardinality: 2
+	    parter  searched: 3     rate: 47810.3
+	    parter 6.2748e-05s
+	    roller  searched: 143   rate: 717126
+	    roller 0.000199407s
+	    der vars algn density: 1197.49
+	    dervarser       searched: 10    rate: 36079.2
+	    dervarser 0.000277168s
+	    application 0.109366s
+	    <<< layer 0.119355s
+	    >>> layer       fud: 1  layer: 3
+	    substrate cardinality: 4
+	    fud cardinality: 4
+	    tupler  searched: 48    rate: 40457.4
+	    tupler 0.00118643s
+	    tuple cardinality: 1
+	    max tuple algn: 443.8
+	    layer cardinality: 2
+	    parter  searched: 3     rate: 46946.2
+	    parter 6.3903e-05s
+	    roller  searched: 143   rate: 773902
+	    roller 0.000184778s
+	    der vars algn density: 1205.81
+	    dervarser       searched: 20    rate: 42411.5
+	    dervarser 0.00047157s
+	    application 0.107834s
+	    <<< layer 0.117062s
+	    <<< layerer 0.392032s
+	    fud: 1
+	    slize size: 1650
+	    derived cardinality: 3
+	    derived algn density: 1205.81
+	    derived algn density per size: 0.730792
+	    derived algn density per size per decr card: 0.365396
+	    <<< applicationer 0.45668s
+	    dr = ([0,1,2,3],[[(2,[2,1],4,[3,3],3,[0,1,1,1,1,1,1,1,2]),(1,[3],5,[3],3,[0,1,2])],[(2,[1,4],6,[3,3],3,[0,0,1,1,1,1,1,2,2]),(1,[2],7,[3],3,[0,1,2])],[(2,[2,7],8,[3,3],3,[0,0,0,0,1,0,0,0,2]),(1,[4],9,[
+	    3],3,[0,1,2])],[(3,[6,8,9],10,[3,3,3],2,[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],11,[3,3,3],2,[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],12,[3,3,3],
+	    2,[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],13,[3,3,3],2,[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],14,[3,3,3],2,[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
+	    ,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],15,[3,3,3],2,[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],16,[3,3,3],2,[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],17,[3,
+	    3,3],2,[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],18,[3,3,3],2,[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],19,[3,3,3],2,[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],20,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],21,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],2
+	    2,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],23,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],24,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0
+	    ,0,1,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],25,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],26,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]),(3,[6,8
+	    ,9],27,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],28,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]),(3,[6,8,9],29,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,
+	    0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]),(3,[6,8,9],30,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]),(3,[6,8,9],31,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]),(3
+	    ,[6,8,9],32,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0]),(3,[6,8,9],33,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]),(3,[6,8,9],34,[3,3,3],2,[0,0,0,0,0,0,0,0
+	    ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]),(3,[6,8,9],35,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]),(3,[6,8,9],36,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+	    ])]],{(10,{}),(11,{}),(12,{}),(13,{}),(14,{}),(15,{}),(16,{}),(17,{}),(18,{}),(19,{}),(20,{}),(21,{}),(22,{}),(23,{}),(24,{}),(25,{}),(26,{}),(27,{}),(28,{}),(29,{}),(30,{}),(31,{}),(32,{}),(33,{}),(3
+	    4,{}),(35,{}),(36,{})})
+	    */
+	}
+    }
+
 
     return 0;
 }

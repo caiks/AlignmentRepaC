@@ -224,12 +224,111 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const HistoryRepa& hr, SystemRepa& ur)
 {
     auto hrshuffle = historyRepasShuffle_u;
+    auto hrconcat = vectorHistoryRepasConcat_u;
     auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
 
     auto t0 = clk::now();
+    std::map<std::string, double> time;
     std::cout << ">>> applicationer" << std::endl;
-    auto hrs = hrshuffle(hr, seed);
+    auto& llu = ur.listVarSizePair;
+    auto z = hr.size;
+    auto vl = std::make_shared<Variable>("s");
     auto dr = std::make_unique<ApplicationRepa>();
+    dr->substrate = vv;
+    dr->fud.layers.reserve(fmax*(lmax+1));
+    {
+	auto mark = clk::now();
+	HistoryRepaPtrList qq;
+	qq.reserve(mult);
+	for (std::size_t i = 1; i <= mult; i++)
+	    qq.push_back(std::move(hrshuffle(hr, seed + i*z)));
+	auto hrs = hrconcat(qq);
+	time["shuffler"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "shuffler " << time["shuffler"] << "s" << std::endl;
+	std::size_t f = 1;
+	std::unique_ptr<FudRepa> fr;
+	std::unique_ptr<DoubleSizeListPairList> mm;
+	try
+	{
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, vv, hr, *hrs, f, ur);
+	    fr = std::move(std::get<0>(t));
+	    mm = std::move(std::get<1>(t));
+	}
+	catch (const std::out_of_range& e)
+	{
+	    std::cout << "out of range exception: " << e.what() << std::endl;
+	    fr.reset();
+	    mm.reset();
+	}
+	if (!mm || !mm->size())
+	{
+	    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+	    return dr;
+	}
+	auto& a = mm->back().first;
+	auto& kk = mm->back().second;
+	auto m = kk.size();
+	std::cout << "fud: " << f << std::endl;
+	std::cout << "slize size: " << z << std::endl;
+	std::cout << "derived cardinality: " << m << std::endl;
+	std::cout << "derived algn density: " << a << std::endl;
+	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
+	std::cout << "derived algn density per size per decr card: " << a / (double)z / (double)(m -1) << std::endl;
+	if (m < 2 || a <= repaRounding)
+	{
+	    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+	    return dr;
+	}
+	auto vf = std::make_shared<Variable>(f);
+	auto vfl = std::make_shared<Variable>(vf, vl);
+	SizeList sl;
+	TransformRepaPtrList ll;
+	std::size_t sz = 1;
+	SizeList sh0;
+	sh0.reserve(m);
+	for (std::size_t i = 0; i < m; i++)
+	{
+	    auto u = llu[kk[i]].second;
+	    sh0.push_back(u);
+	    sz *= u;
+	}
+	sl.reserve(sz);
+	ll.reserve(sz);
+	for (std::size_t i = 0; i < sz; i++)
+	{
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m;
+	    tr->vectorVar = new std::size_t[m];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m];
+	    auto sh = tr->shape;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j] = kk[j];
+		sh[j] = sh0[j];
+	    }
+	    tr->arr = new unsigned char[sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < sz; j++)
+		rr[j] = 0;
+	    rr[i] = 1;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>(i + 1);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(*vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	dr->fud.layers.insert(dr->fud.layers.end(), fr->layers.begin(), fr->layers.end());
+	dr->fud.layers.push_back(ll);
+	dr->slices._list.reserve(sz);
+	for (auto& s : sl)
+	    dr->slices._list.push_back(SizeSizeTreePair(s, std::shared_ptr<SizeTree>()));
+    }
+
+
 
     std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
     return dr;
