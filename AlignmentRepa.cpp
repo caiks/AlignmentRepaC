@@ -991,22 +991,24 @@ std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasConcat_u(const History
     std::size_t y = 0;
     for (std::size_t k = 0; k < m; k++)
     {
-	auto rr2 = rr1 + y*n;
-	auto& hr = ll[k];
-	auto z = hr->size;
-	auto rr = hr->arr;
-	if (hr->evient)
-	    memcpy(rr2, rr, z*n);
+	std::size_t yn = y*n;
+	auto& hr = *ll[k];
+	auto z = hr.size;
+	auto rr = hr.arr;
+	if (hr.evient)
+            for (std::size_t j = 0; j < z; j++)
+	    {
+		std::size_t jn = j*n;
+	        for (std::size_t i = 0; i < n; i++)
+		    rr1[yn + jn + i] = rr[jn + i];
+	    }
 	else
-	{
-	    std::size_t iz;
 	    for (std::size_t i = 0; i < n; i++)
 	    {
-		iz = i*z;
+		std::size_t iz = i*z;
 		for (std::size_t j = 0; j < z; j++)
-		    rr2[j*n + i] = rr[iz + j];
+		    rr1[yn + j*n + i] = rr[iz + j];
 	    }
-	}
 	y += z;
     }
     return hr1;
