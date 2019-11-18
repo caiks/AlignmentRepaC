@@ -1011,6 +1011,8 @@ std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasConcat_u(const History
 	    }
 	y += z;
     }
+    if (!hr0.evient)
+        hr1->transpose();
     return hr1;
 }
 
