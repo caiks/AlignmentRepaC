@@ -1395,6 +1395,46 @@ std::unique_ptr<SizeTransformRepaPtrMap> Alignment::fudRepasDefinitions(const Fu
     return mm;
 }
 
+// fudsSetVarsDepends :: FudRepa -> [VariableRepa] -> FudRepa
+    std::unique_ptr<TransformRepaPtrList> Alignment::fudsSetVarsDepends(const FudRepa& fr, const SizeUSet& kk)
+{
+    auto mm = fudRepasDefinitions(fr);
+    auto ll = std::make_unique<TransformRepaPtrList>();
+    ll->reserve(mm->size());
+    SizeUSet kk0(mm->size());
+    kk0.insert(kk.begin(),kk.end());
+    SizeUSet kk1(mm->size());
+    SizeUSet kk2(mm->size());
+    SizeUSet* kka = &kk0;
+    SizeUSet* kkb = &kk1;
+    bool found = true;
+    while (found)
+    {
+	found = false;
+        for (auto& w : *kka)
+        {
+            if (kk2.find(w) == kk2.end())
+                continue;
+            auto it = mm->find(w);
+            if (it == mm->end())
+                continue;
+            found = true;
+            kk2.insert(w);
+            auto& tr = it->second;
+            ll->push_back(tr);
+	    auto n = tr->dimension;
+	    auto xx = tr->vectorVar;
+	    for (std::size_t i = 0; i < n; i++)
+		kkb->insert(xx[i]);
+        }
+	SizeUSet* kkc = kka;
+	kka = kkb;
+	kkb = kkc;
+	kkb->clear();
+    }
+    return ll;
+}
+
 
 // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
 // cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa

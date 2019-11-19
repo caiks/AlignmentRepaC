@@ -1521,7 +1521,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -4226,7 +4226,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto sysreg = systemRegular_u;
 	auto sys = histogramsSystemImplied;

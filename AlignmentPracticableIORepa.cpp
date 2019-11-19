@@ -2,6 +2,7 @@
 #include "AlignmentPracticableIORepa.h"
 #include <chrono>
 #include <ctime>
+#include <cmath>
 
 using namespace Alignment;
 
@@ -253,6 +254,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	for (std::size_t i = 1; i <= mult; i++)
 	    qq.push_back(std::move(hrshuffle(hr, seed + i*z)));
 	auto hrs = hrconcat(qq);
+        qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "shuffler " << time["shuffler"] << "s" << std::endl;
 	std::unique_ptr<FudRepa> fr;
@@ -290,7 +292,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
-	std::cout << "derived algn density per size per decr card: " << a / (double)z / (double)(m -1) << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp (a / (double)z / (double)(m -1)) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vfl = std::make_shared<Variable>(vf, vl);
 	SizeList sl;
@@ -401,6 +403,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	for (std::size_t i = 1; i <= mult; i++)
 	    qq.push_back(std::move(hrshuffle(*hr2, seed + i*z)));
 	auto hr2s = hrconcat(qq);
+        qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "shuffler " << time["shuffler"] << "s" << std::endl;
 	std::unique_ptr<FudRepa> fr;
@@ -439,7 +442,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
-	std::cout << "derived algn density per size per decr card: " << a / (double)z / (double)(m - 1) << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp (a / (double)z / (double)(m -1)) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vfl = std::make_shared<Variable>(vf, vl);
 	SizeList sl;
