@@ -1407,18 +1407,15 @@ std::unique_ptr<SizeTransformRepaPtrMap> Alignment::fudRepasDefinitions(const Fu
     SizeUSet kk2(mm->size());
     SizeUSet* kka = &kk0;
     SizeUSet* kkb = &kk1;
-    bool found = true;
-    while (found)
+    while (kka->size())
     {
-	found = false;
         for (auto& w : *kka)
         {
-            if (kk2.find(w) == kk2.end())
+            if (kk2.find(w) != kk2.end())
                 continue;
             auto it = mm->find(w);
             if (it == mm->end())
                 continue;
-            found = true;
             kk2.insert(w);
             auto& tr = it->second;
             ll->push_back(tr);

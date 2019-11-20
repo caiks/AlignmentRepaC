@@ -1623,12 +1623,14 @@ int main(int argc, char **argv)
 	    return systemsHistoriesHistoryRepa_u(uu, ur, hh);
 	};
 	auto hrhh = systemsHistoryRepasHistory_u;
+	auto llfr = setVariablesListTransformRepasFudRepa_u;
 	auto fffr = systemsFudsFudRepa_u;
 	auto frff = systemsFudRepasFud_u;
 	auto frmul = historyRepasFudRepasMultiply_u;
 	auto frvars = fudRepasSetVar;
 	auto frder = fudRepasDerived;
 	auto frund = fudRepasUnderlying;
+	auto frdep = fudsSetVarsDepends;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -1765,6 +1767,18 @@ int main(int argc, char **argv)
 	    << sorted(*frvars(*fr)) << endl << endl;
 	cout << "frff(uu1, fr)" << endl
 	    << *frff(*uu1, *ur2, *fr) << endl << endl;
+	SizeUSet vv1;
+	for (auto& v : *vv)
+	    vv1.insert(ur2->mapVarSize()[v]);
+	SizeUSet kk;
+	cout << "frdep(fr,{})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
+	kk.insert(1);
+	cout << "frdep(fr,{1})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
+	kk.insert(2);
+	cout << "frdep(fr,{1,2})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
 
 	fr = fffr(*uu1, *ur2, *gg);
 	cout << "fr = fffr(uu1,gg)" << endl;
@@ -1785,6 +1799,22 @@ int main(int argc, char **argv)
 	    << sorted(*frvars(*fr)) << endl << endl;
 	cout << "frff(uu1, fr)" << endl
 	    << *frff(*uu1, *ur2, *fr) << endl << endl;
+	kk.clear();
+	cout << "frdep(fr,{})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
+	kk.insert(1);
+	cout << "frdep(fr,{1})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
+	kk.insert(2);
+	cout << "frdep(fr,{1,2})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
+	kk.insert(3);
+	cout << "frdep(fr,{1,2,3})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
+	kk.clear();
+	kk.insert(3);
+	cout << "frdep(fr,{3})" << endl
+	    << *llfr(vv1, *frdep(*fr, kk)) << endl << endl;
 
 	auto hr = hhhr(*uu, *ur2, *hh);
 	cout << "hr = hhhr(uu,hh)" << endl;
