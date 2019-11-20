@@ -1521,7 +1521,7 @@ int main(int argc, char **argv)
 
     }
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto uunion = pairSystemsUnion;
@@ -4256,7 +4256,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (false)
+    if (true)
     {
 	auto sysreg = systemRegular_u;
 	auto sys = histogramsSystemImplied;
@@ -4379,110 +4379,31 @@ int main(int argc, char **argv)
 	auto applicationer = parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa;
 
 	{
-	    auto uu = sysreg(3, 4);
+	    auto uu = sysreg(3, 5);
 	    auto ur = uuur(*uu);
-	    auto vv = SizeList{ 0,1,2,3 };
-	    auto aa = resize(150, *regdiag(3, 4));
+	    auto vv = SizeList{ 0,1,2,3,4 };
+	    auto aa = resize(150, *regdiag(3, 5));
 	    auto hr = aahr(*uu, *ur, *aa);
 	    auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
-	    aa = add(*resize(1500, *regdiag(3, 4)), *rr);
+	    aa = add(*resize(1500, *regdiag(3, 5)), *rr);
 	    hr = aahr(*uu, *ur, *aa);
 	    hr->transpose();
-	    auto dr = applicationer(27, 3, 27, 2, 2, 2, 9, 1, 1, 2, 17, vv, *hr, *ur);
+	    auto dr = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 1, 2, 17, vv, *hr, *ur);
 	    cout << "dr = " << *dr << endl;
-	    /*
-	    >>> applicationer
-	    shuffler 0.000525849s
-	    >>> layerer
-	    >>> layer       fud: 1  layer: 1
-	    substrate cardinality: 4
-	    fud cardinality: 0
-	    tupler  searched: 10    rate: 27576.5
-	    tupler 0.000362628s
-	    tuple cardinality: 1
-	    max tuple algn: 2856.9
-	    layer cardinality: 2
-	    parter  searched: 3     rate: 40801.9
-	    parter 7.3526e-05s
-	    roller  searched: 143   rate: 690468
-	    roller 0.000207106s
-	    der vars algn density: 680.352
-	    dervarser       searched: 2     rate: 43659.5
-	    dervarser 4.5809e-05s
-	    application 0.120854s
-	    <<< layer 0.13534s
-	    >>> layer       fud: 1  layer: 2
-	    substrate cardinality: 4
-	    fud cardinality: 2
-	    tupler  searched: 28    rate: 48105.7
-	    tupler 0.000582052s
-	    tuple cardinality: 1
-	    max tuple algn: 1340.42
-	    layer cardinality: 2
-	    parter  searched: 3     rate: 44532.2
-	    parter 6.7367e-05s
-	    roller  searched: 143   rate: 594355
-	    roller 0.000240597s
-	    der vars algn density: 1197.49
-	    dervarser       searched: 10    rate: 46470.6
-	    dervarser 0.00021519s
-	    application 0.108118s
-	    <<< layer 0.11642s
-	    >>> layer       fud: 1  layer: 3
-	    substrate cardinality: 4
-	    fud cardinality: 4
-	    tupler  searched: 48    rate: 40695.1
-	    tupler 0.0011795s
-	    tuple cardinality: 1
-	    max tuple algn: 443.8
-	    layer cardinality: 2
-	    parter  searched: 3     rate: 44787.5
-	    parter 6.6983e-05s
-	    roller  searched: 143   rate: 846174
-	    roller 0.000168996s
-	    der vars algn density: 1205.81
-	    dervarser       searched: 20    rate: 47403.4
-	    dervarser 0.000421911s
-	    application 0.107357s
-	    <<< layer 0.116649s
-	    <<< layerer 0.397636s
-	    fud: 1
-	    slize size: 1650
-	    derived cardinality: 3
-	    derived algn density: 1205.81
-	    derived algn density per size: 0.730792
-	    derived algn density per size per decr card: 0.365396
-	    transer 0.0434988s
-	    <<< applicationer 0.46728s
-	    dr = ([0,1,2,3],[[(2,[2,1],4,[3,3],3,[0,1,1,1,1,1,1,1,2]),(1,[3],5,[3],3,[0,1,2])],[(2,[1,4],6,[3,3],3,[0,0,1,1,1,1,1,2,2]),(1,[2],7,[3],3,[0,1,2])],[(2,[2,7],8,[3,3],3,[0,0,0,0,1,0,0,0,2]),(1,[4],9,[
-	    3],3,[0,1,2])],[(3,[6,8,9],10,[3,3,3],2,[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],11,[3,3,3],2,[0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],12,[3,3,3],
-	    2,[0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],13,[3,3,3],2,[0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],14,[3,3,3],2,[0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0
-	    ,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],15,[3,3,3],2,[0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],16,[3,3,3],2,[0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],17,[3,
-	    3,3],2,[0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],18,[3,3,3],2,[0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],19,[3,3,3],2,[0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],20,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],21,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],2
-	    2,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],23,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],24,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0
-	    ,0,1,0,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],25,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],26,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0]),(3,[6,8
-	    ,9],27,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0]),(3,[6,8,9],28,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0]),(3,[6,8,9],29,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,
-	    0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]),(3,[6,8,9],30,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]),(3,[6,8,9],31,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]),(3
-	    ,[6,8,9],32,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0]),(3,[6,8,9],33,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0]),(3,[6,8,9],34,[3,3,3],2,[0,0,0,0,0,0,0,0
-	    ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0]),(3,[6,8,9],35,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0]),(3,[6,8,9],36,[3,3,3],2,[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
-	    ])]],{(10,{}),(11,{}),(12,{}),(13,{}),(14,{}),(15,{}),(16,{}),(17,{}),(18,{}),(19,{}),(20,{}),(21,{}),(22,{}),(23,{}),(24,{}),(25,{}),(26,{}),(27,{}),(28,{}),(29,{}),(30,{}),(31,{}),(32,{}),(33,{}),(3
-	    4,{}),(35,{}),(36,{})})
-	    */
 	}
 
 	cout << endl;
 	{
-	    auto uu = sysreg(3, 4);
+	    auto uu = sysreg(3, 5);
 	    auto ur = uuur(*uu);
-	    auto vv = SizeList{ 0,1,2,3 };
-	    auto aa = resize(150, *regdiag(3, 4));
+	    auto vv = SizeList{ 0,1,2,3,4 };
+	    auto aa = resize(150, *regdiag(3, 5));
 	    auto hr = aahr(*uu, *ur, *aa);
 	    auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
-	    aa = add(*resize(1500, *regdiag(3, 4)), *rr);
+	    aa = add(*resize(1500, *regdiag(3, 5)), *rr);
 	    hr = aahr(*uu, *ur, *aa);
 	    hr->transpose();
-	    auto dr = applicationer(27, 3, 27, 2, 2, 2, 9, 1, 2, 2, 17, vv, *hr, *ur);
+	    auto dr = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 2, 2, 17, vv, *hr, *ur);
 	    cout << "dr = " << *dr << endl;
 	}
 

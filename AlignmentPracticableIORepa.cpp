@@ -148,7 +148,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 		    s++;
 		    if (s == 1)
 			continue;
-		    if (m == 1 && s == sz)
+		    if (e == 1 && s == sz)
 			continue;
 		    if (s > ucmax + 1)
 			throw std::out_of_range("parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u");
@@ -228,12 +228,15 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     auto hrred = setVarsHistoryRepasReduce_u;
     auto hrconcat = vectorHistoryRepasConcat_u;
     auto hrshuffle = historyRepasShuffle_u;
+    auto llfr = setVariablesListTransformRepasFudRepa_u;
     auto frmul = historyRepasFudRepasMultiply_u;
+    auto frdep = fudsSetVarsDepends;
     auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
 
     auto t0 = clk::now();
     std::map<std::string, double> time;
     std::cout << ">>> applicationer" << std::endl;
+    SizeUSet vv1(vv.begin(), vv.end());
     auto& llu = ur.listVarSizePair;
     auto z = hr.size;
     auto vl = std::make_shared<Variable>("s");
@@ -295,20 +298,53 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp (a / (double)z / (double)(m -1)) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vfl = std::make_shared<Variable>(vf, vl);
+	SizeUSet kk1(kk.begin(), kk.end());
+	auto gr = llfr(vv1, *frdep(*fr, kk1));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(hr, *gr));
 	SizeList sl;
 	TransformRepaPtrList ll;
 	std::size_t sz = 1;
-	SizeList sh0;
-	sh0.reserve(m);
+	auto skk = ar->shape;
+	auto rr0 = ar->arr;
 	for (std::size_t i = 0; i < m; i++)
-	{
-	    auto u = llu[kk[i]].second;
-	    sh0.push_back(u);
-	    sz *= u;
-	}
+	    sz *= skk[i];
 	sl.reserve(sz);
 	ll.reserve(sz);
+	bool remainder = false;
+	std::size_t b = 1;
 	for (std::size_t i = 0; i < sz; i++)
+	{
+	    if (rr0[i] <= 0.0)
+	    {
+		remainder = true;
+		continue;
+	    }
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m;
+	    tr->vectorVar = new std::size_t[m];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m];
+	    auto sh = tr->shape;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j] = kk[j];
+		sh[j] = skk[j];
+	    }
+	    tr->arr = new unsigned char[sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < sz; j++)
+		rr[j] = 0;
+	    rr[i] = 1;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>(b++);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(*vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	if (remainder)
 	{
 	    auto tr = std::make_shared<TransformRepa>();
 	    tr->dimension = m;
@@ -319,15 +355,14 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    for (std::size_t j = 0; j < m; j++)
 	    {
 		ww[j] = kk[j];
-		sh[j] = sh0[j];
+		sh[j] = skk[j];
 	    }
 	    tr->arr = new unsigned char[sz];
 	    auto rr = tr->arr;
 	    for (std::size_t j = 0; j < sz; j++)
-		rr[j] = 0;
-	    rr[i] = 1;
+		rr[j] = rr0[j] <= 0.0 ? 1 : 0;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(i + 1);
+	    auto vb = std::make_shared<Variable>(b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(*vflb, 2));
 	    auto w = llu.size() - 1;
@@ -348,19 +383,27 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     {
 	auto mark = clk::now();
 	auto hr1 = frmul(hr, dr->fud);
+hr1->transpose();
 	auto n1 = hr1->dimension;
 	auto& mvv1 = hr1->mapVarInt();
 	auto rr1 = hr1->arr;
+std::cout << "hr1->size = " << hr1->size << std::endl;
+std::cout << "n1 = " << n1 << std::endl;
 	auto nn = treesLeafNodes(dr->slices);
 	SizeSizePairList zs;
 	zs.reserve(nn->size());
 	for (auto& p : *nn)
 	{
 	    auto v = p.first;
+std::cout << "v = " << v << std::endl;
+SizeList jj{ v };
+auto ar = hrred(1.0, 1, jj.data(), *hr1);
+std::cout << "ar = " << *ar << std::endl;
 	    if (ig.find(v) != ig.end())
-		break;
+		continue;
 	    std::size_t a = 0;
 	    auto pk = mvv1[v];
+ std::cout << "pk = " << pk << std::endl;
 	    if (hr1->evient)
 		for (std::size_t j = 0; j < z; j++)
 		    if (rr1[j*n1 + pk])
@@ -369,7 +412,9 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		for (std::size_t j = 0; j < z; j++)
 		    if (rr1[pk*z + j])
 			a++;
-	    zs.push_back(SizeSizePair(a,v));
+std::cout << "a = " << a << std::endl;
+	    if (a > 1)
+		zs.push_back(SizeSizePair(a,v));
 	}
 	if (!zs.size())
 	{
@@ -445,21 +490,27 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp (a / (double)z / (double)(m -1)) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vfl = std::make_shared<Variable>(vf, vl);
+	SizeUSet kk1(kk.begin(), kk.end());
+	auto gr = llfr(vv1, *frdep(*fr, kk1));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(*hr2, *gr));
 	SizeList sl;
 	TransformRepaPtrList ll;
 	std::size_t sz = 1;
-	SizeList sh0;
-	sh0.reserve(m);
+	auto skk = ar->shape;
+	auto rr0 = ar->arr;
 	for (std::size_t i = 0; i < m; i++)
-	{
-	    auto u = llu[kk[i]].second;
-	    sh0.push_back(u);
-	    sz *= u;
-	}
+	    sz *= skk[i];
 	sl.reserve(sz);
 	ll.reserve(sz);
+	bool remainder = false;
+	std::size_t b = 1;
 	for (std::size_t i = 0; i < sz; i++)
 	{
+	    if (rr0[i] <= 0.0)
+	    {
+		remainder = true;
+		continue;
+	    }
 	    auto tr = std::make_shared<TransformRepa>();
 	    tr->dimension = m+1;
 	    tr->vectorVar = new std::size_t[m+1];
@@ -471,7 +522,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    for (std::size_t j = 0; j < m; j++)
 	    {
 		ww[j+1] = kk[j];
-		sh[j+1] = sh0[j];
+		sh[j+1] = skk[j];
 	    }
 	    tr->arr = new unsigned char[2*sz];
 	    auto rr = tr->arr;
@@ -479,7 +530,35 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[sz+i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(i + 1);
+	    auto vb = std::make_shared<Variable>(b++);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(*vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	if (remainder)
+	{
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m + 1;
+	    tr->vectorVar = new std::size_t[m + 1];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m + 1];
+	    auto sh = tr->shape;
+	    ww[0] = v;
+	    sh[0] = 2;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j + 1] = kk[j];
+		sh[j + 1] = skk[j];
+	    }
+	    tr->arr = new unsigned char[2 * sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < 2 * sz; j++)
+		rr[j] = j >= sz && rr0[j - sz] <= 0.0 ? 1 : 0;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>(b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(*vflb, 2));
 	    auto w = llu.size() - 1;
