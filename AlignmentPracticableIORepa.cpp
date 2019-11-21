@@ -383,36 +383,33 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     {
 	auto mark = clk::now();
 	auto hr1 = frmul(hr, dr->fud);
-hr1->transpose();
 	auto n1 = hr1->dimension;
 	auto& mvv1 = hr1->mapVarInt();
 	auto rr1 = hr1->arr;
-std::cout << "hr1->size = " << hr1->size << std::endl;
-std::cout << "n1 = " << n1 << std::endl;
 	auto nn = treesLeafNodes(dr->slices);
 	SizeSizePairList zs;
 	zs.reserve(nn->size());
 	for (auto& p : *nn)
 	{
 	    auto v = p.first;
-std::cout << "v = " << v << std::endl;
-SizeList jj{ v };
-auto ar = hrred(1.0, 1, jj.data(), *hr1);
-std::cout << "ar = " << *ar << std::endl;
 	    if (ig.find(v) != ig.end())
 		continue;
 	    std::size_t a = 0;
 	    auto pk = mvv1[v];
- std::cout << "pk = " << pk << std::endl;
 	    if (hr1->evient)
 		for (std::size_t j = 0; j < z; j++)
-		    if (rr1[j*n1 + pk])
+		{
+		    std::size_t u = rr1[j*n1 + pk];
+		    if (u)
 			a++;
+		}
 	    else
 		for (std::size_t j = 0; j < z; j++)
-		    if (rr1[pk*z + j])
+		{
+		    std::size_t u = rr1[pk*z + j];
+		    if (u)
 			a++;
-std::cout << "a = " << a << std::endl;
+		}
 	    if (a > 1)
 		zs.push_back(SizeSizePair(a,v));
 	}
@@ -432,12 +429,18 @@ std::cout << "a = " << a << std::endl;
 	    auto pk = mvv1[v];
 	    if (hr1->evient)
 		for (std::size_t j = 0; j < z; j++)
-		    if (rr1[j*n1 + pk])
+		{
+		    std::size_t u = rr1[j*n1 + pk];
+		    if (u)
 			ev.push_back(j);
+		}
 	    else
 		for (std::size_t j = 0; j < z; j++)
-		    if (rr1[pk*z + j])
+		{
+		    std::size_t u = rr1[pk*z + j];
+		    if (u)
 			ev.push_back(j);
+		}
 	}
 	auto hr2 = hrsel(ev.size(), ev.data(), hr);
 	time["slicer"] = ((sec)(clk::now() - mark)).count();
