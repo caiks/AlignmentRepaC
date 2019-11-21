@@ -2347,8 +2347,8 @@ int main(int argc, char **argv)
 	    out.close();
 
 	    std::ifstream in(filename, std::ios::binary);
-	    auto hr2 = persistentsHistoryRepa(in, m);
-	    cout << "hr2 = persistentsHistoryRepa(in, m)" << endl;
+	    auto hr2 = persistentsHistoryRepa(in);
+	    cout << "hr2 = persistentsHistoryRepa(in)" << endl;
 	    rpln(cout, sorted(*aall(*trim(*hraa(*uu1, *ur1, *hr2))))); cout << endl;
 	    in.close();
 	}
@@ -2368,8 +2368,8 @@ int main(int argc, char **argv)
 	    out.close();
 
 	    std::ifstream in(filename, std::ios::binary);
-	    auto tr2 = persistentsTransformRepa(in, m);
-	    cout << "tr2 = persistentsTransformRepa(in, m)" << endl;
+	    auto tr2 = persistentsTransformRepa(in);
+	    cout << "tr2 = persistentsTransformRepa(in)" << endl;
 	    cout << "trtt(uu2,tr2)" << endl
 		<< *trtt(*uu2, *ur2, *tr2) << endl << endl;
 	    in.close();
@@ -2388,8 +2388,8 @@ int main(int argc, char **argv)
 	    out.close();
 
 	    std::ifstream in(filename, std::ios::binary);
-	    auto fr2 = persistentsFudRepa(in, m);
-	    cout << "fr2 = persistentsFudRepa(in, m)" << endl;
+	    auto fr2 = persistentsFudRepa(in);
+	    cout << "fr2 = persistentsFudRepa(in)" << endl;
 	    cout << "frff(uu2, fr2)" << endl
 		<< *frff(*uu2, *ur2, *fr2) << endl << endl;
 	    in.close();
@@ -2600,8 +2600,8 @@ int main(int argc, char **argv)
 	    out.close();
 
 	    std::ifstream in(filename, std::ios::binary);
-	    auto hr2 = persistentsHistoryRepa(in, m);
-	    cout << "hr2 = persistentsHistoryRepa(in, m)" << endl;
+	    auto hr2 = persistentsHistoryRepa(in);
+	    cout << "hr2 = persistentsHistoryRepa(in)" << endl;
 	    rpln(cout, sorted(*aall(*trim(*hraa(*uu1, *ur1, *hr2))))); cout << endl;
 	    in.close();
 	}
@@ -2621,8 +2621,8 @@ int main(int argc, char **argv)
 	    out.close();
 
 	    std::ifstream in(filename, std::ios::binary);
-	    auto tr2 = persistentsTransformRepa(in, m);
-	    cout << "tr2 = persistentsTransformRepa(in, m)" << endl;
+	    auto tr2 = persistentsTransformRepa(in);
+	    cout << "tr2 = persistentsTransformRepa(in)" << endl;
 	    cout << "trtt(uu2,tr2)" << endl
 		<< *trtt(*uu2, *ur2, *tr2) << endl << endl;
 	    in.close();
@@ -2641,8 +2641,8 @@ int main(int argc, char **argv)
 	    out.close();
 
 	    std::ifstream in(filename, std::ios::binary);
-	    auto fr2 = persistentsFudRepa(in, m);
-	    cout << "fr2 = persistentsFudRepa(in, m)" << endl;
+	    auto fr2 = persistentsFudRepa(in);
+	    cout << "fr2 = persistentsFudRepa(in)" << endl;
 	    cout << "frff(uu2, fr2)" << endl
 		<< *frff(*uu2, *ur2, *fr2) << endl << endl;
 	    in.close();
@@ -2710,10 +2710,10 @@ int main(int argc, char **argv)
 
 	    start = chrono::system_clock::now();
 	    std::ifstream in(filename, std::ios::binary);
-	    auto dr2 = persistentsDecompFudRepa(in, m);
+	    auto dr2 = persistentsDecompFudRepa(in);
 	    in.close();
 	    end = chrono::system_clock::now();
-	    cout << "dr2 = persistentsDecompFudRepa(in, m) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+	    cout << "dr2 = persistentsDecompFudRepa(in) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
 
 	    start = chrono::system_clock::now();
 	    auto df2 = drdf(*uu, *ur, *dr2);
@@ -2812,10 +2812,10 @@ int main(int argc, char **argv)
 
 	    start = chrono::system_clock::now();
 	    std::ifstream in(filename, std::ios::binary);
-	    auto dr2 = persistentsDecompFudRepa(in, m);
+	    auto dr2 = persistentsDecompFudRepa(in);
 	    in.close();
 	    end = chrono::system_clock::now();
-	    cout << "dr2 = persistentsDecompFudRepa(in, m) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
+	    cout << "dr2 = persistentsDecompFudRepa(in) " << ((chrono::duration<double>)(end - start)).count() << "s" << endl;
 
 	    start = chrono::system_clock::now();
 	    auto df2 = drdf(*uu, *ur, *dr2);
@@ -4406,7 +4406,19 @@ int main(int argc, char **argv)
 	    auto dr = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 15, 2, 17, vv, *hr, *ur);
 	    cout << "dr = " << *dr << endl;
 	    cout << "treesPaths(dr.slices)" << endl;
-	    rpln(cout, *treesPaths(dr->slices)); cout << endl;
+	    rpln(cout, *treesPaths(*dr->slices)); cout << endl;
+
+	    std::string filename = "test.bin";
+	    std::ofstream out(filename, std::ios::binary);
+	    applicationRepasPersistent(*dr, out); cout << endl;
+	    out.close();
+	    cout << "decompFudRepasPersistent(dr,out) " << endl;
+
+	    std::ifstream in(filename, std::ios::binary);
+	    auto dr2 = persistentsApplicationRepa(in);
+	    in.close();
+	    cout << "dr2 = persistentsApplicationRepa(in) " << endl;
+	    cout << "dr2 = " << *dr2 << endl;
 	}
 
     }

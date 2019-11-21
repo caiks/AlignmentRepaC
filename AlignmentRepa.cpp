@@ -1673,7 +1673,13 @@ std::unique_ptr<DecompFud> Alignment::systemsDecompFudRepasDecompFud_u(const Sys
 
 std::ostream& operator<<(std::ostream& out, const ApplicationRepa& dr)
 {
-    out << "(" << dr.substrate << "," << dr.fud << "," << dr.slices << ")";
+    out << "(" << dr.substrate << ",";
+    if (dr.fud)
+	out << *dr.fud;
+    out << ",";
+    if (dr.slices)
+	out << *dr.slices;
+    out << ")";
     return out;
 }
 

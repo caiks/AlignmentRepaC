@@ -242,7 +242,9 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     auto vl = std::make_shared<Variable>("s");
     auto dr = std::make_unique<ApplicationRepa>();
     dr->substrate = vv;
-    dr->fud.layers.reserve(fmax*(lmax+1));
+    dr->fud = std::make_shared<FudRepa>();
+    dr->slices = std::make_shared<SizeTree>();
+    dr->fud->layers.reserve(fmax*(lmax+1));
     if (!z)
     {
 	std::cout << "empty history" << std::endl;
@@ -372,11 +374,11 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    sl.push_back(w);
 	    ll.push_back(tr);
 	}
-	dr->fud.layers.insert(dr->fud.layers.end(), fr->layers.begin(), fr->layers.end());
-	dr->fud.layers.push_back(ll);
-	dr->slices._list.reserve(sz);
+	dr->fud->layers.insert(dr->fud->layers.end(), fr->layers.begin(), fr->layers.end());
+	dr->fud->layers.push_back(ll);
+	dr->slices->_list.reserve(sz);
 	for (auto& s : sl)
-	    dr->slices._list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
+	    dr->slices->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
 	time["transer"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
     }
@@ -385,11 +387,11 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     {
 	auto mark = clk::now();
 	std::cout << ">>> slicer " << std::endl;
-	auto hr1 = frmul(hr, dr->fud);
+	auto hr1 = frmul(hr, *dr->fud);
 	auto n1 = hr1->dimension;
 	auto& mvv1 = hr1->mapVarInt();
 	auto rr1 = hr1->arr;
-	auto nn = treesLeafNodes(dr->slices);
+	auto nn = treesLeafNodes(*dr->slices);
 	SizeSizePairList zs;
 	zs.reserve(nn->size());
 	for (auto& p : *nn)
@@ -574,8 +576,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    sl.push_back(w);
 	    ll.push_back(tr);
 	}
-	dr->fud.layers.insert(dr->fud.layers.end(), fr->layers.begin(), fr->layers.end());
-	dr->fud.layers.push_back(ll);
+	dr->fud->layers.insert(dr->fud->layers.end(), fr->layers.begin(), fr->layers.end());
+	dr->fud->layers.push_back(ll);
 	for (auto& p : *nn)
 	    if (p.first == v)
 	    {

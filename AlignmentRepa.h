@@ -311,8 +311,8 @@ namespace Alignment
 {
     struct ApplicationRepa
     {
-	SizeTree slices;
-	FudRepa fud;
+	std::shared_ptr<SizeTree> slices;
+	std::shared_ptr<FudRepa> fud;
 	SizeList substrate;
     };
 }

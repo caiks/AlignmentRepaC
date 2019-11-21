@@ -26,7 +26,7 @@ void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
 }
 
 // persistentsHistoryRepa :: HistoryRepaPersistent -> Maybe HistoryRepa
-std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in, StrVarPtrMap& vm)
+std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in)
 {
     auto hr = std::make_unique<HistoryRepa>();
     std::size_t n;
@@ -74,7 +74,7 @@ void Alignment::transformRepasPersistent(const TransformRepa& tr, std::ostream& 
 }
 
 // persistentsTransformRepa :: TransformRepaPersistent -> Maybe TransformRepa
-std::unique_ptr<TransformRepa> Alignment::persistentsTransformRepa(std::istream& in, StrVarPtrMap& vm)
+std::unique_ptr<TransformRepa> Alignment::persistentsTransformRepa(std::istream& in)
 {
     auto tr = std::make_unique<TransformRepa>();
     std::size_t n;
@@ -120,7 +120,7 @@ void Alignment::fudRepasPersistent(const FudRepa& fr, std::ostream& out)
 }
 
 // persistentsFudRepa :: FudRepaPersistent -> Maybe FudRepa
-std::unique_ptr<FudRepa> Alignment::persistentsFudRepa(std::istream& in, StrVarPtrMap& vm)
+std::unique_ptr<FudRepa> Alignment::persistentsFudRepa(std::istream& in)
 {
     auto fr = std::make_unique<FudRepa>();
     auto& ll = fr->layers;
@@ -133,7 +133,7 @@ std::unique_ptr<FudRepa> Alignment::persistentsFudRepa(std::istream& in, StrVarP
 	in.read(reinterpret_cast<char*>(&m), sizeof m);
 	for (std::size_t i = 0; i < m; i++)
 	{
-	    auto tr = persistentsTransformRepa(in, vm);
+	    auto tr = persistentsTransformRepa(in);
 	    mm.push_back(std::move(tr));
 	}
     }
@@ -173,7 +173,7 @@ typedef std::shared_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> HistoryRepaPtrFudRep
 typedef std::pair<HistoryRepaPtrFudRepaPtrPair, HistoryRepaPtrFudRepaPtrPairTreePtr> HistoryRepaPtrFudRepaPtrPairTreePtrPair;
 
 // persistentsHistoryRepaPtrFudRepaPtrPairTree :: Tree HistoryRepaPtrFudRepaPtrPair -> Maybe DecompFudRepa
-std::unique_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> persistentsHistoryRepaPtrFudRepaPtrPairTree(std::istream& in, StrVarPtrMap& vm)
+std::unique_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> persistentsHistoryRepaPtrFudRepaPtrPairTree(std::istream& in)
 {
     auto zz = std::make_unique<Tree<HistoryRepaPtrFudRepaPtrPair>>();
     auto& ll = zz->_list;
@@ -182,17 +182,17 @@ std::unique_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> persistentsHistoryRepaPtrFud
     ll.reserve(l);
     for (std::size_t i = 0; i < l; i++)
     {
-	auto hr = persistentsHistoryRepa(in, vm);
-	auto fr = persistentsFudRepa(in, vm);
+	auto hr = persistentsHistoryRepa(in);
+	auto fr = persistentsFudRepa(in);
 	HistoryRepaPtrFudRepaPtrPair mr(std::move(hr), std::move(fr));
-	auto zr = persistentsHistoryRepaPtrFudRepaPtrPairTree(in, vm);
+	auto zr = persistentsHistoryRepaPtrFudRepaPtrPairTree(in);
 	ll.push_back(HistoryRepaPtrFudRepaPtrPairTreePtrPair(mr, std::move(zr)));
     }
     return zz;
 }
 
 // persistentsDecompFudRepa :: DecompFudRepaPersistent -> Maybe DecompFudRepa
-std::unique_ptr<DecompFudRepa> Alignment::persistentsDecompFudRepa(std::istream& in, StrVarPtrMap& vm)
+std::unique_ptr<DecompFudRepa> Alignment::persistentsDecompFudRepa(std::istream& in)
 {
     auto dr = std::make_unique<DecompFudRepa>();
     auto& zz = dr->tree;
@@ -202,12 +202,76 @@ std::unique_ptr<DecompFudRepa> Alignment::persistentsDecompFudRepa(std::istream&
     ll.reserve(l);
     for (std::size_t i = 0; i < l; i++)
     {
-	auto hr = persistentsHistoryRepa(in, vm);
-	auto fr = persistentsFudRepa(in, vm);
+	auto hr = persistentsHistoryRepa(in);
+	auto fr = persistentsFudRepa(in);
 	HistoryRepaPtrFudRepaPtrPair mr(std::move(hr), std::move(fr));
-	auto zr = persistentsHistoryRepaPtrFudRepaPtrPairTree(in, vm);
+	auto zr = persistentsHistoryRepaPtrFudRepaPtrPairTree(in);
 	ll.push_back(HistoryRepaPtrFudRepaPtrPairTreePtrPair(mr, std::move(zr)));
     }
+    return dr;
+}
+
+void sizeTreesPersistent(const SizeTree& zz, std::ostream& out)
+{
+    auto& ll = zz._list;
+    std::size_t l = ll.size();
+    out.write(reinterpret_cast<char*>(&l), sizeof l);
+    for (auto& pp : ll)
+    {
+	std::size_t x = pp.first;
+	out.write(reinterpret_cast<char*>(&x), sizeof(std::size_t));
+	if (pp.second)
+	    sizeTreesPersistent(*pp.second, out);
+	else
+	    sizeTreesPersistent(SizeTree(), out);
+    }
+}
+
+// applicationRepasPersistent :: ApplicationRepa -> ApplicationRepaPersistent
+void Alignment::applicationRepasPersistent(const ApplicationRepa& dr, std::ostream& out)
+{
+    auto n = dr.substrate.size();
+    out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+    out.write(reinterpret_cast<char*>((std::size_t*)dr.substrate.data()), n * sizeof(std::size_t));
+    if (dr.fud)
+	fudRepasPersistent(*dr.fud, out);
+    else 
+	fudRepasPersistent(FudRepa(), out);
+    if (dr.slices)
+	sizeTreesPersistent(*dr.slices, out);
+    else
+	sizeTreesPersistent(SizeTree(), out);
+}
+
+typedef std::pair<std::size_t, std::shared_ptr<SizeTree>> SizeSizeTreePtrPair;
+
+std::unique_ptr<SizeTree> persistentsSizeTree(std::istream& in)
+{
+    auto zz = std::make_unique<SizeTree>();
+    auto& ll = zz->_list;
+    std::size_t l;
+    in.read(reinterpret_cast<char*>(&l), sizeof l);
+    ll.reserve(l);
+    for (std::size_t i = 0; i < l; i++)
+    {
+	std::size_t x;
+	in.read(reinterpret_cast<char*>(&x), sizeof(std::size_t));
+	auto zr = persistentsSizeTree(in);
+	ll.push_back(SizeSizeTreePtrPair(x, std::move(zr)));
+    }
+    return zz;
+}
+
+// persistentsApplicationRepa :: ApplicationRepaPersistent -> Maybe ApplicationRepa
+std::unique_ptr<ApplicationRepa> Alignment::persistentsApplicationRepa(std::istream& in)
+{
+    auto dr = std::make_unique<ApplicationRepa>();
+    std::size_t n;
+    in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+    dr->substrate.resize(n);
+    in.read(reinterpret_cast<char*>((std::size_t*)dr->substrate.data()), n * sizeof(std::size_t));
+    dr->fud = std::move(persistentsFudRepa(in));
+    dr->slices = std::move(persistentsSizeTree(in));
     return dr;
 }
 
