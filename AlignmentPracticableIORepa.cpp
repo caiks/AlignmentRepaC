@@ -252,6 +252,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     std::size_t f = 1;
     {
 	auto mark = clk::now();
+	std::cout << ">>> shuffler " << std::endl;
 	HistoryRepaPtrList qq;
 	qq.reserve(mult);
 	for (std::size_t i = 1; i <= mult; i++)
@@ -259,7 +260,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	auto hrs = hrconcat(qq);
         qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "shuffler " << time["shuffler"] << "s" << std::endl;
+	std::cout << "<<< shuffler " << time["shuffler"] << "s" << std::endl;
 	std::unique_ptr<FudRepa> fr;
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
@@ -290,8 +291,9 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    return dr;
 	}
 	mark = clk::now();
+	std::cout << ">>> transer " << std::endl;
 	std::cout << "fud: " << f << std::endl;
-	std::cout << "slize size: " << z << std::endl;
+	std::cout << "fud slize size: " << z << std::endl;
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
@@ -374,14 +376,15 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	dr->fud.layers.push_back(ll);
 	dr->slices._list.reserve(sz);
 	for (auto& s : sl)
-	    dr->slices._list.push_back(SizeSizeTreePair(s, std::shared_ptr<SizeTree>()));
+	    dr->slices._list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
 	time["transer"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "transer " << time["transer"] << "s" << std::endl;
+	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
     }
     SizeSet ig;
     while (f < fmax)
     {
 	auto mark = clk::now();
+	std::cout << ">>> slicer " << std::endl;
 	auto hr1 = frmul(hr, dr->fud);
 	auto n1 = hr1->dimension;
 	auto& mvv1 = hr1->mapVarInt();
@@ -419,12 +422,12 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    break;
 	}
 	std::sort(zs.begin(), zs.end());
-	std::cout << "slize size: " << zs.back().first << std::endl;
-	if (!zs.back().first)
-	    break;
+	auto z2 = zs.back().first;
 	auto v = zs.back().second;
+	std::cout << "slize size: " << z2 << std::endl;
+	std::cout << "slize variable: " << llu[v] << std::endl;
 	SizeList ev;
-	ev.reserve(z);
+	ev.reserve(z2);
 	{
 	    auto pk = mvv1[v];
 	    if (hr1->evient)
@@ -444,16 +447,17 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	}
 	auto hr2 = hrsel(ev.size(), ev.data(), hr);
 	time["slicer"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "slicer " << time["slicer"] << "s" << std::endl;
+	std::cout << "<<< slicer " << time["slicer"] << "s" << std::endl;
 	mark = clk::now();
+	std::cout << ">>> shuffler " << std::endl;
 	HistoryRepaPtrList qq;
 	qq.reserve(mult);
 	for (std::size_t i = 1; i <= mult; i++)
-	    qq.push_back(std::move(hrshuffle(*hr2, seed + i*z)));
+	    qq.push_back(std::move(hrshuffle(*hr2, seed + i*z2)));
 	auto hr2s = hrconcat(qq);
         qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "shuffler " << time["shuffler"] << "s" << std::endl;
+	std::cout << "<<< shuffler " << time["shuffler"] << "s" << std::endl;
 	std::unique_ptr<FudRepa> fr;
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
@@ -484,13 +488,14 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    continue;
 	}	
 	mark = clk::now();
+	std::cout << ">>> transer " << std::endl;
 	f++;
 	std::cout << "fud: " << f << std::endl;
-	std::cout << "slize size: " << z << std::endl;
+	std::cout << "fud slize size: " << z2 << std::endl;
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
-	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
-	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp (a / (double)z / (double)(m -1)) << std::endl;
+	std::cout << "derived algn density per size: " << a / (double)z2 << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp (a / (double)z2 / (double)(m -1)) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vfl = std::make_shared<Variable>(vf, vl);
 	SizeUSet kk1(kk.begin(), kk.end());
@@ -576,11 +581,11 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    {
 		p.second->_list.reserve(sz);
 		for (auto& s : sl)
-		    p.second->_list.push_back(SizeSizeTreePair(s, std::shared_ptr<SizeTree>()));
+		    p.second->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
 		break;
 	    }
 	time["transer"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "transer " << time["transer"] << "s" << std::endl;
+	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
     }
 
     std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;

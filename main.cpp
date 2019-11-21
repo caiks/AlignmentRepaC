@@ -4403,8 +4403,10 @@ int main(int argc, char **argv)
 	    aa = add(*resize(1500, *regdiag(3, 5)), *rr);
 	    hr = aahr(*uu, *ur, *aa);
 	    hr->transpose();
-	    auto dr = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 2, 2, 17, vv, *hr, *ur);
+	    auto dr = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 15, 2, 17, vv, *hr, *ur);
 	    cout << "dr = " << *dr << endl;
+	    cout << "treesPaths(dr.slices)" << endl;
+	    rpln(cout, *treesPaths(dr->slices)); cout << endl;
 	}
 
     }
