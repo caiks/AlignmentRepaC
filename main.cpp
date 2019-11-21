@@ -4412,7 +4412,7 @@ int main(int argc, char **argv)
 	    std::ofstream out(filename, std::ios::binary);
 	    applicationRepasPersistent(*dr, out); cout << endl;
 	    out.close();
-	    cout << "decompFudRepasPersistent(dr,out) " << endl;
+	    cout << "applicationRepasPersistent(dr,out) " << endl;
 
 	    std::ifstream in(filename, std::ios::binary);
 	    auto dr2 = persistentsApplicationRepa(in);

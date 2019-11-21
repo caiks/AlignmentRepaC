@@ -1,7 +1,6 @@
 ﻿#ifndef ALIGNMENTAESONREPA_H
 #define ALIGNMENTAESONREPA_H
 
-#include "AlignmentAeson.h"
 #include "AlignmentRepa.h"
 
 namespace Alignment
