@@ -295,7 +295,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	mark = clk::now();
 	std::cout << ">>> transer " << std::endl;
 	std::cout << "fud: " << f << std::endl;
-	std::cout << "fud slize size: " << z << std::endl;
+	std::cout << "fud slice size: " << z << std::endl;
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
@@ -426,8 +426,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::sort(zs.begin(), zs.end());
 	auto z2 = zs.back().first;
 	auto v = zs.back().second;
-	std::cout << "slize size: " << z2 << std::endl;
-	std::cout << "slize variable: " << llu[v] << std::endl;
+	std::cout << "slice size: " << z2 << std::endl;
+	std::cout << "slice variable: " << llu[v] << std::endl;
 	SizeList ev;
 	ev.reserve(z2);
 	{
@@ -493,7 +493,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << ">>> transer " << std::endl;
 	f++;
 	std::cout << "fud: " << f << std::endl;
-	std::cout << "fud slize size: " << z2 << std::endl;
+	std::cout << "fud slice size: " << z2 << std::endl;
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived algn density per size: " << a / (double)z2 << std::endl;
@@ -586,6 +586,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		    p.second->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
 		break;
 	    }
+	std::cout << "fud slice cardinality: " << ll.size() << std::endl;
 	time["transer"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
     }
