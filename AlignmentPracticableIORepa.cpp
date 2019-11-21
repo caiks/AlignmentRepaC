@@ -166,7 +166,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 		    tr->valency = s;
 		    auto vb = std::make_shared<Variable>(b);
 		    auto vflb = std::make_shared<Variable>(vfl, vb);
-		    llu.push_back(VarSizePair(*vflb,s));
+		    llu.push_back(VarSizePair(vflb,s));
 		    auto w = llu.size() - 1;
 		    tr->derived = w;
 		    ll.push_back(tr);
@@ -342,7 +342,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    tr->valency = 2;
 	    auto vb = std::make_shared<Variable>(b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
-	    llu.push_back(VarSizePair(*vflb, 2));
+	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
 	    tr->derived = w;
 	    sl.push_back(w);
@@ -368,7 +368,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    tr->valency = 2;
 	    auto vb = std::make_shared<Variable>(b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
-	    llu.push_back(VarSizePair(*vflb, 2));
+	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
 	    tr->derived = w;
 	    sl.push_back(w);
@@ -427,7 +427,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	auto z2 = zs.back().first;
 	auto v = zs.back().second;
 	std::cout << "slice size: " << z2 << std::endl;
-	std::cout << "slice variable: " << llu[v] << std::endl;
+	std::cout << "slice variable: " << *llu[v].first << std::endl;
 	SizeList ev;
 	ev.reserve(z2);
 	{
@@ -542,7 +542,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    tr->valency = 2;
 	    auto vb = std::make_shared<Variable>(b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
-	    llu.push_back(VarSizePair(*vflb, 2));
+	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
 	    tr->derived = w;
 	    sl.push_back(w);
@@ -570,7 +570,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    tr->valency = 2;
 	    auto vb = std::make_shared<Variable>(b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
-	    llu.push_back(VarSizePair(*vflb, 2));
+	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
 	    tr->derived = w;
 	    sl.push_back(w);

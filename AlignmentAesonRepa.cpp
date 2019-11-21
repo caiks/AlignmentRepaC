@@ -5,6 +5,47 @@
 
 using namespace Alignment;
 
+// systemRepasPersistent :: SystemRepa -> SystemRepaPersistent
+void Alignment::systemRepasPersistent(const SystemRepa& ur, std::ostream& out)
+{
+    auto& llu = ur.listVarSizePair;
+    auto n = llu.size();
+    out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto& p = llu[i];
+	std::ostringstream sout;
+	sout << *p.first;
+	std::string s(sout.str());
+	std::size_t l = s.size();
+	out.write(reinterpret_cast<char*>(&l), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>((char*)s.data()), l);
+	std::size_t u = p.second;
+	out.write(reinterpret_cast<char*>(&u), sizeof(std::size_t));
+    }
+}
+
+// persistentsSystemRepa :: SystemRepaPersistent -> Maybe SystemRepa
+std::unique_ptr<SystemRepa> Alignment::persistentsSystemRepa(std::istream& in, StrVarPtrMap& m)
+{
+    auto ur = std::make_unique<SystemRepa>();
+    auto& llu = ur->listVarSizePair;
+    std::size_t n;
+    in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+    llu.reserve(n);
+    for (std::size_t i = 0; i < n; i++)
+    {
+	std::size_t l;
+	in.read(reinterpret_cast<char*>(&l), sizeof(std::size_t));
+	std::string s(l,' ');
+	in.read(reinterpret_cast<char*>((char*)s.data()), l);
+	std::size_t u;
+	in.read(reinterpret_cast<char*>(&u), sizeof(std::size_t));
+	llu.push_back(VarSizePair(stringsVariable(s, m), u));
+    }
+    return ur;
+}
+
 // historyRepasPersistent :: HistoryRepa -> HistoryRepaPersistent
 void Alignment::historyRepasPersistent(const HistoryRepa& hr, std::ostream& out)
 {

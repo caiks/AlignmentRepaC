@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& out, const SystemRepa& ur)
     for (std::size_t i = 0; i < n; i++)
     {
 	if (i) out << ",";
-	out << "(" << ll[i].first << "," << ll[i].second << ")";
+	out << "(" << *ll[i].first << "," << ll[i].second << ")";
     }
     out << "]";
     return out;
@@ -38,7 +38,7 @@ VarSizeUMap& Alignment::SystemRepa::mapVarSize() const
 	    delete const_cast<SystemRepa*>(this)->_mapVarSize;
 	const_cast<SystemRepa*>(this)->_mapVarSize = new VarSizeUMap(n);
 	for (std::size_t i = 0; i < n; i++)
-	    const_cast<SystemRepa*>(this)->_mapVarSize->insert_or_assign(listVarSizePair[i].first, i);
+	    const_cast<SystemRepa*>(this)->_mapVarSize->insert_or_assign(*listVarSizePair[i].first, i);
     }
     return *_mapVarSize;
 }
@@ -51,7 +51,7 @@ std::unique_ptr<SystemRepa> Alignment::systemsSystemRepa(const System& uu)
     auto mm = sorted(uu.map_u());
     ll.reserve(mm.size());
     for (auto& vww : mm)
-	ll.push_back(VarSizePair(vww.first, vww.second.size()));
+	ll.push_back(VarSizePair(std::make_shared<Variable>(vww.first), vww.second.size()));
     return ur;
 }
 
@@ -60,13 +60,13 @@ void Alignment::systemsRepasSystem(const SystemRepa& ur, System& uu)
 {
     for (auto& vs : ur.listVarSizePair)
     {
-	auto it = uu.map_u().find(vs.first);
+	auto it = uu.map_u().find(*vs.first);
 	if (it == uu.map_u().end())
 	{
 	    ValSet ww;
 	    for (int i = 0; i < vs.second; i++)
 		ww.insert(Value(i));
-	    uu.map_u().insert_or_assign(vs.first, ww);
+	    uu.map_u().insert_or_assign(*vs.first, ww);
 	}
     }
 }
@@ -224,7 +224,7 @@ std::unique_ptr<Histogram> Alignment::systemsHistogramRepasHistogram_u(const Sys
     VarList ww;
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& v = ivv[vv[i]].first;
+	auto& v = *ivv[vv[i]].first;
 	ww.push_back(v);
 	auto xx = systemsVarsSetValue(uu, v);
 	auto& yy = mm[i];
@@ -646,7 +646,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
     VarList ww;
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& v = ivv[vv[i]].first;
+	auto& v = *ivv[vv[i]].first;
 	ww.push_back(v);
 	auto xx = systemsVarsSetValue(uu, v);
 	auto s = xx.size();
@@ -1150,7 +1150,7 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
     VarList ww;
     for (std::size_t i = 0; i < n; i++)
     {
-	auto& v = ivv[vv[i]].first;
+	auto& v = *ivv[vv[i]].first;
 	ww.push_back(v);
 	auto xx = systemsVarsSetValue(uu, v);
 	auto s = xx.size();
@@ -1160,7 +1160,7 @@ std::unique_ptr<Transform> Alignment::systemsTransformRepasTransform_u(const Sys
 	for (auto& x : xx)
 	    yy.push_back(x);
     }
-    auto& w = ivv[tr.derived].first;
+    auto& w = *ivv[tr.derived].first;
     {
 	auto xx = systemsVarsSetValue(uu, w);
 	auto s = xx.size();

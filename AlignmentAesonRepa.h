@@ -1,10 +1,17 @@
 ﻿#ifndef ALIGNMENTAESONREPA_H
 #define ALIGNMENTAESONREPA_H
 
+#include "AlignmentAeson.h"
 #include "AlignmentRepa.h"
 
 namespace Alignment
 {
+    // systemRepasPersistent :: SystemRepa -> SystemRepaPersistent
+    void systemRepasPersistent(const SystemRepa&, std::ostream&);
+
+    // persistentsSystemRepa :: SystemRepaPersistent -> Maybe SystemRepa
+    std::unique_ptr<SystemRepa> persistentsSystemRepa(std::istream&, StrVarPtrMap&);
+
     // historyRepasPersistent :: HistoryRepa -> HistoryRepaPersistent
     void historyRepasPersistent(const HistoryRepa&, std::ostream&);
 

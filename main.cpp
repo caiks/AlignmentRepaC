@@ -56,8 +56,8 @@ int main(int argc, char **argv)
 	cout << "ur.mapVarSize()" << endl
 	    << ur->mapVarSize() << endl << endl;
 
-	ur->listVarSizePair.push_back(VarSizePair(Variable(98), 3));
-	ur->listVarSizePair.push_back(VarSizePair(Variable(99), 5));
+	ur->listVarSizePair.push_back(VarSizePair(std::make_shared<Variable>(Variable(98)), 3));
+	ur->listVarSizePair.push_back(VarSizePair(std::make_shared<Variable>(Variable(99)), 5));
 
 	cout << "ur" << endl
 	    << *ur << endl << endl;
@@ -3728,7 +3728,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3738,7 +3738,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3748,7 +3748,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3758,7 +3758,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3768,7 +3768,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3778,7 +3778,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3789,7 +3789,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3799,7 +3799,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3809,7 +3809,7 @@ int main(int argc, char **argv)
 	    {
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		pp.push_back(qq);
 	    }
 	    cout << pp << endl << endl;
@@ -3835,7 +3835,7 @@ int main(int argc, char **argv)
 		    {
 			VarSet qq;
 			for (std::size_t i = 0; i < kk.size(); i++)
-			    qq.insert((ur->listVarSizePair[kk[i]]).first);
+			    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 			pp.push_back(qq);
 		    }
 		    cout << pp << endl;
@@ -3850,7 +3850,7 @@ int main(int argc, char **argv)
 		    {
 			VarSet qq;
 			for (std::size_t i = 0; i < kk.size(); i++)
-			    qq.insert((ur->listVarSizePair[kk[i]]).first);
+			    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 			pp.push_back(qq);
 		    }
 		    cout << pp << endl;
@@ -3913,7 +3913,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -3934,7 +3934,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -3955,7 +3955,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -3976,7 +3976,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -3997,7 +3997,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -4018,7 +4018,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -4039,7 +4039,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -4060,7 +4060,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -4081,7 +4081,7 @@ int main(int argc, char **argv)
 		{
 		    VarSet qq;
 		    for (std::size_t i = 0; i < kk.second.size(); i++)
-			qq.insert((ur1->listVarSizePair[kk.second[i]]).first);
+			qq.insert(*(ur1->listVarSizePair[kk.second[i]]).first);
 		    pp.push_back(qq);
 		}
 		cout << pp << endl << endl;
@@ -4111,7 +4111,7 @@ int main(int argc, char **argv)
 		auto& kk = mm->back().second;
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		cout << "a = " << a << endl;
 		cout << "kk = " << qq << endl;
 	    }
@@ -4185,7 +4185,7 @@ int main(int argc, char **argv)
 		auto& kk = mm->back().second;
 		VarSet qq;
 		for (std::size_t i = 0; i < kk.size(); i++)
-		    qq.insert((ur->listVarSizePair[kk[i]]).first);
+		    qq.insert(*(ur->listVarSizePair[kk[i]]).first);
 		cout << "a = " << a << endl;
 		cout << "kk = " << qq << endl;
 	    }
@@ -4408,17 +4408,35 @@ int main(int argc, char **argv)
 	    cout << "treesPaths(dr.slices)" << endl;
 	    rpln(cout, *treesPaths(*dr->slices)); cout << endl;
 
-	    std::string filename = "test.bin";
-	    std::ofstream out(filename, std::ios::binary);
-	    applicationRepasPersistent(*dr, out); cout << endl;
-	    out.close();
-	    cout << "applicationRepasPersistent(dr,out) " << endl;
+	    {
+		std::string filename = "test.bin";
+		std::ofstream out(filename, std::ios::binary);
+		systemRepasPersistent(*ur, out); cout << endl;
+		out.close();
+		cout << "systemRepasPersistent(ur,out) " << endl;
+		cout << "ur = " << *ur << endl;
 
-	    std::ifstream in(filename, std::ios::binary);
-	    auto dr2 = persistentsApplicationRepa(in);
-	    in.close();
-	    cout << "dr2 = persistentsApplicationRepa(in) " << endl;
-	    cout << "dr2 = " << *dr2 << endl;
+		StrVarPtrMap m;
+		std::ifstream in(filename, std::ios::binary);
+		auto ur2 = persistentsSystemRepa(in,m);
+		in.close();
+		cout << "ur2 = persistentsSystemRepa(in) " << endl;
+		cout << "ur2 = " << *ur2 << endl;
+	    }
+
+	    {
+		std::string filename = "test.bin";
+		std::ofstream out(filename, std::ios::binary);
+		applicationRepasPersistent(*dr, out); cout << endl;
+		out.close();
+		cout << "applicationRepasPersistent(dr,out) " << endl;
+
+		std::ifstream in(filename, std::ios::binary);
+		auto dr2 = persistentsApplicationRepa(in);
+		in.close();
+		cout << "dr2 = persistentsApplicationRepa(in) " << endl;
+		cout << "dr2 = " << *dr2 << endl;
+	    }
 	}
 
     }

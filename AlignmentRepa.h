@@ -9,7 +9,7 @@
 
 namespace Alignment
 {
-    typedef std::pair<Variable, std::size_t> VarSizePair;
+    typedef std::pair<VarPtr, std::size_t> VarSizePair;
     typedef std::vector<VarSizePair> VarSizePairList;
     typedef std::unordered_map<std::size_t, std::size_t> SizeSizeUMap;
     typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
