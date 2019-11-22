@@ -95,6 +95,9 @@ namespace Alignment
 
     // setVarsHistogramRepasReduce_u :: [VariableRepa] -> HistogramRepa -> HistogramRepa
     std::unique_ptr<HistogramRepa> setVarsHistogramRepasReduce_u(std::size_t m, const std::size_t* kk, const HistogramRepa&);
+
+    // histogramRepasEntropy :: HistogramRepa -> Double
+    double histogramRepasEntropy(const HistogramRepa&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepa&);

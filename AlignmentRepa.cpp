@@ -323,6 +323,29 @@ std::unique_ptr<HistogramRepa> Alignment::setVarsHistogramRepasReduce_u(std::siz
     return br;
 }
 
+// histogramRepasEntropy :: HistogramRepa -> Double
+double Alignment::histogramRepasEntropy(const HistogramRepa& ar)
+{
+    auto n = ar.dimension;
+    auto sh = ar.shape;
+    auto rr = ar.arr;
+    std::size_t v = 1;
+    for (std::size_t i = 0; i < n; i++)
+	v *= sh[i];
+    double z = 0.0;
+    for (std::size_t j = 0; j < v; j++)
+	z += rr[j];
+    double e = 0.0;
+    for (std::size_t j = 0; j < v; j++)
+    {
+	auto a = rr[j] / z;
+	if (a > 0.0)
+	    e -= a * log(a);
+    }
+    return e;
+}
+
+
 HistogramRepaRed::HistogramRepaRed() : _mapVarInt(0), dimension(0), vectorVar(0), shape(0), arr(0)
 {
 }

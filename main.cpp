@@ -254,7 +254,7 @@ int main(int argc, char **argv)
 	    << *bb1 << endl << endl;
     }
 
-    if (false)
+    if (true)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -311,6 +311,7 @@ int main(int argc, char **argv)
 	};
 	auto arpr = histogramRepasRed;
 	auto prar = histogramRepaRedsIndependent;
+	auto arent = histogramRepasEntropy;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");
@@ -363,6 +364,8 @@ int main(int argc, char **argv)
 	cout << "ar = aarr(uu,ur,aa)" << endl;
 	cout << "ar" << endl
 	    << *ar << endl << endl;
+	cout << "20 * arent(ar)" << endl
+	    << 20 * arent(*ar) << endl << endl;
 
 	auto aa1 = rraa(*uu, *ur, *ar);
 	cout << "aa1 = rraa(uu,ur,ar)" << endl;
@@ -378,11 +381,15 @@ int main(int argc, char **argv)
 	cout << "xr = prar(20,pr)" << endl;
 	cout << "xr" << endl
 	    << *xr << endl << endl;
+	cout << "20 * arent(xr)" << endl
+	    << 20 * arent(*xr) << endl << endl;
 
 	auto br = arred(*ar, *ur, VarList{ pressure, rain, cloud, wind });
 	cout << "br = arred(ar, VarList{ pressure, rain, cloud, wind })" << endl;
 	cout << "br" << endl
 	    << *br << endl << endl;
+	cout << "20 * arent(br)" << endl
+	    << 20 * arent(*br) << endl << endl;
 
 	auto bb1 = rraa(*uu, *ur, *br);
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
@@ -398,11 +405,15 @@ int main(int argc, char **argv)
 	cout << "xr = prar(20,pr)" << endl;
 	cout << "xr" << endl
 	    << *xr << endl << endl;
+	cout << "20 * arent(xr)" << endl
+	    << 20 * arent(*xr) << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ wind, cloud, rain });
 	cout << "br = arred(ar, VarList{ wind, cloud, rain})" << endl;
 	cout << "br" << endl
 	    << *br << endl << endl;
+	cout << "20 * arent(br)" << endl
+	    << 20 * arent(*br) << endl << endl;
 
 	bb1 = rraa(*uu, *ur, *br);
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
@@ -418,11 +429,15 @@ int main(int argc, char **argv)
 	cout << "xr = prar(20,pr)" << endl;
 	cout << "xr" << endl
 	    << *xr << endl << endl;
+	cout << "20 * arent(xr)" << endl
+	    << 20 * arent(*xr) << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ wind, rain });
 	cout << "br = arred(ar, VarList{ wind, rain})" << endl;
 	cout << "br" << endl
 	    << *br << endl << endl;
+	cout << "20 * arent(br)" << endl
+	    << 20 * arent(*br) << endl << endl;
 
 	bb1 = rraa(*uu, *ur, *br);
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
@@ -438,11 +453,15 @@ int main(int argc, char **argv)
 	cout << "xr = prar(20,pr)" << endl;
 	cout << "xr" << endl
 	    << *xr << endl << endl;
+	cout << "20 * arent(xr)" << endl
+	    << 20 * arent(*xr) << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ rain });
 	cout << "br = arred(ar, VarList{ rain})" << endl;
 	cout << "br" << endl
 	    << *br << endl << endl;
+	cout << "20 * arent(br)" << endl
+	    << 20 * arent(*br) << endl << endl;
 
 	bb1 = rraa(*uu, *ur, *br);
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
@@ -458,11 +477,15 @@ int main(int argc, char **argv)
 	cout << "xr = prar(20,pr)" << endl;
 	cout << "xr" << endl
 	    << *xr << endl << endl;
+	cout << "20 * arent(xr)" << endl
+	    << 20 * arent(*xr) << endl << endl;
 
 	br = arred(*ar, *ur, VarList{ });
 	cout << "br = arred(ar, VarList{})" << endl;
 	cout << "br" << endl
 	    << *br << endl << endl;
+	cout << "20 * arent(br)" << endl
+	    << 20 * arent(*br) << endl << endl;
 
 	bb1 = rraa(*uu, *ur, *br);
 	cout << "bb1 = rraa(uu,ur,br)" << endl;
@@ -478,6 +501,8 @@ int main(int argc, char **argv)
 	cout << "xr = prar(20,pr)" << endl;
 	cout << "xr" << endl
 	    << *xr << endl << endl;
+	cout << "20 * arent(xr)" << endl
+	    << 20 * arent(*xr) << endl << endl;
     }
 
 //    if (false)
@@ -4256,7 +4281,7 @@ int main(int argc, char **argv)
 	}
     }
 
-    if (true)
+    if (false)
     {
 	auto sysreg = systemRegular_u;
 	auto sys = histogramsSystemImplied;
