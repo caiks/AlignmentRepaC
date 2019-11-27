@@ -1096,6 +1096,36 @@ SizeSizeUMap& Alignment::TransformRepa::mapVarInt() const
     return *_mapVarInt;
 }
 
+// transformRepasTransformRepa :: TransformRepa -> TransformRepa
+std::unique_ptr<TransformRepa> Alignment::transformRepasTransformRepa(const TransformRepa& tr)
+{
+    auto n = tr.dimension;
+    auto vv = tr.vectorVar;
+    auto sh = tr.shape;
+    auto rr = tr.arr;
+    auto tr1 = std::make_unique<TransformRepa>();
+    if (!rr || !n)
+	return tr1;
+    tr1->derived = tr.derived;
+    tr1->valency = tr.valency;
+    tr1->dimension = n;
+    tr1->vectorVar = new std::size_t[n];
+    auto vv1 = tr1->vectorVar;
+    tr1->shape = new std::size_t[n];
+    auto sh1 = tr1->shape;
+    std::size_t sz = 1;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	vv1[i] = vv[i];
+	auto s = sh[i];
+	sh1[i] = s;
+	sz *= s;
+    }
+    tr1->arr = new unsigned char[sz];
+    auto rr1 = tr1->arr;
+    memcpy(rr1, rr, sz);
+    return tr1;
+}
 
 // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
 std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const System& uu, const SystemRepa& ur, const Transform& tt)
@@ -1232,6 +1262,24 @@ std::ostream& operator<<(std::ostream& out, const FudRepa& fr)
     }
     out << "]";
     return out;
+}
+
+// fudRepasFudRepa :: FudRepa -> FudRepa
+std::unique_ptr<FudRepa> Alignment::fudRepasFudRepa(const FudRepa& fr)
+{
+    auto trcopy = transformRepasTransformRepa; 
+
+    auto fr1 = std::make_unique<FudRepa>();
+    fr1->layers.resize(fr.layers.size());
+    for (std::size_t i = 0; i < fr.layers.size(); i++)
+    {
+	auto& ll = fr.layers[i];
+	auto& ll1 = fr1->layers[i];
+	ll1.reserve(ll.size());
+	for (auto& tr : ll)
+	    ll1.push_back(std::move(trcopy(*tr)));
+    }
+    return fr1;
 }
 
 // setVariablesListTransformRepasFudRepa_u :: [VariableRepa] -> [TransformRepa] -> FudRepa

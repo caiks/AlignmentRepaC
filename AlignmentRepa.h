@@ -228,6 +228,9 @@ namespace Alignment
     public: unsigned char* arr;
     };
 
+    // transformRepasTransformRepa :: TransformRepa -> TransformRepa
+    std::unique_ptr<TransformRepa> transformRepasTransformRepa(const TransformRepa&);
+
     // systemsTransformsTransformRepa_u :: System -> Transform -> TransformRepa
     std::unique_ptr<TransformRepa> systemsTransformsTransformRepa_u(const System&, const SystemRepa&, const Transform&);
 
@@ -252,6 +255,9 @@ namespace Alignment
     {
 	TransformRepaPtrListList layers;
     };
+
+    // fudRepasFudRepa :: FudRepa -> FudRepa
+    std::unique_ptr<FudRepa> fudRepasFudRepa(const FudRepa&);
 
     // setVariablesListTransformRepasFudRepa_u :: [VariableRepa] -> [TransformRepa] -> FudRepa
     std::unique_ptr<FudRepa> setVariablesListTransformRepasFudRepa_u(const SizeUSet&, const TransformRepaPtrList&);
