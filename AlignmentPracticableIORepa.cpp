@@ -396,7 +396,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    sl.push_back(w);
 	    ll.push_back(tr);
 	}
-	dr->fud->layers.insert(dr->fud->layers.end(), fr->layers.begin(), fr->layers.end());
+	dr->fud->layers.insert(dr->fud->layers.end(), gr->layers.begin(), gr->layers.end());
 	dr->fud->layers.push_back(ll);
 	dr->slices->_list.reserve(sz);
 	for (auto& s : sl)
@@ -604,7 +604,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    sl.push_back(w);
 	    ll.push_back(tr);
 	}
-	dr->fud->layers.insert(dr->fud->layers.end(), fr->layers.begin(), fr->layers.end());
+	dr->fud->layers.insert(dr->fud->layers.end(), gr->layers.begin(), gr->layers.end());
 	dr->fud->layers.push_back(ll);
 	for (auto& p : *nn)
 	    if (p.first == v)

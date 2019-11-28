@@ -1441,20 +1441,10 @@ std::unique_ptr<SizeUSet> Alignment::fudRepasSetVar(const FudRepa& fr)
 // fudRepasDerived :: FudRepa -> [VariableRepa]
 std::unique_ptr<SizeUSet> Alignment::fudRepasDerived(const FudRepa& fr)
 {
-    std::size_t l = 0;
+    auto vv = std::make_unique<SizeUSet>(fudRepasSize(fr));
     for (auto& ll : fr.layers)
 	for (auto& tt : ll)
-	    l += tt->dimension + 1;
-    auto vv = std::make_unique<SizeUSet>(l);
-    for (auto& ll : fr.layers)
-	for (auto& tt : ll)
-	{
 	    vv->insert(tt->derived);
-	    auto n = tt->dimension;
-	    auto xx = tt->vectorVar;
-	    for (std::size_t i = 0; i < n; i++)
-		vv->insert(xx[i]);
-	}
     for (auto& ll : fr.layers)
 	for (auto& tt : ll)
 	{
@@ -1469,15 +1459,10 @@ std::unique_ptr<SizeUSet> Alignment::fudRepasDerived(const FudRepa& fr)
 // fudRepasUnderlying :: FudRepa -> [VariableRepa]
 std::unique_ptr<SizeUSet> Alignment::fudRepasUnderlying(const FudRepa& fr)
 {
-    std::size_t l = 0;
-    for (auto& ll : fr.layers)
-	for (auto& tt : ll)
-	    l += tt->dimension + 1;
-    auto vv = std::make_unique<SizeUSet>(l);
+    auto vv = std::make_unique<SizeUSet>(fudRepasSize(fr));
     for (auto& ll : fr.layers)
 	for (auto& tt : ll)
 	{
-	    vv->insert(tt->derived);
 	    auto n = tt->dimension;
 	    auto xx = tt->vectorVar;
 	    for (std::size_t i = 0; i < n; i++)
