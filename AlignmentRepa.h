@@ -226,6 +226,9 @@ namespace Alignment
 
     public: std::size_t* shape;
     public: unsigned char* arr;
+
+    public: void reframe_u(const SizeSizeUMap&);
+
     };
 
     // transformRepasTransformRepa :: TransformRepa -> TransformRepa
@@ -254,6 +257,8 @@ namespace Alignment
     struct FudRepa
     {
 	TransformRepaPtrListList layers;
+
+	void reframe_u(const SizeSizeUMap&);
     };
 
     // fudRepasFudRepa :: FudRepa -> FudRepa
@@ -323,7 +328,13 @@ namespace Alignment
 	std::shared_ptr<SizeTree> slices;
 	std::shared_ptr<FudRepa> fud;
 	SizeList substrate;
+
+	void reframe_u(const SizeSizeUMap&);
     };
+
+    // applicationRepasApplicationRepa_u :: ApplicationRepa -> ApplicationRepa
+    std::unique_ptr<ApplicationRepa> applicationRepasApplicationRepa_u(const ApplicationRepa&);
+
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::ApplicationRepa&);

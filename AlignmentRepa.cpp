@@ -1096,6 +1096,32 @@ SizeSizeUMap& Alignment::TransformRepa::mapVarInt() const
     return *_mapVarInt;
 }
 
+void Alignment::TransformRepa::reframe_u(const SizeSizeUMap& nn)
+{
+    auto n = dimension;
+    auto vv = vectorVar;
+    bool altered = false;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto it = nn.find(vv[i]);
+	if (it != nn.end())
+	{
+	    vv[i] = it->second;
+	    altered = true;
+	}
+    }
+    {
+	auto it = nn.find(derived);
+	if (it != nn.end())
+	    derived = it->second;
+    }
+    if (!_mapVarInt && altered)
+    {
+	delete _mapVarInt;
+	_mapVarInt = 0;
+    }
+}
+
 // transformRepasTransformRepa :: TransformRepa -> TransformRepa
 std::unique_ptr<TransformRepa> Alignment::transformRepasTransformRepa(const TransformRepa& tr)
 {
@@ -1262,6 +1288,13 @@ std::ostream& operator<<(std::ostream& out, const FudRepa& fr)
     }
     out << "]";
     return out;
+}
+
+void Alignment::FudRepa::reframe_u(const SizeSizeUMap& nn)
+{
+    for (auto& ll : layers)
+	for (auto& tr : ll)
+	    tr->reframe_u(nn);
 }
 
 // fudRepasFudRepa :: FudRepa -> FudRepa
@@ -1753,6 +1786,44 @@ std::ostream& operator<<(std::ostream& out, const ApplicationRepa& dr)
     out << ")";
     return out;
 }
+
+void Alignment::ApplicationRepa::reframe_u(const SizeSizeUMap& nn)
+{
+    auto& vv = substrate;
+    auto n = vv.size();
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto it = nn.find(vv[i]);
+	if (it != nn.end())
+	    vv[i] = it->second;
+    }
+    fud->reframe_u(nn);
+    auto ll = treesPaths(*slices);
+    bool altered = false;
+    for (auto& pp : *ll)
+	for (auto& v : pp)
+	{
+	    auto it = nn.find(v);
+	    if (it != nn.end())
+	    {
+		v = it->second;
+		altered = true;
+	    }
+	}
+    if (altered)
+	slices = std::move(pathsTree(*ll));
+}
+
+// applicationRepasApplicationRepa_u :: ApplicationRepa -> ApplicationRepa
+std::unique_ptr<ApplicationRepa> Alignment::applicationRepasApplicationRepa_u(const ApplicationRepa& dr)
+{
+    auto dr1 = std::make_unique<ApplicationRepa>();
+    dr1->substrate = dr.substrate;
+    dr1->fud = std::move(fudRepasFudRepa(*dr.fud));
+    dr1->slices = std::move(pathsTree(*treesPaths(*dr.slices)));
+    return dr1;
+}
+
 
 std::size_t listVarsArrayHistoryEvientAlignedTop_u(
     std::size_t xmax, std::size_t omax, std::size_t n, std::size_t* svv, std::size_t m, std::size_t z1, std::size_t z2,
