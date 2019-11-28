@@ -1599,17 +1599,18 @@ std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const His
 	    }
 	    else
 	    {
+		std::size_t qz = q*z;
 		if (m > 0)
 		    for (std::size_t j = 0; j < z; j++)
 		    {
 			std::size_t k = rr1[pkk[0] * z + j];
 			for (std::size_t i = 1; i < m; i++)
 			    k = sh[i] * k + rr1[pkk[i] * z + j];
-			rr1[q*z + j] = ar[k];
+			rr1[qz + j] = ar[k];
 		    }
 		else
 		    for (std::size_t j = 0; j < z; j++)
-			rr1[q*z + j] = 0;
+			rr1[qz + j] = 0;
 	    }
 	    q++;
 	}
