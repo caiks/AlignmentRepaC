@@ -978,8 +978,64 @@ std::unique_ptr<HistogramRepaRed> Alignment::historyRepasRed(const HistoryRepa& 
 	    for (std::size_t j = 0; j < z; j++)
 		rr1[xx[i] + rr[iz + j]] += f;
 	}
+    delete[] xx;
     return pr;
 }
+
+// setVarsHistoryRepasRed_u :: Double -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed
+std::unique_ptr<HistogramRepaRed> Alignment::setVarsHistoryRepasRed_u(std::size_t m, const std::size_t* kk, const HistoryRepa& hr)
+{
+    auto n = hr.dimension;
+    auto& mvv = hr.mapVarInt();
+    auto sh = hr.shape;
+    auto z = hr.size;
+    auto rr = hr.arr;
+    if (!n || !rr || !z)
+	return std::make_unique<HistogramRepaRed>();
+    double f = 1.0 / z;
+    auto pr = std::make_unique<HistogramRepaRed>();
+    pr->dimension = m;
+    pr->vectorVar = new std::size_t[m];
+    auto vv1 = pr->vectorVar;
+    pr->shape = new std::size_t[m];
+    auto sh1 = pr->shape;
+    std::size_t sz = 0;
+    std::size_t* pkk = new std::size_t[m];
+    std::size_t* xx = new std::size_t[m];
+    for (std::size_t i = 0; i < m; i++)
+    {
+	auto x = kk[i];
+	vv1[i] = x;
+	auto p = mvv[x];
+	pkk[i] = p;
+	auto s = sh[p];
+	sh1[i] = s;
+	xx[i] = sz;
+	sz += s;
+    }
+    pr->arr = new double[sz];
+    auto rr1 = pr->arr;
+    for (std::size_t j = 0; j < sz; j++)
+	rr1[j] = 0.0;
+    if (hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    for (std::size_t i = 0; i < m; i++)
+		rr1[xx[i] + rr[jn + pkk[i]]] += f;
+	}
+    else
+	for (std::size_t i = 0; i < m; i++)
+	{
+	    std::size_t iz = pkk[i]*z;
+	    for (std::size_t j = 0; j < z; j++)
+		rr1[xx[i] + rr[iz + j]] += f;
+	}
+    delete[] xx;
+    delete[] pkk;
+    return pr;
+}
+
 
 // vectorHistoryRepasConcat_u :: V.Vector HistoryRepa -> HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasConcat_u(const HistoryRepaPtrList& ll)

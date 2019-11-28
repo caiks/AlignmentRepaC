@@ -191,6 +191,9 @@ namespace Alignment
     // historyRepasRed :: HistoryRepa -> HistogramRepaRed
     std::unique_ptr<HistogramRepaRed> historyRepasRed(const HistoryRepa&);
 
+    // setVarsHistoryRepasRed_u :: D[VariableRepa] -> HistoryRepa -> HistogramRepaRed
+    std::unique_ptr<HistogramRepaRed> setVarsHistoryRepasRed_u(std::size_t, const std::size_t*, const HistoryRepa&);
+
     // vectorHistoryRepasConcat_u :: V.Vector HistoryRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> vectorHistoryRepasConcat_u(const HistoryRepaPtrList&);
 }
