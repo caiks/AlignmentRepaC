@@ -991,6 +991,7 @@ int main(int argc, char **argv)
 	    return setVarsHistoryRepasReduce_u(1.0, m, kk1.data(), hr);
 	};
 	auto hrpr = historyRepasRed;
+	auto prents = histogramRepaRedsListEntropy;
 	auto hrpr1 = [](const HistoryRepa& hr, const SystemRepa& ur, const VarList& kk)
 	{
 	    auto& vvi = ur.mapVarSize();
@@ -1065,18 +1066,28 @@ int main(int argc, char **argv)
 	auto pr1 = hrpr1(*hr, *ur, VarList{ rain, pressure, cloud, wind });
 	cout << "pr1 = hrpr1(*hr, *ur, VarList{ rain, pressure, cloud, wind })" << endl
 	    << *pr1 << endl << endl;
+	cout << "prents(pr1)" << endl
+	    << *prents(*pr1) << endl << endl;
 	pr1 = hrpr1(*hr, *ur, VarList{ pressure, cloud, wind });
 	cout << "pr1 = hrpr1(*hr, *ur, VarList{ pressure, cloud, wind })" << endl
 	    << *pr1 << endl << endl;
+	cout << "prents(pr1)" << endl
+	    << *prents(*pr1) << endl << endl;
 	pr1 = hrpr1(*hr, *ur, VarList{ cloud, wind });
 	cout << "pr1 = hrpr1(*hr, *ur, VarList{ cloud, wind })" << endl
 	    << *pr1 << endl << endl;
+	cout << "prents(pr1)" << endl
+	    << *prents(*pr1) << endl << endl;
 	pr1 = hrpr1(*hr, *ur, VarList{ wind });
 	cout << "pr1 = hrpr1(*hr, *ur, VarList{ wind })" << endl
 	    << *pr1 << endl << endl;
+	cout << "prents(pr1)" << endl
+	    << *prents(*pr1) << endl << endl;
 	pr1 = hrpr1(*hr, *ur, VarList{ });
 	cout << "pr1 = hrpr1(*hr, *ur, VarList{ })" << endl
 	    << *pr1 << endl << endl;
+	cout << "prents(pr1)" << endl
+	    << *prents(*pr1) << endl << endl;
 
 	auto hr1 = hrhrred(*hr, *ur, VarList{ pressure, rain, cloud, wind });
 	cout << "hr1 = hrhrred(hr, VarList{ pressure, rain, cloud, wind })" << endl;

@@ -19,6 +19,8 @@ namespace Alignment
     typedef std::vector<SizeListList> SizeListListList;
     typedef std::pair<std::size_t, std::size_t> SizeSizePair;
     typedef std::vector<SizeSizePair> SizeSizePairList;
+    typedef std::pair<double, std::size_t> DoubleSizePair;
+    typedef std::vector<DoubleSizePair> DoubleSizePairList;
     typedef std::pair<double, SizeList> DoubleSizeListPair;
     typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
     typedef std::unordered_set<std::size_t> SizeUSet;
@@ -133,6 +135,9 @@ namespace Alignment
 
     // histogramRepaRedsIndependent :: Double -> HistogramRepaRed -> HistogramRepa
     std::unique_ptr<HistogramRepa> histogramRepaRedsIndependent(double, const HistogramRepaRed&);
+
+    // histogramRepaRedsListEntropy :: HistogramRepaRed -> [(Double,VariableRepa)]
+    std::unique_ptr<DoubleSizePairList> histogramRepaRedsListEntropy(const HistogramRepaRed&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistogramRepaRed&);

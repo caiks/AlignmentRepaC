@@ -514,6 +514,35 @@ std::unique_ptr<HistogramRepa> Alignment::histogramRepaRedsIndependent(double z,
     return ar;
 }
 
+// histogramRepaRedsListEntropy :: HistogramRepaRed -> [(Double,VariableRepa)]
+std::unique_ptr<DoubleSizePairList> Alignment::histogramRepaRedsListEntropy(const HistogramRepaRed& pr)
+{
+    auto n = pr.dimension;
+    auto vv = pr.vectorVar;
+    auto sh = pr.shape;
+    auto rr = pr.arr;
+    auto ee = std::make_unique<DoubleSizePairList>();
+    if (!n || !rr)
+	return ee;
+    ee->reserve(n);
+    std::size_t j = 0;
+    for (std::size_t i = 0; i < n; i++)
+    {
+	auto s = sh[i];
+	double e = 0.0;
+	for (std::size_t k = 0; k < s; k++)
+	{
+	    auto a = rr[j];
+	    e -= a * log(a);
+	    j++;
+	}
+	if (e > 0.0)
+	    ee->push_back(DoubleSizePair(e, vv[i]));
+    }
+    return ee;
+}
+
+
 
 HistoryRepa::HistoryRepa() : _mapVarInt(0), dimension(0), vectorVar(0), shape(0), size(0), evient(false), arr(0)
 {
