@@ -1895,6 +1895,25 @@ std::unique_ptr<ApplicationRepa> Alignment::applicationRepasApplicationRepa_u(co
     return dr1;
 }
 
+// applicationRepaPairsJoin :: ApplicationRepa -> ApplicationRepa -> ApplicationRepa
+std::unique_ptr<ApplicationRepa> Alignment::applicationRepaPairsJoin_u(const ApplicationRepa& dr1, const ApplicationRepa& dr2)
+{
+    auto llfr = setVariablesListTransformRepasFudRepa_u;
+    auto frdep = fudsSetVarsDepends;
+
+    auto dr3 = std::make_unique<ApplicationRepa>();
+    dr3->substrate = dr1.substrate;
+    dr3->slices = dr2.slices;
+    SizeUSet vv(dr1.substrate.begin(), dr1.substrate.end());
+    auto sl = treesElements(*dr2.slices);
+    SizeUSet ww(sl->begin(), sl->end());
+    FudRepa fr;
+    fr.layers.reserve(dr1.fud->layers.size() + dr2.fud->layers.size());
+    fr.layers.insert(fr.layers.end(), dr1.fud->layers.begin(), dr1.fud->layers.end());
+    fr.layers.insert(fr.layers.end(), dr2.fud->layers.begin(), dr2.fud->layers.end());
+    dr3->fud = std::move(llfr(vv, *frdep(fr, ww)));
+    return dr3;
+}
 
 std::size_t listVarsArrayHistoryEvientAlignedTop_u(
     std::size_t xmax, std::size_t omax, std::size_t n, std::size_t* svv, std::size_t m, std::size_t z1, std::size_t z2,

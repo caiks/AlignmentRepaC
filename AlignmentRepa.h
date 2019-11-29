@@ -343,6 +343,9 @@ namespace Alignment
     // applicationRepasApplicationRepa_u :: ApplicationRepa -> ApplicationRepa
     std::unique_ptr<ApplicationRepa> applicationRepasApplicationRepa_u(const ApplicationRepa&);
 
+    // applicationRepaPairsJoin :: ApplicationRepa -> ApplicationRepa -> ApplicationRepa
+    std::unique_ptr<ApplicationRepa> applicationRepaPairsJoin_u(const ApplicationRepa&, const ApplicationRepa&);
+
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::ApplicationRepa&);
