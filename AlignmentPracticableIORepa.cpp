@@ -248,13 +248,14 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 {
     auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
     auto hrred = setVarsHistoryRepasReduce_u;
+    auto hrhrred = setVarsHistoryRepasHistoryRepaReduced_u;
     auto hrpr = setVarsHistoryRepasRed_u;
     auto prents = histogramRepaRedsListEntropy;
     auto hrconcat = vectorHistoryRepasConcat_u;
     auto hrshuffle = historyRepasShuffle_u;
     auto llfr = setVariablesListTransformRepasFudRepa_u;
     auto frmul = historyRepasFudRepasMultiply_u;
-    auto frdep = fudsSetVarsDepends;
+    auto frdep = fudRepasSetVarsDepends;
     auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
 
     auto t0 = clk::now();
@@ -279,26 +280,26 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
 	return dr;
     }
+    auto mark = clk::now();
+    std::cout << ">>> applier " << std::endl;
+    std::shared_ptr<HistoryRepa> hr2 = hrhrred(vv.size(), vv.data(), *frmul(hr0, er));
+    std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
+    mark = clk::now();
     std::size_t f = 1;
-    std::unique_ptr<HistoryRepa> hr;
     {
-	auto mark = clk::now();
+	mark = clk::now();
 	std::cout << ">>> shuffler " << std::endl;
 	HistoryRepaPtrList qq;
 	qq.reserve(mult);
 	for (std::size_t i = 1; i <= mult; i++)
-	    qq.push_back(std::move(hrshuffle(hr0, seed + i*z)));
+	    qq.push_back(hrshuffle(hr0, seed + i*z));
 	auto hrs0 = hrconcat(qq);
 	qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< shuffler " << time["shuffler"] << "s" << std::endl;
 	mark = clk::now();
-	std::cout << ">>> applier " << std::endl;
-	hr = std::move(frmul(hr0, er));
-	time["applier"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
-	mark = clk::now();
 	std::cout << ">>> substrater " << std::endl;
+	auto hr = hr2;
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
 	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z + mult*z));
@@ -322,7 +323,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    if (vv0.size() < vv.size())
 	    {
 		SizeUSet vv01(vv0.begin(), vv0.end());
-		er0 = std::move(llfr(vv00, *frdep(er, vv01)));
+		er0 = llfr(vv00, *frdep(er, vv01));
 	    }
 	}
 	time["substrater"] = ((sec)(clk::now() - mark)).count();
@@ -332,12 +333,12 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<HistoryRepa> hrs;
 	if (er0)
 	{
-	    hr = std::move(frmul(hr0, *er0));
-	    hrs = std::move(frmul(*hrs0, *er0));
+	    hr = frmul(hr0, *er0);
+	    hrs = frmul(*hrs0, *er0);
 	}
 	else
 	{
-	    hrs = std::move(frmul(*hrs0, er));
+	    hrs = hrhrred(vv.size(), vv.data(), *frmul(*hrs0, er));
 	}
 	hrs0.reset();
 	time["applier"] = ((sec)(clk::now() - mark)).count();
@@ -465,12 +466,16 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     SizeSet ig;
     while (f < fmax)
     {
-	auto mark = clk::now();
+	mark = clk::now();
+	std::cout << ">>> applier " << std::endl;
+	auto hr = frmul(*hr2, *dr->fud);
+	time["applier"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
+	mark = clk::now();
 	std::cout << ">>> slicer " << std::endl;
-	auto hr1 = frmul(*hr, *dr->fud);
-	auto n1 = hr1->dimension;
-	auto& mvv1 = hr1->mapVarInt();
-	auto rr1 = hr1->arr;
+	auto n = hr->dimension;
+	auto& mvv = hr->mapVarInt();
+	auto rr = hr->arr;
 	auto nn = treesLeafNodes(*dr->slices);
 	SizeSizePairList zs;
 	zs.reserve(nn->size());
@@ -480,18 +485,18 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    if (ig.find(v) != ig.end())
 		continue;
 	    std::size_t a = 0;
-	    auto pk = mvv1[v];
-	    if (hr1->evient)
+	    auto pk = mvv[v];
+	    if (hr->evient)
 		for (std::size_t j = 0; j < z; j++)
 		{
-		    std::size_t u = rr1[j*n1 + pk];
+		    std::size_t u = rr[j*n + pk];
 		    if (u)
 			a++;
 		}
 	    else
 		for (std::size_t j = 0; j < z; j++)
 		{
-		    std::size_t u = rr1[pk*z + j];
+		    std::size_t u = rr[pk*z + j];
 		    if (u)
 			a++;
 		}
@@ -511,23 +516,24 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	SizeList ev;
 	ev.reserve(z2);
 	{
-	    auto pk = mvv1[v];
-	    if (hr1->evient)
+	    auto pk = mvv[v];
+	    if (hr->evient)
 		for (std::size_t j = 0; j < z; j++)
 		{
-		    std::size_t u = rr1[j*n1 + pk];
+		    std::size_t u = rr[j*n + pk];
 		    if (u)
 			ev.push_back(j);
 		}
 	    else
 		for (std::size_t j = 0; j < z; j++)
 		{
-		    std::size_t u = rr1[pk*z + j];
+		    std::size_t u = rr[pk*z + j];
 		    if (u)
 			ev.push_back(j);
 		}
 	}
-	auto hr2 = hrsel(ev.size(), ev.data(), hr0);
+	hr = hrsel(ev.size(), ev.data(), *hr2);
+	auto hr1 = hrsel(ev.size(), ev.data(), hr0);
 	ev.clear();
 	time["slicer"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< slicer " << time["slicer"] << "s" << std::endl;
@@ -536,16 +542,11 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	HistoryRepaPtrList qq;
 	qq.reserve(mult);
 	for (std::size_t i = 1; i <= mult; i++)
-	    qq.push_back(std::move(hrshuffle(*hr2, seed + i*z2)));
-	auto hrs2 = hrconcat(qq);
+	    qq.push_back(hrshuffle(*hr1, seed + i*z2));
+	auto hrs1 = hrconcat(qq);
 	qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< shuffler " << time["shuffler"] << "s" << std::endl;
-	mark = clk::now();
-	std::cout << ">>> applier " << std::endl;
-	auto hr3 = frmul(*hr2, er);
-	time["applier"] = ((sec)(clk::now() - mark)).count();
-	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
 	mark = clk::now();
 	std::cout << ">>> substrater " << std::endl;
 	SizeList vv0;
@@ -553,7 +554,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z2 + mult*z2));
 	if (nmax > bmax)
 	{
-	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr3));
+	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
 	    auto m = ee->size();
 	    if (m > nmax)
 	    {
@@ -571,32 +572,32 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    if (vv0.size() < vv.size())
 	    {
 		SizeUSet vv01(vv0.begin(), vv0.end());
-		er0 = std::move(llfr(vv00, *frdep(er, vv01)));
+		er0 = llfr(vv00, *frdep(er, vv01));
 	    }
 	}
 	time["substrater"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< substrater " << time["substrater"] << "s" << std::endl;
 	mark = clk::now();
 	std::cout << ">>> applier " << std::endl;
-	std::unique_ptr<HistoryRepa> hrs3;
+	std::unique_ptr<HistoryRepa> hrs;
 	if (er0)
 	{
-	    hr3 = std::move(frmul(*hr2, *er0));
-	    hrs3 = std::move(frmul(*hrs2, *er0));
+	    hr = frmul(*hr1, *er0);
+	    hrs = frmul(*hrs1, *er0);
 	}
 	else
 	{
-	    hrs3 = std::move(frmul(*hrs2, er));
+	    hrs = hrhrred(vv.size(), vv.data(), *frmul(*hrs1, er));
 	}
-	hr2.reset();
-	hrs2.reset();
+	hr1.reset();
+	hrs1.reset();
 	time["applier"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
 	std::unique_ptr<FudRepa> fr;
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
 	{
-	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, nmax > bmax ? vv0 : vv, *hr3, *hrs3, f + 1, ur);
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, nmax > bmax ? vv0 : vv, *hr, *hrs, f + 1, ur);
 	    fr = std::move(std::get<0>(t));
 	    mm = std::move(std::get<1>(t));
 	}
@@ -635,7 +636,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeUSet kk1(kk.begin(), kk.end());
 	auto gr = llfr(vv1, *frdep(*fr, kk1));
-	auto ar = hrred(1.0, m, kk.data(), *frmul(*hr3, *gr));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(*hr, *gr));
 	SizeList sl;
 	TransformRepaPtrList ll;
 	std::size_t sz = 1;
@@ -723,7 +724,6 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	time["transer"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
     }
-
     std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
     return dr;
 }
@@ -741,7 +741,7 @@ std::unique_ptr<ApplicationRepa> parametersSystemsFudRepasHistoryRepasApplicatio
     auto hrshuffle = historyRepasShuffle_u;
     auto llfr = setVariablesListTransformRepasFudRepa_u;
     auto frmul = historyRepasFudRepasMultiply_u;
-    auto frdep = fudsSetVarsDepends;
+    auto frdep = fudRepasSetVarsDepends;
     auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
 
     auto t0 = clk::now();

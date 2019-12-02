@@ -1690,7 +1690,7 @@ int main(int argc, char **argv)
 	auto frvars = fudRepasSetVar;
 	auto frder = fudRepasDerived;
 	auto frund = fudRepasUnderlying;
-	auto frdep = fudsSetVarsDepends;
+	auto frdep = fudRepasSetVarsDepends;
 
 	auto pressure = Variable("pressure");
 	auto cloud = Variable("cloud");

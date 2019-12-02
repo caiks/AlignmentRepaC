@@ -1569,8 +1569,8 @@ std::unique_ptr<SizeTransformRepaPtrMap> Alignment::fudRepasDefinitions(const Fu
     return mm;
 }
 
-// fudsSetVarsDepends :: FudRepa -> [VariableRepa] -> FudRepa
-    std::unique_ptr<TransformRepaPtrList> Alignment::fudsSetVarsDepends(const FudRepa& fr, const SizeUSet& kk)
+// fudRepasSetVarsDepends :: FudRepa -> [VariableRepa] -> FudRepa
+    std::unique_ptr<TransformRepaPtrList> Alignment::fudRepasSetVarsDepends(const FudRepa& fr, const SizeUSet& kk)
 {
     auto mm = fudRepasDefinitions(fr);
     auto ll = std::make_unique<TransformRepaPtrList>();
@@ -1899,11 +1899,11 @@ std::unique_ptr<ApplicationRepa> Alignment::applicationRepasApplicationRepa_u(co
 std::unique_ptr<ApplicationRepa> Alignment::applicationRepaPairsJoin_u(const ApplicationRepa& dr1, const ApplicationRepa& dr2)
 {
     auto llfr = setVariablesListTransformRepasFudRepa_u;
-    auto frdep = fudsSetVarsDepends;
+    auto frdep = fudRepasSetVarsDepends;
 
     auto dr3 = std::make_unique<ApplicationRepa>();
     dr3->substrate = dr1.substrate;
-    dr3->slices = dr2.slices;
+    dr3->slices = std::move(pathsTree(*treesPaths(*dr2.slices)));
     SizeUSet vv(dr1.substrate.begin(), dr1.substrate.end());
     auto sl = treesElements(*dr2.slices);
     SizeUSet ww(sl->begin(), sl->end());

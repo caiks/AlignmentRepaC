@@ -296,8 +296,8 @@ namespace Alignment
     // fudRepasDefinitions :: FudRepa -> Map.Map VariableRepa TransformRepa
     std::unique_ptr<SizeTransformRepaPtrMap> fudRepasDefinitions(const FudRepa&);
 
-    // fudsSetVarsDepends :: FudRepa -> [VariableRepa] -> FudRepa
-    std::unique_ptr<TransformRepaPtrList> fudsSetVarsDepends(const FudRepa&, const SizeUSet&);
+    // fudRepasSetVarsDepends :: FudRepa -> [VariableRepa] -> FudRepa
+    std::unique_ptr<TransformRepaPtrList> fudRepasSetVarsDepends(const FudRepa&, const SizeUSet&);
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
