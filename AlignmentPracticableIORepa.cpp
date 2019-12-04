@@ -226,7 +226,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const HistoryRepa& hr, SystemRepa& ur)
 {
-    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, seed, vv, FudRepa(), hr, ur);
+    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, seed, vv, FudRepa(), hr, 0, ur);
 }
 
 // parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
@@ -236,15 +236,15 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr, SystemRepa& ur)
 {
-    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, seed, vv, er, hr, ur);
+    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, seed, vv, er, hr, 0, ur);
 }
 
 // parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
 //   Integer -> Integer ->
-//   [VariableRepa] -> HistoryRepa ->
+//   [VariableRepa] -> HistoryRepa -> Integer ->
 //   IO (SystemRepa, ApplicationRepa)
-std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, SystemRepa& ur)
+std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, int d, SystemRepa& ur)
 {
     auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
     auto hrred = setVarsHistoryRepasReduce_u;
@@ -267,7 +267,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     SizeUSet vv1(vv.begin(), vv.end());
     auto& llu = ur.listVarSizePair;
     auto z = hr0.size;
-    auto vd = std::make_shared<Variable>(0);
+    auto vd = std::make_shared<Variable>(d);
     auto vl = std::make_shared<Variable>("s");
     auto dr = std::make_unique<ApplicationRepa>();
     dr->substrate = vv;
