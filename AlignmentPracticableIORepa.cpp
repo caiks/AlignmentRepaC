@@ -878,7 +878,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
 	TransformRepaPtrList ll;
-	std::size_t sz = sh[ew];
+	std::size_t sz = sh[mvv[ew]];
 	sl.reserve(sz);
 	ll.reserve(sz);
 	std::size_t b = 1;
@@ -1114,7 +1114,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
 	TransformRepaPtrList ll;
-	std::size_t sz = sh[ew];
+	std::size_t sz = sh[mvv[ew]];
 	sl.reserve(sz);
 	ll.reserve(sz);
 	std::size_t b = 1;
