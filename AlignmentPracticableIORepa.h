@@ -33,11 +33,11 @@ namespace Alignment
     //   IO (SystemRepa, ApplicationRepa)
     std::unique_ptr<ApplicationRepa> parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList&, const FudRepa&, const HistoryRepa&, int, SystemRepa&);
 
-    // parametersSystemsHistoryRepasApplicationerConditionalFmaxIORepa ::
+    // parametersSystemsHistoryRepasApplicationerConditionalFmaxIORepa_u ::
     //  Integer ->
     //   [VariableRepa] -> VariableRepa -> HistoryRepa -> Integer ->
     //   IO (SystemRepa, ApplicationRepa)
-    std::unique_ptr<ApplicationRepa> parametersSystemsHistoryRepasApplicationerConditionalFmaxIORepa(std::size_t fmax, const SizeList&, std::size_t, const HistoryRepa&, int, SystemRepa&);
+    std::unique_ptr<ApplicationRepa> parametersSystemsHistoryRepasApplicationerConditionalFmaxIORepa_u(std::size_t fmax, const SizeList&, std::size_t, const HistoryRepa&, int, SystemRepa&);
 
 
 
