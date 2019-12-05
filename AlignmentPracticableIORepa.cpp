@@ -378,8 +378,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << "fud slice size: " << z << std::endl;
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
-	std::cout << "derived algn density per size: " << a / (double)z << std::endl;
-	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp(a / (double)z / (double)(m - 1)) << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 100.0 * (std::exp(a / (double)z / (double)(m - 1)) - 1.0) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
@@ -629,8 +628,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << "fud slice size: " << z2 << std::endl;
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
-	std::cout << "derived algn density per size: " << a / (double)z2 << std::endl;
-	std::cout << "derived impl bi-valency percent: " << 50.0 * std::exp(a / (double)z2 / (double)(m - 1)) << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 100.0 * (std::exp(a / (double)z2 / (double)(m - 1)) - 1.0) << std::endl;
 	auto vf = std::make_shared<Variable>(f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
