@@ -1,36 +1,27 @@
 # AlignmentRepaC
 
-C++ implementation of practicable Aligned Induction 
+The AlignmentRepaC repository is a fast C++ implementation of some of the *practicable inducers* described in the paper *The Theory and Practice of Induction by Alignment* at https://greenlake.co.uk/. The AlignmentRepaC repository depends on the [AlignmentC repository](https://github.com/caiks/AlignmentC) for the underlying *model* framework. 
 
-Windows debug -
-```sh
-cd /d C:\zzz\caiks\AlignmentC-master
+## Installation
 
-cl -I../rapidjson-master/include /EHsc /DEBUG /Zi /c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
+The `AlignmentRepaC` module requires [modern C++](https://en.cppreference.com/w/) version 17 or later to be installed.
 
-cd /d C:\zzz\caiks\AlignmentRepaC-master
-
-cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /DEBUG /Zi main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC-master/AlignmentUtil.obj ../AlignmentC-master/Alignment.obj ../AlignmentC-master/AlignmentApprox.obj ../AlignmentC-master/AlignmentAeson.obj 
-
-main
+For example in Ubuntu,
 ```
-Windows release -
-```sh
-cd /d C:\zzz\caiks\AlignmentC-master
-
-cl -I../rapidjson-master/include /EHsc /O2 /c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
-
-cd /d C:\zzz\caiks\AlignmentRepaC-master
-
-cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /O2 main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC-master/AlignmentUtil.obj ../AlignmentC-master/Alignment.obj ../AlignmentC-master/AlignmentApprox.obj ../AlignmentC-master/AlignmentAeson.obj 
-
-main
+sudo apt-get update -y
+sudo apt install -y g++
 ```
+Then download the zip file or use git to get the underlying rapidjson and AlignmentC repositories, and the AlignmentRepaC repository -
 ```
+git clone https://github.com/Tencent/rapidjson.git
+git clone https://github.com/caiks/AlignmentC.git
+git clone https://github.com/caiks/AlignmentRepaC.git
+```
+
+## Build
+
 Ubuntu debug -
 ```sh
-git clone https://github.com/Tencent/rapidjson.git
-
 cd AlignmentC
 
 g++ -I../rapidjson/include -std=gnu++17 -g -c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
@@ -44,9 +35,6 @@ g++ -I../rapidjson/include -I../AlignmentC -std=gnu++17 -g -o main main.cpp Alig
 ```
 Ubuntu release -
 ```sh
-cd /home/cliff/Documents/projects/CAIKS4
-git clone https://github.com/Tencent/rapidjson.git
-
 cd AlignmentC
 
 g++ -I../rapidjson/include -std=gnu++17 -O3 -c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
@@ -57,5 +45,28 @@ g++ -I../rapidjson/include -I../AlignmentC -std=gnu++17 -O3 -o main main.cpp Ali
 
 ./main
 
+```
+Windows debug -
+```sh
+cd AlignmentC-master
 
+cl -I../rapidjson-master/include /EHsc /DEBUG /Zi /c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
+
+cd ..\AlignmentRepaC-master
+
+cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /DEBUG /Zi main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC-master/AlignmentUtil.obj ../AlignmentC-master/Alignment.obj ../AlignmentC-master/AlignmentApprox.obj ../AlignmentC-master/AlignmentAeson.obj 
+
+main
+```
+Windows release -
+```sh
+cd AlignmentC-master
+
+cl -I../rapidjson-master/include /EHsc /O2 /c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
+
+cd ..\AlignmentRepaC-master
+
+cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /O2 main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC-master/AlignmentUtil.obj ../AlignmentC-master/Alignment.obj ../AlignmentC-master/AlignmentApprox.obj ../AlignmentC-master/AlignmentAeson.obj 
+
+main
 ```
