@@ -45,6 +45,12 @@ namespace Alignment
     //   IO (SystemRepa, ApplicationRepa)
     std::unique_ptr<ApplicationRepa> parametersSystemsHistoryRepasApplicationerConditionalFmaxIORepa_u_1(std::size_t fmax, const SizeList&, std::size_t, const HistoryRepa&, int, SystemRepa&);
 
+    // parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_u ::
+    //  Integer ->
+    //   [VariableRepa] -> VariableRepa -> HistoryRepa -> Integer ->
+    //   IO (SystemRepa, ApplicationRepa)
+    std::unique_ptr<ApplicationRepa> parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_u(std::size_t fmax, const SizeList&, std::size_t, const HistoryRepa&, int, SystemRepa&);
+
 
 
 }
