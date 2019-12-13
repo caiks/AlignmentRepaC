@@ -995,7 +995,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		    if (b > 0.0)
 			e -= b * log(b);
 		}
-		zs.push_back(DoubleSizeSizeTuple((double)a * e, a, i));
+		if ((double)a * e > repaRounding)
+		    zs.push_back(DoubleSizeSizeTuple((double)a * e, a, i));
 	    }
 	}
 	if (!zs.size())
@@ -1406,7 +1407,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 			if (b > 0.0)
 			    e -= b * log(b);
 		    }
-		    zs.push_back(DoubleSizeSizeTuple((double)a * e, a, v));
+		    if ((double)a * e > repaRounding)
+			zs.push_back(DoubleSizeSizeTuple((double)a * e, a, v));
 		}
 	    }
 	    if (!zs.size())
@@ -1838,7 +1840,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		double e = alngam((double)a + 1.0);
 		for (std::size_t k = 0; k < ls; k++)
 		    e -= alngam((double)ee0[k]);
-		zs.push_back(DoubleSizeSizeTuple(e, a, i));
+		if (e > repaRounding)
+		    zs.push_back(DoubleSizeSizeTuple(e, a, i));
 	    }
 	}
 	if (!zs.size())
