@@ -227,7 +227,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const HistoryRepa& hr, SystemRepa& ur)
 {
-    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, seed, vv, FudRepa(), hr, 0, ur);
+    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, 0, seed, vv, FudRepa(), hr, 0, ur);
 }
 
 // parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
@@ -237,15 +237,15 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr, SystemRepa& ur)
 {
-    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, seed, vv, er, hr, 0, ur);
+    return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, 0, seed, vv, er, hr, 0, ur);
 }
 
 // parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
-//   Integer -> Integer ->
+//   Integer -> Integer -> Integer ->
 //   [VariableRepa] -> HistoryRepa -> Integer ->
 //   IO (SystemRepa, ApplicationRepa)
-std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, int d, SystemRepa& ur)
+std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t smin, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, int d, SystemRepa& ur)
 {
     auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
     auto hrred = setVarsHistoryRepasReduce_u;
@@ -290,9 +290,10 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     {
 	mark = clk::now();
 	std::cout << ">>> shuffler " << std::endl;
+	std::size_t mult1 = smin/z + 1 > mult ? smin/z + 1 : mult;
 	HistoryRepaPtrList qq;
-	qq.reserve(mult);
-	for (std::size_t i = 1; i <= mult; i++)
+	qq.reserve(mult1);
+	for (std::size_t i = 1; i <= mult1; i++)
 	    qq.push_back(hrshuffle(hr0, seed + i*z));
 	auto hrs0 = hrconcat(qq);
 	qq.clear();
@@ -303,7 +304,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	auto hr = hr2;
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
-	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z + mult*z));
+	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z + mult1*z));
 	if (nmax > bmax)
 	{
 	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
@@ -539,9 +540,10 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << "<<< slicer " << time["slicer"] << "s" << std::endl;
 	mark = clk::now();
 	std::cout << ">>> shuffler " << std::endl;
+	std::size_t mult1 = smin / z2 + 1 > mult ? smin / z2 + 1 : mult;
 	HistoryRepaPtrList qq;
-	qq.reserve(mult);
-	for (std::size_t i = 1; i <= mult; i++)
+	qq.reserve(mult1);
+	for (std::size_t i = 1; i <= mult1; i++)
 	    qq.push_back(hrshuffle(*hr1, seed + i*z2));
 	auto hrs1 = hrconcat(qq);
 	qq.clear();
@@ -551,7 +553,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << ">>> substrater " << std::endl;
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
-	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z2 + mult*z2));
+	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z2 + mult1*z2));
 	if (nmax > bmax)
 	{
 	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
