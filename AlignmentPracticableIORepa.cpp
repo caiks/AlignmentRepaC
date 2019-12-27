@@ -4,6 +4,7 @@
 #include <chrono>
 #include <ctime>
 #include <cmath>
+#include <thread>
 
 using namespace Alignment;
 
@@ -2032,6 +2033,46 @@ void parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_up_root
     delete ee1;
 }
 
+void parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_up_child(std::size_t tint, std::size_t n, std::size_t z, std::size_t i2z, std::size_t* vv1, std::size_t* sh1, unsigned char* rr1, std::size_t ms, std::size_t l, std::size_t ls, std::size_t t, double* e, std::size_t* i1)
+{
+    auto ee1 = new std::size_t[ms*ls];
+    auto ee2 = new std::size_t[ms];
+    for (std::size_t i = 1; i <= n; i++)
+	if (i % tint == t)
+	{
+	    auto iz = i*z;
+	    auto s = sh1[i];
+	    for (std::size_t k = 0; k < s*ls; k++)
+		ee1[k] = 1;
+	    for (std::size_t k = 0; k < s; k++)
+		ee2[k] = 1;
+	    for (std::size_t j = 0; j < z; j++)
+	    {
+		std::size_t q = rr1[i2z + j];
+		if (q)
+		{
+		    std::size_t u = rr1[iz + j];
+		    std::size_t w = rr1[j];
+		    ee1[w*s + u]++;
+		    ee2[u]++;
+		}
+	    }
+	    double e1 = 0.0;
+	    double e2 = 0.0;
+	    for (std::size_t k = 0; k < s*ls; k++)
+		e1 += alngam((double)ee1[k]);
+	    for (std::size_t k = 0; k < s; k++)
+		e2 += alngam((double)ee2[k]);
+	    if (vv1[i] != l && (e[t] > e2 - e1))
+	    {
+		e[t] = e2 - e1;
+		i1[t] = i;
+	    }
+	}
+    delete ee2;
+    delete ee1;
+}
+
 // parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_up ::
 //  Integer -> Integer ->
 //   [VariableRepa] -> HistoryRepa -> Integer ->
@@ -2040,6 +2081,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 {
     auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
     auto frmul = historyRepasFudRepasMultiply_u;
+    auto root = parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_up_root;
+    auto child = parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxIORepa_up_child;
 
     auto t0 = clk::now();
     auto mark = clk::now();
@@ -2137,41 +2180,28 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
 	    return dr;
 	}
+	auto ee = new double[tint];
+	auto ii1 = new std::size_t[tint];
+	std::vector<std::thread> threads;
+	threads.reserve(tint);
+	for (std::size_t t = 0; t < tint; t++)
+	{
+	    ee[t] = e0;
+	    ii1[t] = 0;
+	    threads.push_back(std::thread(root, tint, n, z, vv1, sh1, rr1, ms, l, ls, t, ee, ii1));
+	}
+	for (auto& t : threads)
+	    t.join();
 	double e = e0;
 	std::size_t i1 = 0;
-
-	auto ee1 = new std::size_t[ms*ls];
-	auto ee2 = new std::size_t[ms];
-	for (std::size_t i = 1; i <= n; i++)
-	{
-	    auto s = sh1[i];
-	    for (std::size_t k = 0; k < s*ls; k++)
-		ee1[k] = 1;
-	    for (std::size_t k = 0; k < s; k++)
-		ee2[k] = 1;
-	    auto iz = i*z;
-	    for (std::size_t j = 0; j < z; j++)
+	for (std::size_t t = 0; t < tint; t++)
+	    if (e > ee[t])
 	    {
-		std::size_t u = rr1[iz + j];
-		std::size_t w = rr1[j];
-		ee1[w*s + u]++;
-		ee2[u]++;
+		e = ee[t];
+		i1 = ii1[t];
 	    }
-	    double e1 = 0.0;
-	    double e2 = 0.0;
-	    for (std::size_t k = 0; k < s*ls; k++)
-		e1 += alngam((double)ee1[k]);
-	    for (std::size_t k = 0; k < s; k++)
-		e2 += alngam((double)ee2[k]);
-	    if (vv1[i] != l && (e > e2 - e1))
-	    {
-		e = e2 - e1;
-		i1 = i;
-	    }
-	}
-	delete ee2;
-	delete ee1;
-
+	delete ee;
+	delete ii1;
 	if (i1 == 0 || e >= e0 - repaRounding)
 	{
 	    std::cout << "no conditional entropy" << std::endl;
@@ -2316,43 +2346,28 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	for (std::size_t k = 0; k < ls; k++)
 	    e0 -= alngam((double)ee0[k]);
 	delete ee0;
+	auto ee = new double[tint];
+	auto ii1 = new std::size_t[tint];
+	std::vector<std::thread> threads;
+	threads.reserve(tint);
+	for (std::size_t t = 0; t < tint; t++)
+	{
+	    ee[t] = e0;
+	    ii1[t] = 0;
+	    threads.push_back(std::thread(child, tint, n, z, i2z, vv1, sh1, rr1, ms, l, ls, t, ee, ii1));
+	}
+	for (auto& t : threads)
+	    t.join();
 	double e = e0;
 	std::size_t i1 = 0;
-	auto ee1 = new std::size_t[ms*ls];
-	auto ee2 = new std::size_t[ms];
-	for (std::size_t i = 1; i <= n; i++)
-	{
-	    auto iz = i*z;
-	    auto s = sh1[i];
-	    for (std::size_t k = 0; k < s*ls; k++)
-		ee1[k] = 1;
-	    for (std::size_t k = 0; k < s; k++)
-		ee2[k] = 1;
-	    for (std::size_t j = 0; j < z; j++)
+	for (std::size_t t = 0; t < tint; t++)
+	    if (e > ee[t])
 	    {
-		std::size_t t = rr1[i2z + j];
-		if (t)
-		{
-		    std::size_t u = rr1[iz + j];
-		    std::size_t w = rr1[j];
-		    ee1[w*s + u]++;
-		    ee2[u]++;
-		}
+		e = ee[t];
+		i1 = ii1[t];
 	    }
-	    double e1 = 0.0;
-	    double e2 = 0.0;
-	    for (std::size_t k = 0; k < s*ls; k++)
-		e1 += alngam((double)ee1[k]);
-	    for (std::size_t k = 0; k < s; k++)
-		e2 += alngam((double)ee2[k]);
-	    if (vv1[i] != l && e > e2 - e1)
-	    {
-		e = e2 - e1;
-		i1 = i;
-	    }
-	}
-	delete ee2;
-	delete ee1;
+	delete ee;
+	delete ii1;
 	if (i1 == 0 || e >= e0 - repaRounding)
 	{
 	    ig.insert(v2);
