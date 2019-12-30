@@ -31,6 +31,7 @@ namespace Alignment
     typedef std::vector<std::vector<double>> DoubleListList;
     typedef Tree<std::size_t> SizeTree;
     typedef std::pair<std::size_t, std::shared_ptr<SizeTree>> SizeSizeTreePair;
+    typedef std::vector<std::pair<std::size_t, std::shared_ptr<SizeTree>>> SizeSizeTreePairList;
 }
 
 namespace Alignment
