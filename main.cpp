@@ -3729,7 +3729,7 @@ int main(int argc, char **argv)
 	    auto bb = histogramsMapVarsFrame_u(*aa, nn);
 	    VarUSet ww;
 	    if (pp.size())
-		ww.insert(Variable(pp.back()));
+		ww.insert(Variable((int)pp.back()));
 	    return histogramsSetVarsTransform(*bb, ww);
 	};
 	auto llff = setTransformsFud_u;
@@ -4401,7 +4401,7 @@ int main(int argc, char **argv)
 	    auto bb = histogramsMapVarsFrame_u(*aa, nn);
 	    VarUSet ww;
 	    if (pp.size())
-		ww.insert(Variable(pp.back()));
+		ww.insert(Variable((int)pp.back()));
 	    return histogramsSetVarsTransform(*bb, ww);
 	};
 	auto llff = setTransformsFud_u;
