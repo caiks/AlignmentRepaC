@@ -576,7 +576,7 @@ std::ostream& operator<<(std::ostream& out, const HistoryRepa& hr)
 	if (i) out << ",";
 	out << s;
     }
-    out << "]," << z << "," << (bool)hr.evient << ",[";
+    out << "]," << z << "," << (hr.evient ? "true" : "false") << ",[";
     for (std::size_t j = 0; j < n*z; j++)
     {
 	if (j) out << ",";
@@ -675,7 +675,7 @@ std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const Syst
 	auto& sm = is.second.map_u();
 	for (std::size_t i = 0; i < n; i++)
 	{
-	    rr[j] = mm[i][sm.find(ww1[i])->second];
+	    rr[j] = (unsigned char)mm[i][sm.find(ww1[i])->second];
 	    j++;
 	}
     }
@@ -716,7 +716,7 @@ std::unique_ptr<History> Alignment::systemsHistoryRepasHistory_u(const System& u
 	ss.reserve(n);
 	for (std::size_t i = 0; i < n; i++)
 	    ss.push_back(VarValPair(ww[i], mm[i][rr[hr.evient ? j*n + i : i*z + j]]));
-	hm.insert_or_assign(Id(j + 1), State(ss));
+	hm.insert_or_assign(Id((int)j + 1), State(ss));
     }
     return hh;
 }
@@ -1294,7 +1294,7 @@ std::unique_ptr<TransformRepa> Alignment::systemsTransformsTransformRepa_u(const
 	std::size_t j = 0;
 	for (std::size_t i = 0; i < n; i++)
 	    j = sh[i] * j + mm[i][sm.find(qq1[i])->second];
-	rr[j] = mm[n][sm.find(*wit)->second];
+	rr[j] = (unsigned char)mm[n][sm.find(*wit)->second];
     }
     return tr;
 }

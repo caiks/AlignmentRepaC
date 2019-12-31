@@ -37,7 +37,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
     auto z = (double)hr.size;
     auto zr = (double)hrs.size;
     auto vd = std::make_shared<Variable>(0);
-    auto vf = std::make_shared<Variable>(f);
+    auto vf = std::make_shared<Variable>((int)f);
     auto vdf = std::make_shared<Variable>(vd, vf);
     auto fr = std::make_unique<FudRepa>();
     auto mm = std::make_unique<DoubleSizeListPairList>();
@@ -54,7 +54,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	auto t1 = clk::now();
 	layering = false;
 	std::cout << ">>> layer\tfud: " << f << "\tlayer: " << l << std::endl;
-	auto vl = std::make_shared<Variable>(l);
+	auto vl = std::make_shared<Variable>((int)l);
 	auto vfl = std::make_shared<Variable>(vdf,vl);
 	std::size_t b = 1;
 	std::cout << "substrate cardinality: " << vv.size() << std::endl;
@@ -145,7 +145,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 		    for (std::size_t j = 0; j < sz; j++)
 		    {
 			auto u = rr1[j];
-			rr[j] = u;
+			rr[j] = (unsigned char)u;
 			if (u > s)
 			    s = u;
 		    }
@@ -168,7 +168,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 			continue;
 		    qq.push_back(jj1);
 		    tr->valency = s;
-		    auto vb = std::make_shared<Variable>(b);
+		    auto vb = std::make_shared<Variable>((int)b);
 		    auto vflb = std::make_shared<Variable>(vfl, vb);
 		    llu.push_back(VarSizePair(vflb,s));
 		    auto w = llu.size() - 1;
@@ -295,7 +295,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	HistoryRepaPtrList qq;
 	qq.reserve(mult1);
 	for (std::size_t i = 1; i <= mult1; i++)
-	    qq.push_back(hrshuffle(hr0, seed + i*z));
+	    qq.push_back(hrshuffle(hr0, (unsigned int)(seed + i*z)));
 	auto hrs0 = hrconcat(qq);
 	qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
@@ -382,7 +382,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived impl bi-valency percent: " << 100.0 * (std::exp(a / (double)z / (double)(m - 1)) - 1.0) << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeUSet kk1(kk.begin(), kk.end());
@@ -423,7 +423,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 		rr[j] = 0;
 	    rr[i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -449,7 +449,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    for (std::size_t j = 0; j < sz; j++)
 		rr[j] = rr0[j] <= 0.0 ? 1 : 0;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -545,7 +545,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	HistoryRepaPtrList qq;
 	qq.reserve(mult1);
 	for (std::size_t i = 1; i <= mult1; i++)
-	    qq.push_back(hrshuffle(*hr1, seed + i*z2));
+	    qq.push_back(hrshuffle(*hr1, (unsigned int)(seed + i*z2)));
 	auto hrs1 = hrconcat(qq);
 	qq.clear();
 	time["shuffler"] = ((sec)(clk::now() - mark)).count();
@@ -633,7 +633,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::cout << "derived cardinality: " << m << std::endl;
 	std::cout << "derived algn density: " << a << std::endl;
 	std::cout << "derived impl bi-valency percent: " << 100.0 * (std::exp(a / (double)z2 / (double)(m - 1)) - 1.0) << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeUSet kk1(kk.begin(), kk.end());
@@ -676,7 +676,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 		rr[j] = 0;
 	    rr[sz + i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -704,7 +704,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    for (std::size_t j = 0; j < 2 * sz; j++)
 		rr[j] = j >= sz && rr0[j - sz] <= 0.0 ? 1 : 0;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -901,7 +901,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << (double)z * e << std::endl;
 	std::cout << "sized entropy decrease: " << (double)z * (e0 - e) << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -926,7 +926,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -1101,7 +1101,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << (double)z2 * e << std::endl;
 	std::cout << "sized entropy decrease: " << (double)z2 * (e0 - e) << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -1128,7 +1128,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[sz + i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -1308,7 +1308,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << (double)z * e << std::endl;
 	std::cout << "sized entropy decrease: " << (double)z * (e0 - e) << std::endl;
 	std::cout << "entropy variable: " << *llu[ew].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -1333,7 +1333,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -1544,7 +1544,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << (double)z2 * e << std::endl;
 	std::cout << "sized entropy decrease: " << (double)z2 * (e0 - e) << std::endl;
 	std::cout << "entropy variable: " << *llu[ew].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -1571,7 +1571,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[sz + i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -1751,7 +1751,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << e << std::endl;
 	std::cout << "sized entropy decrease: " << e0 - e << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -1776,7 +1776,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -1933,7 +1933,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << e << std::endl;
 	std::cout << "sized entropy decrease: " << e0 - e << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -1960,7 +1960,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[sz + i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -2222,7 +2222,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << e << std::endl;
 	std::cout << "sized entropy decrease: " << e0 - e << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -2247,7 +2247,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -2395,7 +2395,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << e << std::endl;
 	std::cout << "sized entropy decrease: " << e0 - e << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -2422,7 +2422,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[sz + i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -2610,7 +2610,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << e << std::endl;
 	std::cout << "sized entropy decrease: " << e0 - e << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -2635,7 +2635,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;
@@ -2777,7 +2777,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	std::cout << "sized conditional entropy: " << e << std::endl;
 	std::cout << "sized entropy decrease: " << e0 - e << std::endl;
 	std::cout << "entropy variable: " << *llu[v1].first << std::endl;
-	auto vf = std::make_shared<Variable>(f);
+	auto vf = std::make_shared<Variable>((int)f);
 	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeList sl;
@@ -2804,7 +2804,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 		rr[j] = 0;
 	    rr[sz + i] = 1;
 	    tr->valency = 2;
-	    auto vb = std::make_shared<Variable>(b++);
+	    auto vb = std::make_shared<Variable>((int)b++);
 	    auto vflb = std::make_shared<Variable>(vfl, vb);
 	    llu.push_back(VarSizePair(vflb, 2));
 	    auto w = llu.size() - 1;

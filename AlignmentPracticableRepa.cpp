@@ -87,7 +87,7 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
     xx1->reserve(bmax / mmax);
     std::size_t start = xx.size() - 1;
     std::size_t end = xx.size() > bmax/mmax ? xx.size() - bmax/mmax : 0;
-    for (long long i = start; i >= end; i--)
+    for (long long i = start; i >= (long long)end; i--)
 	xx1->push_back(xx[i].second);
     return std::tuple<std::unique_ptr<SizeListList>, std::size_t>(std::move(xx1), s);
 }
