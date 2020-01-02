@@ -5,24 +5,25 @@ project(AlignmentRepaC)
 
 # specify the C++ standard
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package (Threads)
 
 add_subdirectory(../AlignmentC ../AlignmentC_build)
 
 include_directories(../rapidjson/include ../AlignmentC)
 
-add_library(libAlignmentRepaC AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp)
+add_library(AlignmentRepaC AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp)
 
-add_executable(AlignmentRepaC main.cpp)
+add_executable(AlignmentRepaC_test main.cpp)
 
-target_link_libraries(AlignmentRepaC PUBLIC libAlignmentC libAlignmentRepaC)
+target_link_libraries(AlignmentRepaC_test PUBLIC AlignmentRepaC AlignmentC Threads::Threads)
 
-target_include_directories(AlignmentRepaC PUBLIC
+target_include_directories(AlignmentRepaC_test PUBLIC
                           "${PROJECT_BINARY_DIR}"
                           )
 
-install(TARGETS AlignmentRepaC DESTINATION bin)
-install(TARGETS libAlignmentRepaC DESTINATION lib)
+install(TARGETS AlignmentRepaC DESTINATION lib)
 install(FILES AlignmentRepa.h AlignmentAesonRepa.h AlignmentRandomRepa.h AlignmentPracticableRepa.h AlignmentPracticableIORepa.h
   DESTINATION include
   )
