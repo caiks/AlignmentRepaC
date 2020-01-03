@@ -6,67 +6,77 @@ The AlignmentRepaC repository is a fast C++ implementation of some of the *pract
 
 The `AlignmentRepaC` module requires [modern C++](https://en.cppreference.com/w/) version 17 or later to be installed.
 
-For example in Ubuntu,
+For example, in Ubuntu bionic (18.04),
 ```
-sudo apt-get update -y
-sudo apt install -y g++
+sudo apt-get update -y && sudo apt install -y git g++ cmake
+
 ```
 Then download the zip file or use git to get the underlying rapidjson and AlignmentC repositories, and the AlignmentRepaC repository -
 ```
 git clone https://github.com/Tencent/rapidjson.git
 git clone https://github.com/caiks/AlignmentC.git
 git clone https://github.com/caiks/AlignmentRepaC.git
+
 ```
 
 ## Build
 
 Ubuntu debug -
 ```sh
-cd AlignmentC
-
-g++ -I../rapidjson/include -std=gnu++17 -g -c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
-
-cd ../AlignmentRepaC
-
-g++ -I../rapidjson/include -I../AlignmentC -std=gnu++17 -g -o main main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC/AlignmentUtil.o ../AlignmentC/Alignment.o ../AlignmentC/AlignmentApprox.o ../AlignmentC/AlignmentAeson.o
-
-./main
+mkdir AlignmentC_build AlignmentRepaC_build
+cd AlignmentRepaC_build
+cmake -DCMAKE_BUILD_TYPE=DEBUG ../AlignmentRepaC
+make
 
 ```
 Ubuntu release -
 ```sh
-cd AlignmentC
-
-g++ -I../rapidjson/include -std=gnu++17 -O3 -c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
-
-cd ../AlignmentRepaC
-
-g++ -I../rapidjson/include -I../AlignmentC -std=gnu++17 -O3 -o main main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC/AlignmentUtil.o ../AlignmentC/Alignment.o ../AlignmentC/AlignmentApprox.o ../AlignmentC/AlignmentAeson.o
-
-./main
+mkdir AlignmentC_build AlignmentRepaC_build
+cd AlignmentRepaC_build
+cmake -DCMAKE_BUILD_TYPE=RELEASE ../AlignmentRepaC
+make
 
 ```
 Windows debug -
 ```sh
-cd AlignmentC-master
+mkdir AlignmentC_build AlignmentRepaC_build
+cd /d AlignmentRepaC_build
+"C:\Program Files\CMake\bin\cmake" -G "Visual Studio 14 2015" -A x64 ../AlignmentRepaC
+"C:\Program Files\CMake\bin\cmake" --build . --config Debug
 
-cl -I../rapidjson-master/include /EHsc /DEBUG /Zi /c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
-
-cd ..\AlignmentRepaC-master
-
-cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /DEBUG /Zi main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC-master/AlignmentUtil.obj ../AlignmentC-master/Alignment.obj ../AlignmentC-master/AlignmentApprox.obj ../AlignmentC-master/AlignmentAeson.obj 
-
-main
 ```
 Windows release -
 ```sh
-cd AlignmentC-master
+mkdir AlignmentC_build AlignmentRepaC_build
+cd /d AlignmentRepaC_build
+"C:\Program Files\CMake\bin\cmake" -G "Visual Studio 14 2015" -A x64 ../AlignmentRepaC
+"C:\Program Files\CMake\bin\cmake" --build . --config Release
 
-cl -I../rapidjson-master/include /EHsc /O2 /c AlignmentUtil.cpp Alignment.cpp AlignmentApprox.cpp AlignmentAeson.cpp 
+```
 
-cd ..\AlignmentRepaC-master
+## Usage
 
-cl -IC:../rapidjson-master/include -I../AlignmentC-master /EHsc /O2 main.cpp AlignmentRepa.cpp AlignmentAesonRepa.cpp AlignmentRandomRepa.cpp AlignmentPracticableRepa.cpp AlignmentPracticableIORepa.cpp ../AlignmentC-master/AlignmentUtil.obj ../AlignmentC-master/Alignment.obj ../AlignmentC-master/AlignmentApprox.obj ../AlignmentC-master/AlignmentAeson.obj 
+Ubuntu -
+```sh
+cd ..
+mkdir AlignmentRepaC_run
+cd AlignmentRepaC_run
+../AlignmentRepaC_build/AlignmentRepaC_test 
 
-main
+```
+Windows debug -
+```sh
+cd ..
+mkdir AlignmentRepaC_run
+cd AlignmentRepaC_run
+..\AlignmentRepaC_build\Debug\AlignmentRepaC_test.exe
+
+```
+Windows release -
+```sh
+cd ..
+mkdir AlignmentRepaC_run
+cd AlignmentRepaC_run
+..\AlignmentRepaC_build\Release\AlignmentRepaC_test.exe 
+
 ```
