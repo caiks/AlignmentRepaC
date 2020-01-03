@@ -42,7 +42,7 @@ Windows debug -
 mkdir AlignmentC_build AlignmentRepaC_build
 cd /d AlignmentRepaC_build
 "C:\Program Files\CMake\bin\cmake" -G "Visual Studio 14 2015" -A x64 ../AlignmentRepaC
-"C:\Program Files\CMake\bin\cmake" --build . --config Debug
+"C:\Program Files\CMake\bin\cmake" --build . --config Debug --target AlignmentRepaC_test
 
 ```
 Windows release -
@@ -50,7 +50,7 @@ Windows release -
 mkdir AlignmentC_build AlignmentRepaC_build
 cd /d AlignmentRepaC_build
 "C:\Program Files\CMake\bin\cmake" -G "Visual Studio 14 2015" -A x64 ../AlignmentRepaC
-"C:\Program Files\CMake\bin\cmake" --build . --config Release
+"C:\Program Files\CMake\bin\cmake" --build . --config Release --target AlignmentRepaC_test
 
 ```
 
