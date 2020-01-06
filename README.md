@@ -59,24 +59,24 @@ cd /d AlignmentRepaC_build
 Ubuntu -
 ```sh
 cd ..
-mkdir AlignmentRepaC_run
-cd AlignmentRepaC_run
+mkdir AlignmentRepaC_ws
+cd AlignmentRepaC_ws
 ../AlignmentRepaC_build/AlignmentRepaC_test 
 
 ```
 Windows debug -
 ```sh
 cd ..
-mkdir AlignmentRepaC_run
-cd AlignmentRepaC_run
+mkdir AlignmentRepaC_ws
+cd AlignmentRepaC_ws
 ..\AlignmentRepaC_build\Debug\AlignmentRepaC_test.exe
 
 ```
 Windows release -
 ```sh
 cd ..
-mkdir AlignmentRepaC_run
-cd AlignmentRepaC_run
+mkdir AlignmentRepaC_ws
+cd AlignmentRepaC_ws
 ..\AlignmentRepaC_build\Release\AlignmentRepaC_test.exe 
 
 ```
