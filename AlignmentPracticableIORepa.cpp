@@ -2089,6 +2089,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
     std::map<std::string, double> time;
     std::cout << ">>> applicationer" << std::endl;
     auto n = vv.size();
+    std::size_t tint1 = std::min(tint, n);
     auto& llu = ur.listVarSizePair;
     auto n0 = hr0.dimension;
     auto z = hr0.size;
@@ -2183,21 +2184,21 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
 	    return dr;
 	}
-	auto ee = new double[tint];
-	auto ii1 = new std::size_t[tint];
+	auto ee = new double[tint1];
+	auto ii1 = new std::size_t[tint1];
 	std::vector<std::thread> threads;
-	threads.reserve(tint);
-	for (std::size_t t = 0; t < tint; t++)
+	threads.reserve(tint1);
+	for (std::size_t t = 0; t < tint1; t++)
 	{
 	    ee[t] = e0;
 	    ii1[t] = 0;
-	    threads.push_back(std::thread(root, tint, n, z, vv1, sh1, rr1, ms, l, ls, t, ee, ii1));
+	    threads.push_back(std::thread(root, tint1, n, z, vv1, sh1, rr1, ms, l, ls, t, ee, ii1));
 	}
 	for (auto& t : threads)
 	    t.join();
 	double e = e0;
 	std::size_t i1 = 0;
-	for (std::size_t t = 0; t < tint; t++)
+	for (std::size_t t = 0; t < tint1; t++)
 	    if (e > ee[t])
 	    {
 		e = ee[t];
@@ -2355,21 +2356,21 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplica
 	for (std::size_t k = 0; k < ls; k++)
 	    e0 -= alngam((double)ee0[k]);
 	delete ee0;
-	auto ee = new double[tint];
-	auto ii1 = new std::size_t[tint];
+	auto ee = new double[tint1];
+	auto ii1 = new std::size_t[tint1];
 	std::vector<std::thread> threads;
-	threads.reserve(tint);
-	for (std::size_t t = 0; t < tint; t++)
+	threads.reserve(tint1);
+	for (std::size_t t = 0; t < tint1; t++)
 	{
 	    ee[t] = e0;
 	    ii1[t] = 0;
-	    threads.push_back(std::thread(child, tint, n, z, i2z, vv1, sh1, rr1, ms, l, ls, t, ee, ii1));
+	    threads.push_back(std::thread(child, tint1, n, z, i2z, vv1, sh1, rr1, ms, l, ls, t, ee, ii1));
 	}
 	for (auto& t : threads)
 	    t.join();
 	double e = e0;
 	std::size_t i1 = 0;
-	for (std::size_t t = 0; t < tint; t++)
+	for (std::size_t t = 0; t < tint1; t++)
 	    if (e > ee[t])
 	    {
 		e = ee[t];
