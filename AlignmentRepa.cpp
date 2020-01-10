@@ -1,6 +1,7 @@
 ﻿#include "AlignmentApprox.h"
 #include "AlignmentRepa.h"
 
+#include <thread>
 #include <cstring>
 #include <iostream>
 
@@ -1607,103 +1608,217 @@ std::unique_ptr<SizeTransformRepaPtrMap> Alignment::fudRepasDefinitions(const Fu
 }
 
 
-// historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
-// cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
-std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
-{
-    auto n = hr.dimension;
-    auto vv = hr.vectorVar;
-    auto svv = hr.shape;
-    auto z = hr.size;
-    auto rr = hr.arr;
-    auto hr1 = std::make_unique<HistoryRepa>();
-    auto n1 = n;
-    for (auto& ll : fr.layers)
-	n1 += ll.size();
-    hr1->dimension = n1;
-    hr1->vectorVar = new std::size_t[n1];
-    auto kk = hr1->vectorVar;
-    hr1->shape = new std::size_t[n1];
-    auto skk = hr1->shape;
-    for (std::size_t i = 0; i < n; i++)
+    // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
+    // cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
     {
-	kk[i] = vv[i];
-	skk[i] = svv[i];
+	auto n = hr.dimension;
+	auto vv = hr.vectorVar;
+	auto svv = hr.shape;
+	auto z = hr.size;
+	auto rr = hr.arr;
+	auto hr1 = std::make_unique<HistoryRepa>();
+	auto n1 = n;
+	for (auto& ll : fr.layers)
+	    n1 += ll.size();
+	hr1->dimension = n1;
+	hr1->vectorVar = new std::size_t[n1];
+	auto kk = hr1->vectorVar;
+	hr1->shape = new std::size_t[n1];
+	auto skk = hr1->shape;
+	for (std::size_t i = 0; i < n; i++)
+	{
+	    kk[i] = vv[i];
+	    skk[i] = svv[i];
+	}
+	std::size_t mmax = 1;
+	auto p = n;
+	for (auto& ll : fr.layers)
+	    for (auto& tr : ll)
+	    {
+		kk[p] = tr->derived;
+		skk[p] = tr->valency;
+		p++;
+		if (mmax < tr->dimension)
+		    mmax = tr->dimension;
+	    }
+	hr1->size = z;
+	auto& mkk = hr1->mapVarInt();
+	hr1->evient = hr.evient;
+	hr1->arr = new unsigned char[z*p];
+	auto rr1 = hr1->arr;
+	if (hr.evient)
+	    for (std::size_t j = 0; j < z; j++)
+	    {
+		std::size_t jn = j*n;
+		std::size_t jp = j*p;
+		for (std::size_t i = 0; i < n; i++)
+		    rr1[jp + i] = rr[jn + i];
+	    }
+	else
+	    memcpy(rr1, rr, z*n);
+	std::size_t* pkk = new std::size_t[mmax];
+	auto q = n;
+	for (auto& ll : fr.layers)
+	    for (auto& tr : ll)
+	    {
+		auto m = tr->dimension;
+		auto ww = tr->vectorVar;
+		auto sh = tr->shape;
+		auto ar = tr->arr;
+		for (std::size_t i = 0; i < m; i++)
+		    pkk[i] = mkk[ww[i]];
+		if (hr.evient)
+		{
+		    if (m > 0)
+			for (std::size_t j = 0; j < z; j++)
+			{
+			    std::size_t jp = j*p;
+			    std::size_t k = rr1[jp + pkk[0]];
+			    for (std::size_t i = 1; i < m; i++)
+				k = sh[i] * k + rr1[jp + pkk[i]];
+			    rr1[jp + q] = ar[k];
+			}
+		    else
+			for (std::size_t j = 0; j < z; j++)
+			    rr1[j*p + q] = 0;
+		}
+		else
+		{
+		    std::size_t qz = q*z;
+		    if (m > 0)
+			for (std::size_t j = 0; j < z; j++)
+			{
+			    std::size_t k = rr1[pkk[0] * z + j];
+			    for (std::size_t i = 1; i < m; i++)
+				k = sh[i] * k + rr1[pkk[i] * z + j];
+			    rr1[qz + j] = ar[k];
+			}
+		    else
+			for (std::size_t j = 0; j < z; j++)
+			    rr1[qz + j] = 0;
+		}
+		q++;
+	    }
+	delete[] pkk;
+	return hr1;
     }
-    std::size_t mmax = 1;
-    auto p = n;
-    for (auto& ll : fr.layers)
-	for (auto& tr : ll)
-	{
-	    kk[p] = tr->derived;
-	    skk[p] = tr->valency;
-	    p++;
-	    if (mmax < tr->dimension)
-		mmax = tr->dimension;
-	}
-    hr1->size = z;
-    auto& mkk = hr1->mapVarInt();
-    hr1->evient = hr.evient;
-    hr1->arr = new unsigned char[z*p];
-    auto rr1 = hr1->arr;
-    if (hr.evient)
-	for (std::size_t j = 0; j < z; j++)
-	{
-	    std::size_t jn = j*n;
-	    std::size_t jp = j*p;
-	    for (std::size_t i = 0; i < n; i++)
-		rr1[jp + i] = rr[jn + i];
-	}
-    else
-	memcpy(rr1, rr, z*n);
-    std::size_t* pkk = new std::size_t[mmax];
-    auto q = n;
-    for (auto& ll : fr.layers)
-	for (auto& tr : ll)
-	{
-	    auto m = tr->dimension;
-	    auto ww = tr->vectorVar;
-	    auto sh = tr->shape;
-	    auto ar = tr->arr;
-	    for (std::size_t i = 0; i < m; i++)
-		pkk[i] = mkk[ww[i]];
-	    if (hr.evient)
-	    {
-		if (m > 0)
-		    for (std::size_t j = 0; j < z; j++)
-		    {
-			std::size_t jp = j*p;
-			std::size_t k = rr1[jp + pkk[0]];
-			for (std::size_t i = 1; i < m; i++)
-			    k = sh[i] * k + rr1[jp + pkk[i]];
-			rr1[jp + q] = ar[k];
-		    }
-		else
-		    for (std::size_t j = 0; j < z; j++)
-			rr1[j*p + q] = 0;
-	    }
-	    else
-	    {
-		std::size_t qz = q*z;
-		if (m > 0)
-		    for (std::size_t j = 0; j < z; j++)
-		    {
-			std::size_t k = rr1[pkk[0] * z + j];
-			for (std::size_t i = 1; i < m; i++)
-			    k = sh[i] * k + rr1[pkk[i] * z + j];
-			rr1[qz + j] = ar[k];
-		    }
-		else
-		    for (std::size_t j = 0; j < z; j++)
-			rr1[qz + j] = 0;
-	    }
-	    q++;
-	}
-    delete[] pkk;
-    return hr1;
-}
 
-typedef std::shared_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> HistoryRepaPtrFudRepaPtrPairTreePtr;
+    void historyRepasFudRepasMultiply_up_layer(std::size_t tint, std::size_t mmax, SizeSizeUMap* mkk, std::size_t p, HistoryRepa* hr, std::size_t q, TransformRepaPtrList* ll, std::size_t t)
+    {
+	auto z = hr->size;
+	auto rr1 = hr->arr;
+	std::size_t* pkk = new std::size_t[mmax];
+	for (std::size_t i = 0; i < ll->size(); i++)
+	    if (i % tint == t)
+	    {
+		auto tr = (*ll)[i];
+		auto m = tr->dimension;
+		auto ww = tr->vectorVar;
+		auto sh = tr->shape;
+		auto ar = tr->arr;
+		for (std::size_t i = 0; i < m; i++)
+		    pkk[i] = (*mkk)[ww[i]];
+		if (hr->evient)
+		{
+		    if (m > 0)
+			for (std::size_t j = 0; j < z; j++)
+			{
+			    std::size_t jp = j*p;
+			    std::size_t k = rr1[jp + pkk[0]];
+			    for (std::size_t i = 1; i < m; i++)
+				k = sh[i] * k + rr1[jp + pkk[i]];
+			    rr1[jp + q+i] = ar[k];
+			}
+		    else
+			for (std::size_t j = 0; j < z; j++)
+			    rr1[j*p + q+i] = 0;
+		}
+		else
+		{
+		    std::size_t qz = (q+i)*z;
+		    if (m > 0)
+			for (std::size_t j = 0; j < z; j++)
+			{
+			    std::size_t k = rr1[pkk[0] * z + j];
+			    for (std::size_t i = 1; i < m; i++)
+				k = sh[i] * k + rr1[pkk[i] * z + j];
+			    rr1[qz + j] = ar[k];
+			}
+		    else
+			for (std::size_t j = 0; j < z; j++)
+			    rr1[qz + j] = 0;
+		}
+	    }
+	delete[] pkk;
+    }
+
+    // historyRepasFudRepasMultiply_up :: Int -> HistoryRepa -> FudRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_up(std::size_t tint, const HistoryRepa& hr, const FudRepa& fr)
+    {
+	auto layer = historyRepasFudRepasMultiply_up_layer;
+
+	auto n = hr.dimension;
+	auto vv = hr.vectorVar;
+	auto svv = hr.shape;
+	auto z = hr.size;
+	auto rr = hr.arr;
+	auto hr1 = std::make_unique<HistoryRepa>();
+	auto n1 = n;
+	for (auto& ll : fr.layers)
+	    n1 += ll.size();
+	hr1->dimension = n1;
+	hr1->vectorVar = new std::size_t[n1];
+	auto kk = hr1->vectorVar;
+	hr1->shape = new std::size_t[n1];
+	auto skk = hr1->shape;
+	for (std::size_t i = 0; i < n; i++)
+	{
+	    kk[i] = vv[i];
+	    skk[i] = svv[i];
+	}
+	std::size_t mmax = 1;
+	auto p = n;
+	for (auto& ll : fr.layers)
+	    for (auto& tr : ll)
+	    {
+		kk[p] = tr->derived;
+		skk[p] = tr->valency;
+		p++;
+		if (mmax < tr->dimension)
+		    mmax = tr->dimension;
+	    }
+	hr1->size = z;
+	auto& mkk = hr1->mapVarInt();
+	hr1->evient = hr.evient;
+	hr1->arr = new unsigned char[z*p];
+	auto rr1 = hr1->arr;
+	if (hr.evient)
+	    for (std::size_t j = 0; j < z; j++)
+	    {
+		std::size_t jn = j*n;
+		std::size_t jp = j*p;
+		for (std::size_t i = 0; i < n; i++)
+		    rr1[jp + i] = rr[jn + i];
+	    }
+	else
+	    memcpy(rr1, rr, z*n);
+	auto q = n;
+	for (auto& ll : fr.layers)
+	{
+	    std::size_t tint1 = std::min(tint, ll.size());
+	    std::vector<std::thread> threads;
+	    threads.reserve(tint1);
+	    for (std::size_t t = 0; t < tint1; t++)
+		threads.push_back(std::thread(layer, tint1, mmax, (SizeSizeUMap*)&mkk, p, hr1.get(), q, (TransformRepaPtrList*)&ll, t));
+	    for (auto& t : threads)
+		t.join();
+	    q += ll.size();
+	}
+	return hr1;
+    }
+
+    typedef std::shared_ptr<Tree<HistoryRepaPtrFudRepaPtrPair>> HistoryRepaPtrFudRepaPtrPairTreePtr;
 typedef std::pair<HistoryRepaPtrFudRepaPtrPair, HistoryRepaPtrFudRepaPtrPairTreePtr> HistoryRepaPtrFudRepaPtrPairTreePtrPair;
 
 // systemsStateFudPairTreesHistoryRepaFudRepaPairTree_u :: Tree (State,Fud) -> Tree (HistoryRepa,FudRepa)

@@ -302,6 +302,9 @@ namespace Alignment
 
     // historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
     std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_u(const HistoryRepa&, const FudRepa&);
+
+    // historyRepasFudRepasMultiply_up :: Int -> HistoryRepa -> FudRepa -> HistoryRepa
+    std::unique_ptr<HistoryRepa> historyRepasFudRepasMultiply_up(std::size_t tint, const HistoryRepa&, const FudRepa&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::FudRepa&);
