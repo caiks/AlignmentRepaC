@@ -949,7 +949,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     auto hrconcat = vectorHistoryRepasConcat_u;
     auto hrshuffle = historyRepasShuffle_u;
     auto llfr = setVariablesListTransformRepasFudRepa_u;
-    auto frmul = historyRepasFudRepasMultiply_u;
+    auto frmul = historyRepasFudRepasMultiply_up;
     auto frdep = fudRepasSetVarsDepends;
     auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_up;
 
@@ -977,7 +977,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     }
     auto mark = clk::now();
     std::cout << ">>> applier " << std::endl;
-    std::shared_ptr<HistoryRepa> hr2 = hrhrred(vv.size(), vv.data(), *frmul(hr0, er));
+    std::shared_ptr<HistoryRepa> hr2 = hrhrred(vv.size(), vv.data(), *frmul(tint, hr0, er));
     std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
     mark = clk::now();
     std::size_t f = 1;
@@ -1029,12 +1029,12 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<HistoryRepa> hrs;
 	if (er0)
 	{
-	    hr = frmul(hr0, *er0);
-	    hrs = frmul(*hrs0, *er0);
+	    hr = frmul(tint, hr0, *er0);
+	    hrs = frmul(tint, *hrs0, *er0);
 	}
 	else
 	{
-	    hrs = hrhrred(vv.size(), vv.data(), *frmul(*hrs0, er));
+	    hrs = hrhrred(vv.size(), vv.data(), *frmul(tint, *hrs0, er));
 	}
 	hrs0.reset();
 	time["applier"] = ((sec)(clk::now() - mark)).count();
@@ -1080,7 +1080,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeUSet kk1(kk.begin(), kk.end());
 	auto gr = llfr(vv1, *frdep(*fr, kk1));
-	auto ar = hrred(1.0, m, kk.data(), *frmul(*hr, *gr));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(tint, *hr, *gr));
 	SizeList sl;
 	TransformRepaPtrList ll;
 	std::size_t sz = 1;
@@ -1163,7 +1163,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     {
 	mark = clk::now();
 	std::cout << ">>> applier " << std::endl;
-	auto hr = frmul(*hr2, *dr->fud);
+	auto hr = frmul(tint, *hr2, *dr->fud);
 	time["applier"] = ((sec)(clk::now() - mark)).count();
 	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
 	mark = clk::now();
@@ -1278,12 +1278,12 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<HistoryRepa> hrs;
 	if (er0)
 	{
-	    hr = frmul(*hr1, *er0);
-	    hrs = frmul(*hrs1, *er0);
+	    hr = frmul(tint, *hr1, *er0);
+	    hrs = frmul(tint, *hrs1, *er0);
 	}
 	else
 	{
-	    hrs = hrhrred(vv.size(), vv.data(), *frmul(*hrs1, er));
+	    hrs = hrhrred(vv.size(), vv.data(), *frmul(tint, *hrs1, er));
 	}
 	hr1.reset();
 	hrs1.reset();
@@ -1331,7 +1331,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	auto vfl = std::make_shared<Variable>(vdf, vl);
 	SizeUSet kk1(kk.begin(), kk.end());
 	auto gr = llfr(vv1, *frdep(*fr, kk1));
-	auto ar = hrred(1.0, m, kk.data(), *frmul(*hr, *gr));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(tint, *hr, *gr));
 	SizeList sl;
 	TransformRepaPtrList ll;
 	std::size_t sz = 1;
@@ -1405,8 +1405,29 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	    sl.push_back(w);
 	    ll.push_back(tr);
 	}
-	dr->fud->layers.insert(dr->fud->layers.end(), gr->layers.begin(), gr->layers.end());
-	dr->fud->layers.push_back(ll);
+	for (std::size_t i = 0; i < gr->layers.size(); i++)
+	{
+	    if (i < dr->fud->layers.size())
+		dr->fud->layers[i].insert(dr->fud->layers[i].end(), gr->layers[i].begin(), gr->layers[i].end());
+	    else
+		dr->fud->layers.push_back(gr->layers[i]);
+	}
+	{
+	    bool found = false;
+	    std::size_t i = 0;
+	    for (i = 0; !found && i < dr->fud->layers.size(); i++)
+		for (auto tr : dr->fud->layers[i])
+		    if (tr->derived == v)
+		    {
+			found = true;
+			break;
+		    }
+	    i = std::max(i+1, gr->layers.size());
+	    if (i < dr->fud->layers.size())
+		dr->fud->layers[i].insert(dr->fud->layers[i].end(), ll.begin(), ll.end());
+	    else
+		dr->fud->layers.push_back(ll);
+	}
 	for (auto& p : *nn)
 	    if (p.first == v)
 	    {

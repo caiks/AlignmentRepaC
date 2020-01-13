@@ -2605,7 +2605,7 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     std::sort(qq1.begin(), qq1.end());
     auto qq = std::make_unique<DoubleSizeListPairList>();
     for (std::size_t i = j - std::min(j, omax); i < j; i++)
-	qq->push_back(DoubleSizeListPair(qq1[i].first,qq2[i]));
+	qq->push_back(DoubleSizeListPair(qq1[i].first,qq2[qq1[i].second]));
     delete[] s;
     delete[] t;
     delete[] ts1;
