@@ -11,6 +11,12 @@ namespace Alignment
     //   ([[VariableRepa]],Integer)
     std::tuple<std::unique_ptr<SizeListList>, std::size_t> parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui(std::size_t, std::size_t, std::size_t, std::size_t, const SizeList&, const FudRepa&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
+    // parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_uip ::
+    //   Integer -> Integer -> Integer -> Integer -> Integer -> [VariableRepa] -> Fud ->
+    //   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
+    //   ([[VariableRepa]],Integer)
+    std::tuple<std::unique_ptr<SizeListList>, std::size_t> parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_uip(std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, const SizeList&, const FudRepa&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
+
     // parametersSystemsPartitionerMaxRollByMRepa_ui ::
     //   Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistoryRepa -> 
     //   ([[[VariableRepa]]],Integer)

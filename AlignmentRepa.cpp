@@ -2387,6 +2387,129 @@ std::size_t listVarsArrayHistoryVarientAlignedTop_u(
     return t;
 }
 
+void listVarsArrayHistoryVarientAlignedTop_up(
+    std::size_t xmax, std::size_t omax, std::size_t tint, std::size_t n, std::size_t* svv, std::size_t m, std::size_t z1, std::size_t z2,
+    std::size_t* ppww, unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
+    std::size_t h, std::size_t* tww1, std::size_t* tww2, double* ts1, std::size_t* t, std::size_t* s)
+{
+    double* aa = new double[xmax];
+    double** xx1 = new double*[n];
+    double** xx2 = new double*[n];
+    double zf = (double)z1;
+    double f = (double)z1 / (double)z2;
+    double t1;
+    std::size_t tm;
+    double x1;
+    double x2;
+    double a1;
+    double a2;
+    double b1;
+    double b2;
+    std::size_t ii;
+    std::size_t ij;
+    std::size_t pi;
+    std::size_t pj;
+    std::size_t qi;
+    std::size_t qj;
+    std::size_t si;
+    std::size_t sj;
+    std::size_t u;
+    std::size_t i;
+    std::size_t j;
+    std::size_t k;
+    std::size_t a;
+
+    for (k = 1, a = svv[0], xx1[0] = pxx1, xx2[0] = pxx2; k<n; k++)
+    {
+	xx1[k] = pxx1 + a;
+	xx2[k] = pxx2 + a;
+	a += svv[k];
+    }
+
+    for (ii = 0; ii<m-1; ii++)
+	if (ii % tint == h)
+	{
+	    pi = ppww[ii];
+	    si = svv[pi];
+	    for (ij = ii + 1; ij<m; ij++)
+	    {
+		pj = ppww[ij];
+		sj = svv[pj];
+		u = si*sj;
+		if (u <= xmax)
+		{
+		    s[h]++;
+		    for (i = 0; i<u; i++)
+			aa[i] = 1.0;
+		    qi = z1*pi;
+		    qj = z1*pj;
+		    for (j = 0; j < z1; j++)
+			aa[sj*phh1[qi + j] + phh1[qj + j]] += 1.0;
+		    for (a1 = 0.0, i = 0; i<u; i++)
+			a1 += alngam(aa[i]);
+		    for (i = 0; i<u; i++)
+			aa[i] = 1.0;
+		    qi = z2*pi;
+		    qj = z2*pj;
+		    for (j = 0; j < z2; j++)
+			aa[sj*phh2[qi + j] + phh2[qj + j]] += f;
+		    for (b1 = 0.0, i = 0; i<u; i++)
+			b1 += alngam(aa[i]);
+		    for (a2 = 0.0, b2 = 0.0, i = 0; i<si; i++)
+		    {
+			x1 = zf*xx1[pi][i];
+			x2 = zf*xx2[pi][i];
+			for (j = 0; j<sj; j++)
+			{
+			    a2 += alngam(x1*xx1[pj][j] + 1.0);
+			    b2 += alngam(x2*xx2[pj][j] + 1.0);
+			}
+		    }
+		    if (t[h]<omax)
+		    {
+			tww1[h*omax + t[h]] = pi;
+			tww2[h*omax + t[h]] = pj;
+			ts1[h*omax + t[h]] = a1 - a2 - b1 + b2;
+			t[h]++;
+			if (t[h] == omax)
+			{
+			    for (t1 = ts1[h*omax], tm = 0, i = 1; i<omax; i++)
+			    {
+				x1 = ts1[h*omax + i];
+				if (t1>x1)
+				{
+				    t1 = x1;
+				    tm = i;
+				}
+			    }
+			}
+		    }
+		    else
+		    {
+			x1 = a1 - a2 - b1 + b2;
+			if (t1<x1)
+			{
+			    tww1[h*omax + tm] = pi;
+			    tww2[h*omax + tm] = pj;
+			    ts1[h*omax + tm] = x1;
+			    for (t1 = ts1[h*omax], tm = 0, i = 1; i<omax; i++)
+			    {
+				x1 = ts1[h*omax + i];
+				if (t1>x1)
+				{
+				    t1 = x1;
+				    tm = i;
+				}
+			    }
+			}
+		    }
+		}
+	    }
+	}
+    delete[] xx2;
+    delete[] xx1;
+    delete[] aa;
+}
 
 // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->([(Double, [VariableRepa])],Integer)
 std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t xmax, std::size_t omax, const SizeList& ww, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
@@ -2426,6 +2549,70 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     delete[] tww1;
     delete[] pww;
     return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s);
+}
+
+// parametersSetVarsHistoryRepasSetSetVarsAlignedTop_up :: Integer -> Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->([(Double, [VariableRepa])],Integer)
+std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSetVarsHistoryRepasSetSetVarsAlignedTop_up(std::size_t xmax, std::size_t omax, std::size_t tint, const SizeList& ww, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+{
+    if (hh.evient)
+	throw std::out_of_range("parametersSetVarsHistoryRepasSetSetVarsAlignedTop_up");
+    auto n = hh.dimension;
+    auto vhh = hh.vectorVar;
+    auto& mvv = hh.mapVarInt();
+    auto svv = hh.shape;
+    auto z = hh.size;
+    auto phh1 = hh.arr;
+    auto zrr = hhrr.size;
+    auto pxx1 = hhx.arr;
+    auto phh2 = hhrr.arr;
+    auto pxx2 = hhrrx.arr;
+    auto m = ww.size();
+    std::size_t tint1 = std::min(tint, m-1);
+    std::size_t* pww = new std::size_t[m];
+    for (std::size_t i = 0; i < m; i++)
+	pww[i] = mvv[ww[i]];
+    std::size_t* tww1 = new std::size_t[tint1*omax];
+    std::size_t* tww2 = new std::size_t[tint1*omax];
+    double* ts1 = new double[tint1*omax];
+    std::size_t* s = new std::size_t[tint1];
+    std::size_t* t = new std::size_t[tint1];
+    std::vector<std::thread> threads;
+    threads.reserve(tint1);
+    for (std::size_t h = 0; h < tint1; h++)
+    {
+	s[h] = 0;
+	t[h] = 0;
+	threads.push_back(std::thread(listVarsArrayHistoryVarientAlignedTop_up, xmax, omax, tint1, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+    }
+    for (auto& h : threads)
+	h.join();
+    std::size_t s1 = 0;
+    DoubleSizePairList qq1;
+    qq1.reserve(tint1*omax);
+    SizeListList qq2;
+    qq2.reserve(tint1*omax);
+    std::size_t j = 0;
+    for (std::size_t h = 0; h < tint1; h++)
+    {
+	for (std::size_t i = 0; i < t[h]; i++)
+	{
+	    qq1.push_back(DoubleSizePair(ts1[h*omax + i], j));
+	    qq2.push_back(SizeList{vhh[tww1[h*omax + i]],vhh[tww2[h*omax + i]]});
+	    j++;
+	}
+	s1 += s[h];
+    }
+    std::sort(qq1.begin(), qq1.end());
+    auto qq = std::make_unique<DoubleSizeListPairList>();
+    for (std::size_t i = j - std::min(j, omax); i < j; i++)
+	qq->push_back(DoubleSizeListPair(qq1[i].first,qq2[i]));
+    delete[] s;
+    delete[] t;
+    delete[] ts1;
+    delete[] tww2;
+    delete[] tww1;
+    delete[] pww;
+    return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s1);
 }
 
 inline void incIndex(std::size_t n, std::size_t* svv, std::size_t* ivv)

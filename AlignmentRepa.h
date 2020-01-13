@@ -360,6 +360,9 @@ namespace Alignment
     // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->([(Double, [VariableRepa])],Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
+    // parametersSetVarsHistoryRepasSetSetVarsAlignedTop_up :: Integer -> Integer -> Integer -> Integer -> [VariableRepa] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->([(Double, [VariableRepa])],Integer)
+    std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsHistoryRepasSetSetVarsAlignedTop_up(std::size_t, std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
+
     // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa])],Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
