@@ -234,7 +234,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
     auto tupler = parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_uip;
     auto parter = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
     auto roller = histogramRepaVecsRollMax;
-    auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui;
+    auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_uip;
 
     auto t0 = clk::now();
     std::cout << ">>> layerer" << std::endl;
@@ -398,7 +398,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	    prs1 = hrpr(*hrs1);
 	    fr->layers.push_back(ll);
 	    mark = clk::now();
-	    auto tt5 = deriveder(wmax, omax, *fr, *hr1, *pr1, *hrs1, *prs1);
+	    auto tt5 = deriveder(wmax, omax, tint, *fr, *hr1, *pr1, *hrs1, *prs1);
 	    time["dervarser"] += ((sec)(clk::now() - mark)).count();
 	    steps["dervarser"] += std::get<1>(tt5);
 	    auto& mm1 = std::get<0>(tt5);

@@ -295,3 +295,77 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(xx2), s);
 }
 
+// parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_uip ::
+//   Integer -> Integer -> Integer -> [VariableRepa] -> Fud ->
+//   HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed ->
+//   ([(Double, [VariableRepa]],Integer)
+std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_uip(std::size_t wmax, std::size_t omax, std::size_t tint, const FudRepa& fr, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+{
+    auto fsize = fudRepasSize;
+    auto append = parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_up;
+
+    auto l = fsize(fr);
+    SizeUSet wwf;
+    wwf.reserve(l);
+    SizeList yy;
+    yy.reserve(l);
+    SizeSizeSetMap mm;
+    bool first = true;
+    for (auto& ll : fr.layers)
+    {
+	for (auto& tt : ll)
+	{
+	    auto& w = tt->derived;
+	    yy.push_back(w);
+	    wwf.insert(w);
+	    auto& nn = mm[w];
+	    if (!first)
+	    {
+		auto m = tt->dimension;
+		auto& zz = tt->vectorVar;
+		for (std::size_t i = 0; i < m; i++)
+		{
+		    auto& v = zz[i];
+		    wwf.erase(v);
+		    nn.insert(v);
+		    auto it = mm.find(v);
+		    if (it != mm.end())
+			nn.insert(it->second.begin(), it->second.end());
+		}
+	    }
+	}
+	first = false;
+    }
+    SizeSizePairList cc;
+    for (auto& pp : mm)
+    {
+	auto& w = pp.first;
+	for (auto& v : pp.second)
+	    cc.push_back(SizeSizePair(w, v));
+    }
+    std::size_t s = 0;
+    DoubleSizeListPairList xx;
+    xx.reserve(omax * 10);
+    SizeListList xx1;
+    xx1.reserve(wwf.size());
+    for (auto& w : wwf)
+	xx1.push_back(SizeList{ w });
+    while (xx1.size())
+    {
+	auto t = append(wmax, omax, tint, cc, yy, xx1, hh, hhx, hhrr, hhrrx);
+	auto& xa = std::get<0>(t);
+	s += std::get<1>(t);
+	xx.insert(xx.end(), xa->begin(), xa->end());
+	xx1.clear();
+	xx1.reserve(xa->size());
+	for (auto& pp : *xa)
+	    xx1.push_back(pp.second);
+    }
+    std::sort(xx.begin(), xx.end());
+    auto xx2 = std::make_unique<DoubleSizeListPairList>();
+    xx2->reserve(1);
+    if (xx.size())
+	xx2->push_back(xx.back());
+    return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(xx2), s);
+}
+

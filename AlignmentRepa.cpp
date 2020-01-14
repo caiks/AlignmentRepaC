@@ -4742,6 +4742,234 @@ std::size_t listVarsListTuplesArrayHistoryVarientsAlignedExcludeHiddenTop_u(
     return t;
 }
 
+void listVarsListTuplesArrayHistoryVarientsAlignedExcludeHiddenTop_up(
+    unsigned char dense,
+    std::size_t xmax, std::size_t omax, std::size_t tint, std::size_t n, std::size_t* svv, std::size_t m, std::size_t d, std::size_t e,
+    std::size_t z1, std::size_t z2,
+    std::size_t ccl, std::size_t* ppccd, std::size_t* ppccu,
+    std::size_t* ppww, std::size_t* ppdd,
+    unsigned char* phh1, double* pxx1, unsigned char* phh2, double* pxx2,
+    std::size_t th, std::size_t* tww1, std::size_t* tww2, double* ts1, std::size_t* t, std::size_t* s)
+{
+    std::size_t findm = 0;
+    std::size_t** pdd = new std::size_t*[d];
+    double* aa = new double[xmax];
+    double** xx1 = new double*[n];
+    double** xx2 = new double*[n];
+    std::size_t* ppccx = new std::size_t[ccl];
+    std::size_t ccx;
+    std::size_t* ts4 = new std::size_t[omax];
+    double zf = (double)z1;
+    double f = (double)z1 / (double)z2;
+    double t1;
+    std::size_t tm;
+    double x1;
+    double x2;
+    double y1;
+    double y2;
+    std::size_t x4;
+    double c;
+    double a1;
+    double a2;
+    double b1;
+    double b2;
+    std::size_t ii;
+    std::size_t ij;
+    std::size_t pi;
+    std::size_t* pj;
+    std::size_t pk;
+    std::size_t qi;
+    std::size_t* qj = new std::size_t[e];
+    std::size_t qk;
+    std::size_t si;
+    std::size_t* sj = new std::size_t[e];
+    std::size_t* yj = new std::size_t[e];
+    std::size_t sk;
+    std::size_t yk;
+    std::size_t u;
+    std::size_t u1;
+    std::size_t i;
+    std::size_t j;
+    std::size_t k;
+    std::size_t h;
+    std::size_t a;
+    std::size_t ok;
+    std::size_t thomax = th*omax;
+
+    for (k = 1, a = svv[0], xx1[0] = pxx1, xx2[0] = pxx2; k<n; k++)
+    {
+	xx1[k] = pxx1 + a;
+	xx2[k] = pxx2 + a;
+	a += svv[k];
+    }
+
+    for (k = 0; k<d; k++)
+	pdd[k] = ppdd + e*k;
+
+    for (ii = 0; ii<m; ii++)
+	if (ii % tint == th)
+	{
+	    pi = ppww[ii];
+	    si = svv[pi];
+	    for (ccx = 0, h = 0; h < ccl; h++)
+		if (ppccu[h] == pi)
+		{
+		    ppccx[ccx] = ppccd[h];
+		    ccx++;
+		}
+		else if (ppccd[h] == pi)
+		{
+		    ppccx[ccx] = ppccu[h];
+		    ccx++;
+		}
+	    for (ij = 0; ij<d; ij++)
+	    {
+		pj = pdd[ij];
+		for (k = 0, ok = 1, u1 = 1; k<e; k++)
+		{
+		    pk = pj[k];
+		    if (pk == pi)
+			ok = 0;
+		    for (h = 0; h<ccx; h++)
+			if (pk == ppccx[h])
+			    ok = 0;
+		    if (!ok)
+			break;
+		    sk = svv[pk];
+		    sj[k] = sk;
+		    u1 *= sk;
+		}
+		u = u1*si;
+		if (ok && u <= xmax)
+		{
+		    s[th]++;
+		    x4 = hash(n, e, pi, pj);
+		    for (i = 0; i<t[th]; i++)
+			if (ts4[i] == x4 && isdup(e, pi, pj, ppww[tww1[thomax + i]], pdd[tww2[thomax + i]]))
+			{
+			    ok = 0;
+			    break;
+			}
+		    if (!ok)
+			continue;
+		    for (i = 0; i<u; i++)
+			aa[i] = 1.0;
+		    pk = pj[0];
+		    sk = sj[0];
+		    qi = z1*pi;
+		    qk = z1*pk;
+		    for (k = 1; k<e; k++)
+			qj[k] = z1*pj[k];
+		    for (j = 0; j<z1; j++)
+		    {
+			for (k = 1, a = sk*phh1[qi + j] + phh1[qk + j]; k<e; k++)
+			    a = sj[k] * a + phh1[qj[k] + j];
+			aa[a] += 1.0;
+		    }
+		    for (a1 = 0.0, i = 0; i<u; i++)
+			a1 += alngam(aa[i]);
+		    for (i = 0; i<u; i++)
+			aa[i] = 1.0;
+		    qi = z2*pi;
+		    qk = z2*pk;
+		    for (k = 1; k<e; k++)
+			qj[k] = z2*pj[k];
+		    for (j = 0; j<z2; j++)
+		    {
+			for (k = 1, a = sk*phh2[qi + j] + phh2[qk + j]; k<e; k++)
+			    a = sj[k] * a + phh2[qj[k] + j];
+			aa[a] += f;
+		    }
+		    for (b1 = 0.0, i = 0; i<u; i++)
+			b1 += alngam(aa[i]);
+		    for (k = 0; k<e; k++)
+			yj[k] = 0;
+		    for (a2 = 0.0, b2 = 0.0, i = 0; i<si; i++)
+		    {
+			y1 = zf*xx1[pi][i];
+			y2 = zf*xx2[pi][i];
+			for (j = 0; j<u1; j++)
+			{
+			    x1 = y1;
+			    x2 = y2;
+			    for (k = 0; k<e; k++)
+			    {
+				pk = pj[k];
+				yk = yj[k];
+				x1 *= xx1[pk][yk];
+				x2 *= xx2[pk][yk];
+			    }
+			    a2 += alngam(x1 + 1.0);
+			    b2 += alngam(x2 + 1.0);
+			    incIndex(e, sj, yj);
+			}
+		    }
+		    if (t[th]<omax)
+		    {
+			if (dense)
+			{
+			    c = pow((double)u, 1.0 / ((double)(e + 1)));
+			    x1 = (a1 - a2 - b1 + b2) / c;
+			}
+			else
+			{
+			    x1 = a1 - a2 - b1 + b2;
+			}
+			tww1[thomax + t[th]] = ii;
+			tww2[thomax + t[th]] = ij;
+			ts1[thomax + t[th]] = x1;
+			ts4[t[th]] = x4;
+			t[th]++;
+			if (t[th] == omax)
+			    findm = 1;
+		    }
+		    else
+		    {
+			if (dense)
+			{
+			    c = pow((double)u, 1.0 / ((double)(e + 1)));
+			    x1 = (a1 - a2 - b1 + b2) / c;
+			}
+			else
+			{
+			    x1 = a1 - a2 - b1 + b2;
+			}
+			if (t1<x1)
+			{
+			    tww1[thomax + tm] = ii;
+			    tww2[thomax + tm] = ij;
+			    ts1[thomax + tm] = x1;
+			    ts4[tm] = x4;
+			    findm = 1;
+			}
+		    }
+		    if (findm)
+		    {
+			for (t1 = ts1[thomax], tm = 0, i = 1; i<omax; i++)
+			{
+			    x1 = ts1[thomax + i];
+			    if (t1>x1)
+			    {
+				t1 = x1;
+				tm = i;
+			    }
+			}
+			findm = 0;
+		    }
+		}
+	    }
+	}
+    delete[] yj;
+    delete[] sj;
+    delete[] qj;
+    delete[] ts4;
+    delete[] ppccx;
+    delete[] xx2;
+    delete[] xx1;
+    delete[] aa;
+    delete[] pdd;
+}
+
 
 // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u :: Integer -> Integer -> [(Variable, Variable)] -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa]], Integer)
 std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_u(std::size_t wmax, std::size_t omax, const SizeSizePairList& cc, const SizeList& ww, const SizeListList& vdd, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
@@ -4804,5 +5032,97 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
     delete[] pdd;
     delete[] pww;
     return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s);
+}
+
+
+// parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_up :: Integer -> Integer -> Integer -> [(Variable, Variable)] -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa]], Integer)
+std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_up(std::size_t wmax, std::size_t omax, std::size_t tint, const SizeSizePairList& cc, const SizeList& ww, const SizeListList& vdd, const HistoryRepa& hh, const HistogramRepaRed& hhx, const HistoryRepa& hhrr, const HistogramRepaRed& hhrrx)
+{
+    if (hh.evient)
+	throw std::out_of_range("parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_up");
+    auto n = hh.dimension;
+    auto vhh = hh.vectorVar;
+    auto& mvv = hh.mapVarInt();
+    auto svv = hh.shape;
+    auto z = hh.size;
+    auto phh1 = hh.arr;
+    auto zrr = hhrr.size;
+    auto pxx1 = hhx.arr;
+    auto phh2 = hhrr.arr;
+    auto pxx2 = hhrrx.arr;
+    auto m = ww.size();
+    std::size_t tint1 = std::min(tint, m);
+    std::size_t* pww = new std::size_t[m];
+    for (std::size_t i = 0; i < m; i++)
+	pww[i] = mvv[ww[i]];
+    auto d = vdd.size();
+    auto e = d ? vdd[0].size() : 0;
+    std::size_t* pdd = new std::size_t[d*e];
+    for (std::size_t i = 0; i < d; i++)
+	for (std::size_t j = 0; j < e; j++)
+	    pdd[i*e + j] = mvv[vdd[i][j]];
+    auto ccl = cc.size();
+    std::size_t* pccd = new std::size_t[ccl];
+    std::size_t* pccu = new std::size_t[ccl];
+    for (std::size_t i = 0; i < ccl; i++)
+    {
+	pccd[i] = mvv[cc[i].first];
+	pccu[i] = mvv[cc[i].second];
+    }
+    std::size_t* tww1 = new std::size_t[tint1*omax];
+    std::size_t* tww2 = new std::size_t[tint1*omax];
+    double* ts1 = new double[tint1*omax];
+    std::size_t* s = new std::size_t[tint1];
+    std::size_t* t = new std::size_t[tint1];
+    std::vector<std::thread> threads;
+    threads.reserve(tint1);
+    for (std::size_t h = 0; h < tint1; h++)
+    {
+	s[h] = 0;
+	t[h] = 0;
+	threads.push_back(std::thread(listVarsListTuplesArrayHistoryVarientsAlignedExcludeHiddenTop_up, 1, wmax, omax, tint1, n, svv, m, d, e, z, zrr, ccl, pccd, pccu, pww, pdd, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+    }
+    for (auto& h : threads)
+	h.join();
+    std::size_t s1 = 0;
+    DoubleSizePairList qq1;
+    qq1.reserve(tint1*omax);
+    SizeListList qq2;
+    qq2.reserve(tint1*omax);
+    std::size_t j = 0;
+    SizeSetSet qq3;
+    for (std::size_t h = 0; h < tint1; h++)
+    {
+	for (std::size_t i = 0; i < t[h]; i++)
+	{
+	    SizeList ll;
+	    ll.push_back(ww[tww1[h*omax + i]]);
+	    for (auto& jj : vdd[tww2[h*omax + i]])
+		ll.push_back(jj);
+	    SizeSet ss(ll.begin(), ll.end());
+	    if (qq3.find(ss) == qq3.end())
+	    {
+		qq1.push_back(DoubleSizePair(ts1[h*omax + i], j));
+		qq2.push_back(ll);
+		qq3.insert(ss);
+		j++;
+	    }
+	}
+	s1 += s[h];
+    }
+    std::sort(qq1.begin(), qq1.end());
+    auto qq = std::make_unique<DoubleSizeListPairList>();
+    for (std::size_t i = j - std::min(j, omax); i < j; i++)
+	qq->push_back(DoubleSizeListPair(qq1[i].first, qq2[qq1[i].second]));
+    delete[] s;
+    delete[] t;
+    delete[] ts1;
+    delete[] tww2;
+    delete[] tww1;
+    delete[] pccu;
+    delete[] pccd;
+    delete[] pdd;
+    delete[] pww;
+    return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s1);
 }
 
