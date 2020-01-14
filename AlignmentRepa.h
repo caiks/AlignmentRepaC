@@ -25,6 +25,7 @@ namespace Alignment
     typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
     typedef std::unordered_set<std::size_t> SizeUSet;
     typedef std::set<std::size_t> SizeSet;
+    typedef std::set<SizeSet> SizeSetSet;
     typedef std::map<std::size_t, SizeSet> SizeSizeSetMap;
     typedef std::vector<SizeSizeSetMap> SizeSizeSetMapList;
     typedef std::vector<double> DoubleList;
@@ -365,6 +366,9 @@ namespace Alignment
 
     // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u :: Integer -> Integer -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa])],Integer)
     std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u(std::size_t, std::size_t, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
+
+    // parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_up :: Integer -> Integer -> Integer -> [VariableRepa] -> [[VariableRepa]] -> HistoryRepa -> HistogramRepaRed -> HistoryRepa -> HistogramRepaRed -> ([(Double, [VariableRepa])],Integer)
+    std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_up(std::size_t, std::size_t, std::size_t, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
     // parametersHistogramRepaVecsSetTuplePartitionTopByM_u ::
     //   Integer -> Integer -> Integer -> HistogramRepa -> HistogramRepa -> Double -> Double -> ([[[VariableRepa]]],Integer)

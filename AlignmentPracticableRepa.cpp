@@ -101,7 +101,7 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
     auto frvars = fudRepasSetVar;
     auto frder = fudRepasDerived;
     auto cross = parametersSetVarsHistoryRepasSetSetVarsAlignedTop_up;
-    auto append = parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_u;
+    auto append = parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedTop_up;
 
     SizeList vv1;
     vv1.reserve(vv.size());
@@ -162,7 +162,7 @@ std::tuple<std::unique_ptr<SizeListList>, std::size_t> Alignment::parametersSyst
     }
     while (xx1->size())
     {
-	auto t = append(xmax, omax, vv1, *xx1, hh, hhx, hhrr, hhrrx);
+	auto t = append(xmax, omax, tint, vv1, *xx1, hh, hhx, hhrr, hhrrx);
 	auto& xa = std::get<0>(t);
 	s += std::get<1>(t);
 	xx.insert(xx.end(), xa->begin(), xa->end());

@@ -445,10 +445,10 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     return parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(wmax, lmax, xmax, 0, omax, bmax, mmax, umax, pmax, fmax, mult, 0, seed, vv, er, hr, 0, ur);
 }
 
-// parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
+// parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
 //   Integer -> Integer -> Integer ->
-//   [VariableRepa] -> HistoryRepa -> Integer ->
+//   [VariableRepa] -> FudRepa -> HistoryRepa -> Integer ->
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t smin, std::size_t seed, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, int d, SystemRepa& ur)
 {
@@ -934,10 +934,10 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     return dr;
 }
 
-// parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa_p ::
+// parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa_p ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
 //   Integer -> Integer -> Integer ->
-//   [VariableRepa] -> HistoryRepa -> Integer ->
+//   [VariableRepa] -> FudRepa -> HistoryRepa -> Integer ->
 //   IO (SystemRepa, ApplicationRepa)
 std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxIORepa_p(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fmax, std::size_t mult, std::size_t smin, std::size_t seed, std::size_t tint, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, int d, SystemRepa& ur)
 {
