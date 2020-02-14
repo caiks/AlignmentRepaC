@@ -1126,6 +1126,147 @@ std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasConcat_u(const History
 }
 
 
+HistorySparse::HistorySparse() : size(0), vectorDimension(0), arr(0)
+{
+}
+
+HistorySparse::~HistorySparse()
+{
+    delete[] arr;
+    delete[] vectorDimension;
+}
+
+std::ostream& operator<<(std::ostream& out, const HistorySparse& hr)
+{
+    auto z = hr.size;
+    out << "(" << z;
+    if (z)
+    {
+	auto nn = hr.vectorDimension;
+	auto rr = hr.arr;
+	std::size_t k = 0;
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    out << ",[";
+	    auto n = nn[j];
+	    for (std::size_t i = 0; i < n; i++)
+	    {
+		if (i) out << ",";
+		out << rr[k];
+		k++;
+	    }
+	    out << "]";
+	}
+    }
+    out << ")";
+    return out;
+}
+
+std::unique_ptr<HistorySparse> Alignment::historyRepasHistorySparse(const HistoryRepa& hr)
+{
+    auto n = hr.dimension;
+    auto vv = hr.vectorVar;
+    auto z = hr.size;
+    auto rr = hr.arr;
+    std::map<std::size_t, std::size_t> ww;
+    for (std::size_t i = 0; i < n; i++)
+	ww.insert_or_assign(vv[i],i);
+    auto hs = std::make_unique<HistorySparse>();
+    hs->size = z;
+    hs->vectorDimension = new std::size_t[z];
+    auto dd = hs->vectorDimension;
+    SizeList rr1;
+    rr1.reserve(n*z);
+    if (hr.evient)
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t jn = j*n;
+	    std::size_t k = 0;
+	    for (auto& p : ww)
+	    {
+		std::size_t u = rr[jn + p.second];
+		if (u)
+		{
+		    rr1.push_back(p.first);
+		    k++;
+		}
+	    }
+	    dd[j] = k;
+	}
+    else
+	for (std::size_t j = 0; j < z; j++)
+	{
+	    std::size_t k = 0;
+	    for (auto& p : ww)
+	    {
+		std::size_t u = rr[p.second*z + j];
+		if (u)
+		{
+		    rr1.push_back(p.first);
+		    k++;
+		}
+	    }
+	    dd[j] = k;
+	}
+    hs->arr = new std::size_t[rr1.size()];
+    memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));
+    return hs;
+}
+
+std::unique_ptr<HistoryRepa> Alignment::historySparsesHistoryRepa(const HistorySparse& hs)
+{
+    auto z = hs.size;
+    auto dd = hs.vectorDimension;
+    auto rr = hs.arr;
+    std::set<std::size_t> ww;
+    std::size_t m = 0;
+    for (std::size_t j = 0; j < z; j++)
+    {
+	auto k = dd[j];
+	for (std::size_t i = 0; i < k; i++)
+	{
+	    ww.insert(rr[m]);
+	    m++;
+	}
+    }
+    auto hr = std::make_unique<HistoryRepa>();
+    hr->dimension = ww.size();
+    auto n = hr->dimension;
+    hr->vectorVar = new std::size_t[n];
+    auto vv = hr->vectorVar;
+    hr->shape = new std::size_t[n];
+    auto sh = hr->shape;
+    hr->size = z;
+    {
+	std::size_t i = 0;
+	for (auto w : ww)
+	{
+	    vv[i] = w;
+	    sh[i] = 2;
+	    i++;
+	}
+    }
+    auto& mvv = hr->mapVarInt();
+    hr->evient = true;
+    hr->arr = new unsigned char[z*n];
+    auto rr1 = hr->arr;
+    memset(rr1, 0, z*n);
+    m = 0;
+    for (std::size_t j = 0; j < z; j++)
+    {
+	std::size_t jn = j*n;
+	auto k = dd[j];
+	for (std::size_t i = 0; i < k; i++)
+	{
+	    rr1[jn + mvv[rr[m]]] = 1;
+	    m++;
+	}
+    }
+    return hr;
+}
+
+
+
 TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
 {
 }

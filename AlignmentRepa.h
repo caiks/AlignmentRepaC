@@ -207,6 +207,29 @@ namespace Alignment
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistoryRepa&);
 
+namespace Alignment
+{
+    class HistorySparse
+    {
+    public: HistorySparse();
+    private: HistorySparse(const HistorySparse &);
+    public: ~HistorySparse();
+
+    private: HistorySparse& operator=(const HistorySparse &);
+
+    public: std::size_t size;
+    public: std::size_t* vectorDimension;
+
+    public: std::size_t* arr;
+    };
+
+    std::unique_ptr<HistorySparse> historyRepasHistorySparse(const HistoryRepa&);
+
+    std::unique_ptr<HistoryRepa> historySparsesHistoryRepa(const HistorySparse&);
+}
+
+std::ostream& operator<<(std::ostream& out, const Alignment::HistorySparse&);
+
 
 namespace Alignment
 {

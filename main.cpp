@@ -28,6 +28,12 @@ using namespace Alignment;
 namespace js = rapidjson;
 using namespace std;
 
+#define ECHO(x) cout << #x << endl; x
+#define EVAL(x) cout << #x << ": " << (x) << endl
+#define EVALL(x) cout << #x << ": " << endl << (x) << endl
+#define TRUTH(x) cout << #x << ": " << ((x) ? "true" : "false") << endl
+
+
 int main(int argc, char **argv)
 {
     if (false)
@@ -901,7 +907,7 @@ int main(int argc, char **argv)
     }
 
 
-    if (true)
+    if (false)
     {
 	auto uvars = systemsSetVar;
 	auto cart = systemsSetVarsSetStateCartesian_u;
@@ -4501,6 +4507,33 @@ int main(int argc, char **argv)
 
     }
 
+    if (true)
+    {
+	auto regcart = histogramRegularCartesian_u;
+	auto regsing = histogramRegularUnitSingleton_u;
+	auto regdiag = histogramRegularUnitDiagonal_u;
+	auto sys = histogramsSystemImplied;
+	auto uuur = systemsSystemRepa;
+	auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+	{
+	    return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa), 1);
+	};
+	auto hrhs = historyRepasHistorySparse;
+	auto hshr = historySparsesHistoryRepa;
+
+	auto aa = regdiag(2, 3);
+	EVALL(*aa);
+
+	auto uu = sys(*aa);
+	auto ur = uuur(*uu);
+	auto hr = aahr(*uu, *ur, *aa);
+	EVALL(*hr);
+
+	EVALL(*hrhs(*hr));
+
+	EVALL(*hshr(*hrhs(*hr)));
+
+    }
 
     return 0;
 }
