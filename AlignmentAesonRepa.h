@@ -18,6 +18,12 @@ namespace Alignment
     // persistentsHistoryRepa :: HistoryRepaPersistent -> Maybe HistoryRepa
     std::unique_ptr<HistoryRepa> persistentsHistoryRepa(std::istream&);
 
+    // historySparsesPersistent :: HistorySparse -> HistorySparsePersistent
+    void historySparsesPersistent(const HistorySparse&, std::ostream&);
+
+    // persistentsHistorySparse :: HistorySparsePersistent -> Maybe HistorySparse
+    std::unique_ptr<HistorySparse> persistentsHistorySparse(std::istream&);
+
     // transformRepasPersistent :: TransformRepa -> TransformRepaPersistent
     void transformRepasPersistent(const TransformRepa&, std::ostream&);
 

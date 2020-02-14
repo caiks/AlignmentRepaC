@@ -223,8 +223,10 @@ namespace Alignment
     public: std::size_t* arr;
     };
 
+    // historyRepasHistorySparse :: HistoryRepa -> HistorySparse
     std::unique_ptr<HistorySparse> historyRepasHistorySparse(const HistoryRepa&);
 
+    // historySparsesHistoryRepa :: HistorySparse -> HistoryRepa
     std::unique_ptr<HistoryRepa> historySparsesHistoryRepa(const HistorySparse&);
 }
 

@@ -1162,6 +1162,7 @@ std::ostream& operator<<(std::ostream& out, const HistorySparse& hr)
     return out;
 }
 
+// historyRepasHistorySparse :: HistoryRepa -> HistorySparse
 std::unique_ptr<HistorySparse> Alignment::historyRepasHistorySparse(const HistoryRepa& hr)
 {
     auto n = hr.dimension;
@@ -1213,6 +1214,7 @@ std::unique_ptr<HistorySparse> Alignment::historyRepasHistorySparse(const Histor
     return hs;
 }
 
+// historySparsesHistoryRepa :: HistorySparse -> HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::historySparsesHistoryRepa(const HistorySparse& hs)
 {
     auto z = hs.size;

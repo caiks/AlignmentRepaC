@@ -4529,10 +4529,21 @@ int main(int argc, char **argv)
 	auto hr = aahr(*uu, *ur, *aa);
 	EVALL(*hr);
 
-	EVALL(*hrhs(*hr));
+	auto hs = hrhs(*hr);
+	EVALL(*hs);
 
-	EVALL(*hshr(*hrhs(*hr)));
+	EVALL(*hshr(*hs));
 
+	std::string filename = "test.bin";
+	std::ofstream out(filename, std::ios::binary);
+	ECHO(historySparsesPersistent(*hs, out));
+	out.close();
+
+	std::ifstream in(filename, std::ios::binary);
+	ECHO(auto hs2 = persistentsHistorySparse(in));
+	in.close();
+	EVALL(*hs2);
+	EVALL(*hshr(*hs2));
     }
 
     return 0;

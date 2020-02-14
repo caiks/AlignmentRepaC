@@ -91,6 +91,57 @@ std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in)
     return hr;
 }
 
+// historySparsesPersistent :: HistorySparse -> HistorySparsePersistent
+void Alignment::historySparsesPersistent(const HistorySparse& hs, std::ostream& out)
+{
+    auto z = hs.size;
+    auto dd = hs.vectorDimension;
+    auto rr = hs.arr;
+    std::size_t m = 0;
+    for (std::size_t j = 0; j < z; j++)
+    {
+	auto k = dd[j];
+	out.write(reinterpret_cast<char*>(&k), sizeof(std::size_t));
+	for (std::size_t i = 0; i < k; i++)
+	{
+	    out.write(reinterpret_cast<char*>(&rr[m]), sizeof(std::size_t));
+	    m++;
+	}
+    }
+}
+
+// persistentsHistorySparse :: HistorySparsePersistent -> Maybe HistorySparse
+std::unique_ptr<HistorySparse> Alignment::persistentsHistorySparse(std::istream& in)
+{
+    std::size_t z = 0;
+    SizeList dd1;
+    SizeList rr1;
+    while (true)
+    {
+	std::size_t k = 0;
+	in.read(reinterpret_cast<char*>(&k), sizeof(std::size_t));
+	if (in.eof())
+	    break;
+	z++;
+	dd1.push_back(k);
+	for (std::size_t i = 0; i < k; i++)
+	{
+	    std::size_t w = 0;
+	    in.read(reinterpret_cast<char*>(&w), sizeof(std::size_t));
+	    rr1.push_back(w);
+	}
+    }
+    auto hs = std::make_unique<HistorySparse>();
+    hs->size = z;
+    hs->vectorDimension = new std::size_t[z];
+    auto dd = hs->vectorDimension;
+    memcpy(dd, dd1.data(), dd1.size() * sizeof(std::size_t));
+    hs->arr = new std::size_t[rr1.size()];
+    memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));
+    return hs;
+}
+
+
 // transformRepasPersistent :: TransformRepa -> TransformRepaPersistent
 void Alignment::transformRepasPersistent(const TransformRepa& tr, std::ostream& out)
 {
