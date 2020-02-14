@@ -512,7 +512,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
 	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z + mult1*z));
-	if (nmax > bmax)
+	nmax = std::max(nmax, bmax);
+	if (nmax < vv.size())
 	{
 	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
 	    auto m = ee->size();
@@ -556,7 +557,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
 	{
-	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, nmax > bmax ? vv0 : vv, *hr, *hrs, f, ur);
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, nmax < vv.size() ? vv0 : vv, *hr, *hrs, f, ur);
 	    fr = std::move(std::get<0>(t));
 	    mm = std::move(std::get<1>(t));
 	}
@@ -761,7 +762,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
 	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z2 + mult1*z2));
-	if (nmax > bmax)
+	nmax = std::max(nmax, bmax);
+	if (nmax < vv.size())
 	{
 	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
 	    auto m = ee->size();
@@ -806,7 +808,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
 	{
-	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, nmax > bmax ? vv0 : vv, *hr, *hrs, f + 1, ur);
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, nmax < vv.size() ? vv0 : vv, *hr, *hrs, f + 1, ur);
 	    fr = std::move(std::get<0>(t));
 	    mm = std::move(std::get<1>(t));
 	}
@@ -1001,7 +1003,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
 	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z + mult1*z));
-	if (nmax > bmax)
+	nmax = std::max(nmax, bmax);
+	if (nmax < vv.size())
 	{
 	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
 	    auto m = ee->size();
@@ -1045,7 +1048,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
 	{
-	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, tint, nmax > bmax ? vv0 : vv, *hr, *hrs, f, ur);
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, tint, nmax < vv.size() ? vv0 : vv, *hr, *hrs, f, ur);
 	    fr = std::move(std::get<0>(t));
 	    mm = std::move(std::get<1>(t));
 	}
@@ -1250,7 +1253,8 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	SizeList vv0;
 	std::unique_ptr<FudRepa> er0;
 	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z2 + mult1*z2));
-	if (nmax > bmax)
+	nmax = std::max(nmax, bmax);
+	if (nmax < vv.size())
 	{
 	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
 	    auto m = ee->size();
@@ -1295,7 +1299,7 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
 	std::unique_ptr<DoubleSizeListPairList> mm;
 	try
 	{
-	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, tint, nmax > bmax ? vv0 : vv, *hr, *hrs, f + 1, ur);
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, tint, nmax < vv.size() ? vv0 : vv, *hr, *hrs, f + 1, ur);
 	    fr = std::move(std::get<0>(t));
 	    mm = std::move(std::get<1>(t));
 	}
@@ -1446,6 +1450,515 @@ std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsFudRepasHistoryRepa
     return dr;
 }
 
+// parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxDeltaIORepa_p ::
+//   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
+//   Integer -> Integer -> Integer ->
+//   [VariableRepa] -> FudRepa -> HistoryRepa -> Integer ->
+//   IO (SystemRepa, ApplicationRepa)
+void Alignment::parametersSystemsFudRepasHistoryRepasApplicationerSubstrateEntropyMaxRollByMExcludedSelfHighestFmaxDeltaIORepa_p(std::size_t wmax, std::size_t lmax, std::size_t xmax, double znnmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t fini, std::size_t fmax, std::size_t mult, std::size_t smin, std::size_t seed, std::size_t tint, const SizeList& vv, const FudRepa& er, const HistoryRepa& hr0, int d, SystemRepa& ur, ApplicationRepa& dr)
+{
+    auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
+    auto hrred = setVarsHistoryRepasReduce_u;
+    auto hrhrred = setVarsHistoryRepasHistoryRepaReduced_u;
+    auto hrpr = setVarsHistoryRepasRed_u;
+    auto prents = histogramRepaRedsListEntropy;
+    auto hrconcat = vectorHistoryRepasConcat_u;
+    auto hrshuffle = historyRepasShuffle_u;
+    auto llfr = setVariablesListTransformRepasFudRepa_u;
+    auto frmul = historyRepasFudRepasMultiply_up;
+    auto frdep = fudRepasSetVarsDepends;
+    auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_up;
+
+    auto t0 = clk::now();
+    std::map<std::string, double> time;
+    std::cout << ">>> applicationer" << std::endl;
+    SizeUSet vv00(hr0.dimension);
+    for (std::size_t i = 0; i < hr0.dimension; i++)
+	vv00.insert(hr0.vectorVar[i]);
+    SizeUSet vv1(vv.begin(), vv.end());
+    auto& llu = ur.listVarSizePair;
+    auto z = hr0.size;
+    auto vd = std::make_shared<Variable>(d);
+    auto vl = std::make_shared<Variable>("s");
+    dr.fud->layers.reserve(fmax*(lmax + 1));
+    if (!z)
+    {
+	std::cout << "empty history" << std::endl;
+	std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+	return;
+    }
+    auto mark = clk::now();
+    std::cout << ">>> applier " << std::endl;
+    std::shared_ptr<HistoryRepa> hr2 = hrhrred(vv.size(), vv.data(), *frmul(tint, hr0, er));
+    std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
+    mark = clk::now();
+    std::size_t f = fini;
+    if (dr.slices->_list.size() == 0)
+    {
+	mark = clk::now();
+	std::cout << ">>> shuffler " << std::endl;
+	std::size_t mult1 = smin / z + 1 > mult ? smin / z + 1 : mult;
+	HistoryRepaPtrList qq;
+	qq.reserve(mult1);
+	for (std::size_t i = 1; i <= mult1; i++)
+	    qq.push_back(hrshuffle(hr0, (unsigned int)(seed + i*z)));
+	auto hrs0 = hrconcat(qq);
+	qq.clear();
+	time["shuffler"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< shuffler " << time["shuffler"] << "s" << std::endl;
+	mark = clk::now();
+	std::cout << ">>> substrater " << std::endl;
+	auto hr = hr2;
+	SizeList vv0;
+	std::unique_ptr<FudRepa> er0;
+	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z + mult1*z));
+	nmax = std::max(nmax, bmax);
+	if (nmax < vv.size())
+	{
+	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
+	    auto m = ee->size();
+	    if (m > nmax)
+	    {
+		std::sort(ee->begin(), ee->end());
+		vv0.reserve(nmax);
+		for (std::size_t i = m - nmax; i < m; i++)
+		    vv0.push_back((*ee)[i].second);
+	    }
+	    else
+	    {
+		vv0.reserve(m);
+		for (std::size_t i = 0; i < m; i++)
+		    vv0.push_back((*ee)[i].second);
+	    }
+	    if (vv0.size() < vv.size())
+	    {
+		SizeUSet vv01(vv0.begin(), vv0.end());
+		er0 = llfr(vv00, *frdep(er, vv01));
+	    }
+	}
+	time["substrater"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< substrater " << time["substrater"] << "s" << std::endl;
+	mark = clk::now();
+	std::cout << ">>> applier " << std::endl;
+	std::unique_ptr<HistoryRepa> hrs;
+	if (er0)
+	{
+	    hr = frmul(tint, hr0, *er0);
+	    hrs = frmul(tint, *hrs0, *er0);
+	}
+	else
+	{
+	    hrs = hrhrred(vv.size(), vv.data(), *frmul(tint, *hrs0, er));
+	}
+	hrs0.reset();
+	time["applier"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
+	std::unique_ptr<FudRepa> fr;
+	std::unique_ptr<DoubleSizeListPairList> mm;
+	try
+	{
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, tint, nmax < vv.size() ? vv0 : vv, *hr, *hrs, f, ur);
+	    fr = std::move(std::get<0>(t));
+	    mm = std::move(std::get<1>(t));
+	}
+	catch (const std::out_of_range& e)
+	{
+	    std::cout << "out of range exception: " << e.what() << std::endl;
+	    fr.reset();
+	    mm.reset();
+	}
+	if (!mm || !mm->size())
+	{
+	    std::cout << "no fud" << std::endl;
+	    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+	    return;
+	}
+	auto& a = mm->back().first;
+	auto& kk = mm->back().second;
+	auto m = kk.size();
+	if (m < 2 || a <= repaRounding)
+	{
+	    std::cout << "no algn" << std::endl;
+	    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+	    return;
+	}
+	mark = clk::now();
+	std::cout << ">>> transer " << std::endl;
+	std::cout << "fud: " << f << std::endl;
+	std::cout << "fud slice size: " << z << std::endl;
+	std::cout << "derived cardinality: " << m << std::endl;
+	std::cout << "derived algn density: " << a << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 100.0 * (std::exp(a / (double)z / (double)(m - 1)) - 1.0) << std::endl;
+	auto vf = std::make_shared<Variable>((int)f);
+	auto vdf = std::make_shared<Variable>(vd, vf);
+	auto vfl = std::make_shared<Variable>(vdf, vl);
+	SizeUSet kk1(kk.begin(), kk.end());
+	auto gr = llfr(vv1, *frdep(*fr, kk1));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(tint, *hr, *gr));
+	SizeList sl;
+	TransformRepaPtrList ll;
+	std::size_t sz = 1;
+	auto skk = ar->shape;
+	auto rr0 = ar->arr;
+	for (std::size_t i = 0; i < m; i++)
+	    sz *= skk[i];
+	sl.reserve(sz);
+	ll.reserve(sz);
+	bool remainder = false;
+	std::size_t b = 1;
+	for (std::size_t i = 0; i < sz; i++)
+	{
+	    if (rr0[i] <= 0.0)
+	    {
+		remainder = true;
+		continue;
+	    }
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m;
+	    tr->vectorVar = new std::size_t[m];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m];
+	    auto sh = tr->shape;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j] = kk[j];
+		sh[j] = skk[j];
+	    }
+	    tr->arr = new unsigned char[sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < sz; j++)
+		rr[j] = 0;
+	    rr[i] = 1;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>((int)b++);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	if (remainder)
+	{
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m;
+	    tr->vectorVar = new std::size_t[m];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m];
+	    auto sh = tr->shape;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j] = kk[j];
+		sh[j] = skk[j];
+	    }
+	    tr->arr = new unsigned char[sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < sz; j++)
+		rr[j] = rr0[j] <= 0.0 ? 1 : 0;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>((int)b++);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	dr.fud->layers.insert(dr.fud->layers.end(), gr->layers.begin(), gr->layers.end());
+	dr.fud->layers.push_back(ll);
+	dr.slices->_list.reserve(sz);
+	for (auto& s : sl)
+	    dr.slices->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
+	f++;
+	time["transer"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
+    }
+    SizeSet ig;
+    while (f <= fmax)
+    {
+	mark = clk::now();
+	std::cout << ">>> applier " << std::endl;
+	auto hr = frmul(tint, *hr2, *dr.fud);
+	time["applier"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
+	mark = clk::now();
+	std::cout << ">>> slicer " << std::endl;
+	auto n = hr->dimension;
+	auto& mvv = hr->mapVarInt();
+	auto rr = hr->arr;
+	auto nn = treesLeafNodes(*dr.slices);
+	SizeSizePairList zs;
+	zs.reserve(nn->size());
+	for (auto& p : *nn)
+	{
+	    auto v = p.first;
+	    if (ig.find(v) != ig.end())
+		continue;
+	    std::size_t a = 0;
+	    auto pk = mvv[v];
+	    if (hr->evient)
+		for (std::size_t j = 0; j < z; j++)
+		{
+		    std::size_t u = rr[j*n + pk];
+		    if (u)
+			a++;
+		}
+	    else
+		for (std::size_t j = 0; j < z; j++)
+		{
+		    std::size_t u = rr[pk*z + j];
+		    if (u)
+			a++;
+		}
+	    if (a > 1)
+		zs.push_back(SizeSizePair(a, v));
+	}
+	if (!zs.size())
+	{
+	    std::cout << "no slices" << std::endl;
+	    break;
+	}
+	std::sort(zs.begin(), zs.end());
+	auto z2 = zs.back().first;
+	auto v = zs.back().second;
+	std::cout << "slice size: " << z2 << std::endl;
+	std::cout << "slice variable: " << *llu[v].first << std::endl;
+	SizeList ev;
+	ev.reserve(z2);
+	{
+	    auto pk = mvv[v];
+	    if (hr->evient)
+		for (std::size_t j = 0; j < z; j++)
+		{
+		    std::size_t u = rr[j*n + pk];
+		    if (u)
+			ev.push_back(j);
+		}
+	    else
+		for (std::size_t j = 0; j < z; j++)
+		{
+		    std::size_t u = rr[pk*z + j];
+		    if (u)
+			ev.push_back(j);
+		}
+	}
+	hr = hrsel(ev.size(), ev.data(), *hr2);
+	auto hr1 = hrsel(ev.size(), ev.data(), hr0);
+	ev.clear();
+	time["slicer"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< slicer " << time["slicer"] << "s" << std::endl;
+	mark = clk::now();
+	std::cout << ">>> shuffler " << std::endl;
+	std::size_t mult1 = smin / z2 + 1 > mult ? smin / z2 + 1 : mult;
+	HistoryRepaPtrList qq;
+	qq.reserve(mult1);
+	for (std::size_t i = 1; i <= mult1; i++)
+	    qq.push_back(hrshuffle(*hr1, (unsigned int)(seed + i*z2)));
+	auto hrs1 = hrconcat(qq);
+	qq.clear();
+	time["shuffler"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< shuffler " << time["shuffler"] << "s" << std::endl;
+	mark = clk::now();
+	std::cout << ">>> substrater " << std::endl;
+	SizeList vv0;
+	std::unique_ptr<FudRepa> er0;
+	auto nmax = (std::size_t)std::sqrt(znnmax / (double)(z2 + mult1*z2));
+	nmax = std::max(nmax, bmax);
+	if (nmax < vv.size())
+	{
+	    auto ee = prents(*hrpr(vv.size(), vv.data(), *hr));
+	    auto m = ee->size();
+	    if (m > nmax)
+	    {
+		std::sort(ee->begin(), ee->end());
+		vv0.reserve(nmax);
+		for (std::size_t i = m - nmax; i < m; i++)
+		    vv0.push_back((*ee)[i].second);
+	    }
+	    else
+	    {
+		vv0.reserve(m);
+		for (std::size_t i = 0; i < m; i++)
+		    vv0.push_back((*ee)[i].second);
+	    }
+	    if (vv0.size() < vv.size())
+	    {
+		SizeUSet vv01(vv0.begin(), vv0.end());
+		er0 = llfr(vv00, *frdep(er, vv01));
+	    }
+	}
+	time["substrater"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< substrater " << time["substrater"] << "s" << std::endl;
+	mark = clk::now();
+	std::cout << ">>> applier " << std::endl;
+	std::unique_ptr<HistoryRepa> hrs;
+	if (er0)
+	{
+	    hr = frmul(tint, *hr1, *er0);
+	    hrs = frmul(tint, *hrs1, *er0);
+	}
+	else
+	{
+	    hrs = hrhrred(vv.size(), vv.data(), *frmul(tint, *hrs1, er));
+	}
+	hr1.reset();
+	hrs1.reset();
+	time["applier"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< applier " << time["applier"] << "s" << std::endl;
+	std::unique_ptr<FudRepa> fr;
+	std::unique_ptr<DoubleSizeListPairList> mm;
+	try
+	{
+	    auto t = layerer(wmax, lmax, xmax, omax, bmax, mmax, umax, pmax, tint, nmax < vv.size() ? vv0 : vv, *hr, *hrs, f, ur);
+	    fr = std::move(std::get<0>(t));
+	    mm = std::move(std::get<1>(t));
+	}
+	catch (const std::out_of_range& e)
+	{
+	    std::cout << "out of range exception: " << e.what() << std::endl;
+	    fr.reset();
+	    mm.reset();
+	}
+	if (!mm || !mm->size())
+	{
+	    ig.insert(v);
+	    std::cout << "no fud" << std::endl;
+	    continue;
+	}
+	auto& a = mm->back().first;
+	auto& kk = mm->back().second;
+	auto m = kk.size();
+	if (m < 2 || a <= repaRounding)
+	{
+	    ig.insert(v);
+	    std::cout << "no algn" << std::endl;
+	    continue;
+	}
+	mark = clk::now();
+	std::cout << ">>> transer " << std::endl;
+	std::cout << "fud: " << f << std::endl;
+	std::cout << "fud slice size: " << z2 << std::endl;
+	std::cout << "derived cardinality: " << m << std::endl;
+	std::cout << "derived algn density: " << a << std::endl;
+	std::cout << "derived impl bi-valency percent: " << 100.0 * (std::exp(a / (double)z2 / (double)(m - 1)) - 1.0) << std::endl;
+	auto vf = std::make_shared<Variable>((int)f);
+	auto vdf = std::make_shared<Variable>(vd, vf);
+	auto vfl = std::make_shared<Variable>(vdf, vl);
+	SizeUSet kk1(kk.begin(), kk.end());
+	auto gr = llfr(vv1, *frdep(*fr, kk1));
+	auto ar = hrred(1.0, m, kk.data(), *frmul(tint, *hr, *gr));
+	SizeList sl;
+	TransformRepaPtrList ll;
+	std::size_t sz = 1;
+	auto skk = ar->shape;
+	auto rr0 = ar->arr;
+	for (std::size_t i = 0; i < m; i++)
+	    sz *= skk[i];
+	sl.reserve(sz);
+	ll.reserve(sz);
+	bool remainder = false;
+	std::size_t b = 1;
+	for (std::size_t i = 0; i < sz; i++)
+	{
+	    if (rr0[i] <= 0.0)
+	    {
+		remainder = true;
+		continue;
+	    }
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m + 1;
+	    tr->vectorVar = new std::size_t[m + 1];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m + 1];
+	    auto sh = tr->shape;
+	    ww[0] = v;
+	    sh[0] = 2;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j + 1] = kk[j];
+		sh[j + 1] = skk[j];
+	    }
+	    tr->arr = new unsigned char[2 * sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < 2 * sz; j++)
+		rr[j] = 0;
+	    rr[sz + i] = 1;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>((int)b++);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	if (remainder)
+	{
+	    auto tr = std::make_shared<TransformRepa>();
+	    tr->dimension = m + 1;
+	    tr->vectorVar = new std::size_t[m + 1];
+	    auto ww = tr->vectorVar;
+	    tr->shape = new std::size_t[m + 1];
+	    auto sh = tr->shape;
+	    ww[0] = v;
+	    sh[0] = 2;
+	    for (std::size_t j = 0; j < m; j++)
+	    {
+		ww[j + 1] = kk[j];
+		sh[j + 1] = skk[j];
+	    }
+	    tr->arr = new unsigned char[2 * sz];
+	    auto rr = tr->arr;
+	    for (std::size_t j = 0; j < 2 * sz; j++)
+		rr[j] = j >= sz && rr0[j - sz] <= 0.0 ? 1 : 0;
+	    tr->valency = 2;
+	    auto vb = std::make_shared<Variable>((int)b++);
+	    auto vflb = std::make_shared<Variable>(vfl, vb);
+	    llu.push_back(VarSizePair(vflb, 2));
+	    auto w = llu.size() - 1;
+	    tr->derived = w;
+	    sl.push_back(w);
+	    ll.push_back(tr);
+	}
+	for (std::size_t i = 0; i < gr->layers.size(); i++)
+	{
+	    if (i < dr.fud->layers.size())
+		dr.fud->layers[i].insert(dr.fud->layers[i].end(), gr->layers[i].begin(), gr->layers[i].end());
+	    else
+		dr.fud->layers.push_back(gr->layers[i]);
+	}
+	{
+	    bool found = false;
+	    std::size_t i = 0;
+	    for (i = 0; !found && i < dr.fud->layers.size(); i++)
+		for (auto tr : dr.fud->layers[i])
+		    if (tr->derived == v)
+		    {
+			found = true;
+			break;
+		    }
+	    i = std::max(i + 1, gr->layers.size());
+	    if (i < dr.fud->layers.size())
+		dr.fud->layers[i].insert(dr.fud->layers[i].end(), ll.begin(), ll.end());
+	    else
+		dr.fud->layers.push_back(ll);
+	}
+	for (auto& p : *nn)
+	    if (p.first == v)
+	    {
+		p.second->_list.reserve(sz);
+		for (auto& s : sl)
+		    p.second->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
+		break;
+	    }
+	f++;
+	std::cout << "fud slice cardinality: " << ll.size() << std::endl;
+	time["transer"] = ((sec)(clk::now() - mark)).count();
+	std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
+    }
+    std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+    return;
+}
 
 typedef std::tuple<double, std::size_t, std::size_t> DoubleSizeSizeTuple;
 typedef std::vector<DoubleSizeSizeTuple> DoubleSizeSizeTupleList;
