@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <cstring>
 
 using namespace Alignment;
 
@@ -135,9 +136,9 @@ std::unique_ptr<HistorySparse> Alignment::persistentsHistorySparse(std::istream&
     hs->size = z;
     hs->vectorDimension = new std::size_t[z];
     auto dd = hs->vectorDimension;
-    memcpy(dd, dd1.data(), dd1.size() * sizeof(std::size_t));
+    std::memcpy(dd, dd1.data(), dd1.size() * sizeof(std::size_t));
     hs->arr = new std::size_t[rr1.size()];
-    memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));
+    std::memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));
     return hs;
 }
 
