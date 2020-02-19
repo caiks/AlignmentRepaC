@@ -2,7 +2,7 @@
 
 The AlignmentRepaC repository is a fast C++ implementation of some of the *practicable inducers* described in the paper *The Theory and Practice of Induction by Alignment* at https://greenlake.co.uk/. The AlignmentRepaC repository depends on the [AlignmentC repository](https://github.com/caiks/AlignmentC) for the underlying *model* framework. 
 
-## Installation
+## Download
 
 The `AlignmentRepaC` module requires [modern C++](https://en.cppreference.com/w/) version 17 or later to be installed.
 
