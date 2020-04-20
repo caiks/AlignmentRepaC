@@ -5,8 +5,8 @@
 
 namespace Alignment
 {
-    // historyRepasShuffle_u :: HistoryRepa -> Int -> HistoryRepa
-    std::unique_ptr<HistoryRepa> historyRepasShuffle_u(const HistoryRepa&, unsigned);
+	// historyRepasShuffle_u :: HistoryRepa -> Int -> HistoryRepa
+	std::unique_ptr<HistoryRepa> historyRepasShuffle_u(const HistoryRepa&, unsigned);
 }
 
 
