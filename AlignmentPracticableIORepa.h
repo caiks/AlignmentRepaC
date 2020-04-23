@@ -87,6 +87,12 @@ namespace Alignment
 	//   [VariableRepa] -> HistoryRepa -> Integer ->
 	//   IO (SystemRepa, ApplicationRepa)
 	void parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxDeltaIORepa_up(std::size_t fini, std::size_t fmax, std::size_t tint, const SizeList&, std::size_t, const HistoryRepa&, int, SystemRepa&, ApplicationRepa&);
+	
+		// parametersSystemsHistoryRepasApplicationerCondMultinomialMultiLabelFmaxIORepa_u ::
+	//  Integer ->
+	//   [VariableRepa] -> [VariableRepa] -> HistoryRepa -> Integer ->
+	//   IO (SystemRepa, ApplicationRepa)
+	std::unique_ptr<ApplicationRepa> parametersSystemsHistoryRepasApplicationerCondMultinomialMultiLabelFmaxIORepa_u(std::size_t fmax, const SizeList&, const SizeList&, const HistoryRepa&, int, SystemRepa&);
 }
 
 

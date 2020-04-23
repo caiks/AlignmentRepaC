@@ -4465,3 +4465,434 @@ void Alignment::parametersSystemsHistoryRepasApplicationerCondMultinomialFmaxDel
 }
 
 
+// parametersSystemsHistoryRepasApplicationerCondMultinomialMultiLabelFmaxIORepa_u ::
+//  Integer ->
+//   [VariableRepa] -> [VariableRepa] -> Integer ->
+//   IO (SystemRepa, ApplicationRepa)
+std::unique_ptr<ApplicationRepa> Alignment::parametersSystemsHistoryRepasApplicationerCondMultinomialMultiLabelFmaxIORepa_u(std::size_t fmax, const SizeList& vv,  const SizeList& ll, const HistoryRepa& hr0, int d, SystemRepa& ur)
+{
+	auto hrsel = eventsHistoryRepasHistoryRepaSelection_u;
+	auto frmul = historyRepasFudRepasMultiply_u;
+
+	auto t0 = clk::now();
+	auto mark = clk::now();
+	std::map<std::string, double> time;
+	std::cout << ">>> applicationer" << std::endl;
+	auto n = vv.size();
+	auto m = ll.size();
+	auto& llu = ur.listVarSizePair;
+	auto n0 = hr0.dimension;
+	auto z = hr0.size;
+	auto& mvv = hr0.mapVarInt();
+	auto sh0 = hr0.shape;
+	auto rr0 = hr0.arr;
+	std::size_t ns = 2;
+	for (auto v : vv)
+	{
+		auto s = sh0[mvv[v]];
+		if (s > ns)
+			ns = s;
+	}
+	auto vd = std::make_shared<Variable>(d);
+	auto vl = std::make_shared<Variable>("s");
+	auto dr = std::make_unique<ApplicationRepa>();
+	dr->substrate = vv;
+	dr->fud = std::make_shared<FudRepa>();
+	dr->slices = std::make_shared<SizeTree>();
+	dr->fud->layers.reserve(fmax);
+	if (!z)
+	{
+		std::cout << "empty history" << std::endl;
+		std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+		return dr;
+	}
+	{
+		bool any = false;
+		for (auto v : vv)
+			for (std::size_t i = 0; !any && i < m; i++)
+				any = v == ll[i];		
+		if (any)
+		{
+			std::cout << "contains label" << std::endl;
+			std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+			return dr;
+		}
+	}
+	HistoryRepa hr1;
+	hr1.evient = false;
+	std::size_t m1 = n + m;
+	std::size_t n1 = m1 + fmax*ns;
+	hr1.dimension = n1;
+	hr1.vectorVar = new std::size_t[n1];
+	auto vv1 = hr1.vectorVar;
+	hr1.shape = new std::size_t[n1];
+	auto sh1 = hr1.shape;
+	auto pp1 = new std::size_t[m1];
+	std::size_t ls = 1;
+	for (std::size_t i = 0; i < m; i++)
+	{
+		auto v = ll[i];
+		vv1[i] = v;
+		auto p = mvv[v];
+		pp1[i] = p;
+		auto s = sh0[p];
+		sh1[i] = s;
+		ls *= s;
+	}
+	for (std::size_t i = 0; i < n; i++)
+	{
+		auto v = vv[i];
+		vv1[i + m] = v;
+		auto p = mvv[v];
+		pp1[i + m] = p;
+		sh1[i + m] = sh0[p];
+	}
+	hr1.arr = new unsigned char[z*n1];
+	auto rr1 = hr1.arr;
+	if (hr0.evient)
+		for (std::size_t j = 0; j < z; j++)
+		{
+			std::size_t jn0 = j*n0;
+			for (std::size_t i = 0; i < m1; i++)
+				rr1[i*z + j] = rr0[jn0 + pp1[i]];
+		}
+	else
+		for (std::size_t i = 0; i < m1; i++)
+		{
+			std::size_t iz0 = pp1[i] * z;
+			std::size_t iz = i*z;
+			for (std::size_t j = 0; j < z; j++)
+				rr1[iz + j] = rr0[iz0 + j];
+		}
+	delete pp1;
+	std::size_t f = 1;
+	{
+		mark = clk::now();
+		std::cout << ">>> searcher " << std::endl;
+		auto ee0 = new std::size_t[ls];
+		for (std::size_t k = 0; k < ls; k++)
+			ee0[k] = 1;
+		for (std::size_t j = 0; j < z; j++)
+		{
+			std::size_t w = 0;
+			for (std::size_t q = 0; q < m; q++)
+				w = w * sh1[q] + rr1[q*z + j];
+			ee0[w]++;
+		}
+		double e0 = alngam((double)z + 1.0);
+		for (std::size_t k = 0; k < ls; k++)
+			e0 -= alngam((double)ee0[k]);
+		delete ee0;
+		if (e0 <= repaRounding)
+		{
+			std::cout << "no label entropy" << std::endl;
+			std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+			return dr;
+		}
+		double e = e0;
+		std::size_t i1 = 0;
+		auto ee1 = new std::size_t[ns*ls];
+		auto ee2 = new std::size_t[ns];
+		for (std::size_t i = m; i < n+m; i++)
+		{
+			auto s = sh1[i];
+			for (std::size_t k = 0; k < s*ls; k++)
+				ee1[k] = 1;
+			for (std::size_t k = 0; k < s; k++)
+				ee2[k] = 1;
+			auto iz = i*z;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				std::size_t u = rr1[iz + j];
+				std::size_t w = 0;
+				for (std::size_t q = 0; q < m; q++)
+					w = w * sh1[q] + rr1[q*z + j];
+				ee1[w*s + u]++;
+				ee2[u]++;
+			}
+			double e1 = 0.0;
+			double e2 = 0.0;
+			for (std::size_t k = 0; k < s*ls; k++)
+				e1 += alngam((double)ee1[k]);
+			for (std::size_t k = 0; k < s; k++)
+				e2 += alngam((double)ee2[k]);
+			if (e > e2 - e1)
+			{
+				e = e2 - e1;
+				i1 = i;
+			}
+			if (e <= repaRounding)
+				break;
+		}
+		delete ee2;
+		delete ee1;
+		if (i1 == 0 || e >= e0 - repaRounding)
+		{
+			std::cout << "no conditional entropy" << std::endl;
+			std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+			return dr;
+		}
+		auto v1 = vv1[i1];
+		time["searcher"] = ((sec)(clk::now() - mark)).count();
+		std::cout << "<<< searcher " << time["searcher"] << "s" << std::endl;
+		mark = clk::now();
+		std::cout << ">>> transer " << std::endl;
+		std::cout << "fud: " << f << std::endl;
+		std::cout << "fud slice size: " << z << std::endl;
+		std::cout << "sized entropy label : " << e0 << std::endl;
+		std::cout << "sized conditional entropy: " << e << std::endl;
+		std::cout << "sized entropy decrease: " << e0 - e << std::endl;
+		std::cout << "entropy variable: " << *llu[v1].first << std::endl;
+		auto vf = std::make_shared<Variable>((int)f);
+		auto vdf = std::make_shared<Variable>(vd, vf);
+		auto vfl = std::make_shared<Variable>(vdf, vl);
+		SizeList sl;
+		TransformRepaPtrList llt;
+		std::size_t sz = sh1[i1];
+		sl.reserve(sz);
+		llt.reserve(sz);
+		std::size_t b = 1;
+		for (std::size_t i = 0; i < sz; i++)
+		{
+			auto tr = std::make_shared<TransformRepa>();
+			tr->dimension = 1;
+			tr->vectorVar = new std::size_t[1];
+			auto ww = tr->vectorVar;
+			tr->shape = new std::size_t[1];
+			auto sh = tr->shape;
+			ww[0] = v1;
+			sh[0] = sz;
+			tr->arr = new unsigned char[sz];
+			auto rr = tr->arr;
+			for (std::size_t j = 0; j < sz; j++)
+				rr[j] = 0;
+			rr[i] = 1;
+			tr->valency = 2;
+			auto vb = std::make_shared<Variable>((int)b++);
+			auto vflb = std::make_shared<Variable>(vfl, vb);
+			llu.push_back(VarSizePair(vflb, 2));
+			auto w = llu.size() - 1;
+			tr->derived = w;
+			sl.push_back(w);
+			llt.push_back(tr);
+			vv1[m1] = w;
+			sh1[m1] = 2;
+			std::size_t i1z = i1*z;
+			std::size_t m1z = m1*z;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				std::size_t k = rr1[i1z + j];
+				rr1[m1z + j] = rr[k];
+			}
+			m1++;
+		}
+		dr->fud->layers.push_back(llt);
+		dr->slices->_list.reserve(sz);
+		for (auto& s : sl)
+			dr->slices->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
+		time["transer"] = ((sec)(clk::now() - mark)).count();
+		std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
+	}
+	SizeSet ig;
+	while (f < fmax)
+	{
+		mark = clk::now();
+		std::cout << ">>> slicer " << std::endl;
+		auto ee0 = new std::size_t[ls];
+		auto nn = treesLeafNodes(*dr->slices);
+		DoubleSizeSizeTupleList zs;
+		zs.reserve(nn->size());
+		for (auto& p : *nn)
+		{
+			auto v = p.first;
+			if (ig.find(v) != ig.end())
+				continue;
+			std::size_t i = m + n;
+			while (i < m1)
+			{
+				if (vv1[i] == v)
+					break;
+				i++;
+			}
+			if (i == m1)
+				continue;
+			std::size_t a = 0;
+			for (std::size_t k = 0; k < ls; k++)
+				ee0[k] = 1;
+			std::size_t iz = i*z;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				std::size_t u = rr1[iz + j];
+				if (u)
+				{
+					a++;
+					std::size_t w = 0;
+					for (std::size_t q = 0; q < m; q++)
+						w = w * sh1[q] + rr1[q*z + j];
+					ee0[w]++;
+				}
+			}
+			if (a > 1)
+			{
+				double e = alngam((double)a + 1.0);
+				for (std::size_t k = 0; k < ls; k++)
+					e -= alngam((double)ee0[k]);
+				if (e > repaRounding)
+					zs.push_back(DoubleSizeSizeTuple(e, a, i));
+			}
+		}
+		if (!zs.size())
+		{
+			std::cout << "no slices" << std::endl;
+			break;
+		}
+		std::sort(zs.begin(), zs.end());
+		auto z2 = std::get<1>(zs.back());
+		auto i2 = std::get<2>(zs.back());
+		auto v2 = vv1[i2];
+		std::cout << "slice size: " << z2 << std::endl;
+		std::cout << "slice variable: " << *llu[v2].first << std::endl;
+		time["slicer"] = ((sec)(clk::now() - mark)).count();
+		std::cout << "<<< slicer " << time["slicer"] << "s" << std::endl;
+		mark = clk::now();
+		std::cout << ">>> searcher " << std::endl;
+		for (std::size_t k = 0; k < ls; k++)
+			ee0[k] = 1;
+		auto i2z = i2*z;
+		for (std::size_t j = 0; j < z; j++)
+		{
+			std::size_t t = rr1[i2z + j];
+			if (t)
+			{
+				std::size_t w = 0;
+				for (std::size_t q = 0; q < m; q++)
+					w = w * sh1[q] + rr1[q*z + j];
+				ee0[w]++;
+			}
+		}
+		double e0 = alngam((double)z2 + 1.0);
+		for (std::size_t k = 0; k < ls; k++)
+			e0 -= alngam((double)ee0[k]);
+		delete ee0;
+		double e = e0;
+		std::size_t i1 = 0;
+		auto ee1 = new std::size_t[ns*ls];
+		auto ee2 = new std::size_t[ns];
+		for (std::size_t i = m; i < n+m; i++)
+		{
+			auto s = sh1[i];
+			for (std::size_t k = 0; k < s*ls; k++)
+				ee1[k] = 1;
+			for (std::size_t k = 0; k < s; k++)
+				ee2[k] = 1;
+			auto iz = i*z;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				std::size_t t = rr1[i2z + j];
+				if (t)
+				{
+					std::size_t u = rr1[iz + j];
+					std::size_t w = 0;
+					for (std::size_t q = 0; q < m; q++)
+						w = w * sh1[q] + rr1[q*z + j];
+					ee1[w*s + u]++;
+					ee2[u]++;
+				}
+			}
+			double e1 = 0.0;
+			double e2 = 0.0;
+			for (std::size_t k = 0; k < s*ls; k++)
+				e1 += alngam((double)ee1[k]);
+			for (std::size_t k = 0; k < s; k++)
+				e2 += alngam((double)ee2[k]);
+			if (e > e2 - e1)
+			{
+				e = e2 - e1;
+				i1 = i;
+			}
+			if (e <= repaRounding)
+				break;
+		}
+		delete ee2;
+		delete ee1;
+		if (i1 == 0 || e >= e0 - repaRounding)
+		{
+			ig.insert(v2);
+			std::cout << "no conditional entropy" << std::endl;
+			continue;
+		}
+		auto v1 = vv1[i1];
+		time["searcher"] = ((sec)(clk::now() - mark)).count();
+		std::cout << "<<< searcher " << time["searcher"] << "s" << std::endl;
+		mark = clk::now();
+		std::cout << ">>> transer " << std::endl;
+		f++;
+		std::cout << "fud: " << f << std::endl;
+		std::cout << "fud slice size: " << z2 << std::endl;
+		std::cout << "sized entropy label : " << e0 << std::endl;
+		std::cout << "sized conditional entropy: " << e << std::endl;
+		std::cout << "sized entropy decrease: " << e0 - e << std::endl;
+		std::cout << "entropy variable: " << *llu[v1].first << std::endl;
+		auto vf = std::make_shared<Variable>((int)f);
+		auto vdf = std::make_shared<Variable>(vd, vf);
+		auto vfl = std::make_shared<Variable>(vdf, vl);
+		SizeList sl;
+		TransformRepaPtrList llt;
+		std::size_t sz = sh1[i1];
+		sl.reserve(sz);
+		llt.reserve(sz);
+		std::size_t b = 1;
+		for (std::size_t i = 0; i < sz; i++)
+		{
+			auto tr = std::make_shared<TransformRepa>();
+			tr->dimension = 2;
+			tr->vectorVar = new std::size_t[2];
+			auto ww = tr->vectorVar;
+			tr->shape = new std::size_t[2];
+			auto sh = tr->shape;
+			ww[0] = v2;
+			sh[0] = 2;
+			ww[1] = v1;
+			sh[1] = sz;
+			tr->arr = new unsigned char[2 * sz];
+			auto rr = tr->arr;
+			for (std::size_t j = 0; j < 2 * sz; j++)
+				rr[j] = 0;
+			rr[sz + i] = 1;
+			tr->valency = 2;
+			auto vb = std::make_shared<Variable>((int)b++);
+			auto vflb = std::make_shared<Variable>(vfl, vb);
+			llu.push_back(VarSizePair(vflb, 2));
+			auto w = llu.size() - 1;
+			tr->derived = w;
+			sl.push_back(w);
+			llt.push_back(tr);
+			vv1[m1] = w;
+			sh1[m1] = 2;
+			std::size_t i1z = i1*z;
+			std::size_t m1z = m1*z;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				std::size_t k = rr1[i2z + j];
+				k = sz*k + rr1[i1z + j];
+				rr1[m1z + j] = rr[k];
+			}
+			m1++;
+		}
+		dr->fud->layers.push_back(llt);
+		for (auto& p : *nn)
+			if (p.first == v2)
+			{
+				p.second->_list.reserve(sz);
+				for (auto& s : sl)
+					p.second->_list.push_back(SizeSizeTreePair(s, std::make_shared<SizeTree>()));
+				break;
+			}
+		std::cout << "fud slice cardinality: " << llt.size() << std::endl;
+		time["transer"] = ((sec)(clk::now() - mark)).count();
+		std::cout << "<<< transer " << time["transer"] << "s" << std::endl;
+	}
+	std::cout << "<<< applicationer " << ((sec)(clk::now() - t0)).count() << "s" << std::endl;
+	return dr;
+}
+
