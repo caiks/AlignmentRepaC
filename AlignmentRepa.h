@@ -172,6 +172,8 @@ namespace Alignment
 	public: void transpose();
 	public: unsigned char evient;
 	public: unsigned char* arr;
+	
+	public: void reframe_u(const SizeSizeUMap&);
 	};
 
 	typedef std::shared_ptr<HistoryRepa> HistoryRepaPtr;
@@ -198,11 +200,14 @@ namespace Alignment
 	// historyRepasRed :: HistoryRepa -> HistogramRepaRed
 	std::unique_ptr<HistogramRepaRed> historyRepasRed(const HistoryRepa&);
 
-	// setVarsHistoryRepasRed_u :: D[VariableRepa] -> HistoryRepa -> HistogramRepaRed
+	// setVarsHistoryRepasRed_u :: [VariableRepa] -> HistoryRepa -> HistogramRepaRed
 	std::unique_ptr<HistogramRepaRed> setVarsHistoryRepasRed_u(std::size_t, const std::size_t*, const HistoryRepa&);
 
 	// vectorHistoryRepasConcat_u :: V.Vector HistoryRepa -> HistoryRepa
 	std::unique_ptr<HistoryRepa> vectorHistoryRepasConcat_u(const HistoryRepaPtrList&);
+
+	// vectorHistoryRepasJoin_u :: V.Vector HistoryRepa -> HistoryRepa
+	std::unique_ptr<HistoryRepa> vectorHistoryRepasJoin_u(const HistoryRepaPtrList&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistoryRepa&);

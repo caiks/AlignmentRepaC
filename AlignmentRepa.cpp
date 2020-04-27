@@ -634,6 +634,27 @@ void Alignment::HistoryRepa::transpose()
 	return;
 }
 
+void Alignment::HistoryRepa::reframe_u(const SizeSizeUMap& nn)
+{
+	auto n = dimension;
+	auto vv = vectorVar;
+	bool altered = false;
+	for (std::size_t i = 0; i < n; i++)
+	{
+		auto it = nn.find(vv[i]);
+		if (it != nn.end())
+		{
+			vv[i] = it->second;
+			altered = true;
+		}
+	}
+	if (!_mapVarInt && altered)
+	{
+		delete _mapVarInt;
+		_mapVarInt = 0;
+	}
+}
+
 // systemsHistoriesHistoryRepa_u :: System -> History -> Maybe HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::systemsHistoriesHistoryRepa_u(const System& uu, const SystemRepa& ur, const History& hh, unsigned char evient)
 {
@@ -1122,6 +1143,49 @@ std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasConcat_u(const History
 	}
 	if (!hr0.evient)
 		hr1->transpose();
+	return hr1;
+}
+
+// vectorHistoryRepasJoin_u :: V.Vector HistoryRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::vectorHistoryRepasJoin_u(const HistoryRepaPtrList& ll)
+{
+	auto hr1 = std::make_unique<HistoryRepa>();
+	if (!ll.size())
+		return hr1;
+	auto& hr0 = *ll[0];
+	if (!hr0.arr)
+		return hr1;
+	auto z = hr0.size;
+	std::size_t n1 = 0;
+	for (auto& hr : ll)
+		n1 += hr->dimension;
+	hr1->dimension = n1;
+	hr1->vectorVar = new std::size_t[n1];
+	auto vv1 = hr1->vectorVar;
+	hr1->shape = new std::size_t[n1];
+	auto sh1 = hr1->shape;
+	hr1->size = z;
+	hr1->evient = false;
+	hr1->arr = new unsigned char[z*n1];
+	auto rr1 = hr1->arr;
+	std::size_t k = 0;
+	for (auto& hr : ll)
+	{
+		auto n = hr->dimension;
+		auto vv = hr->vectorVar;
+		auto sh = hr->shape;
+		auto rr = hr->arr;
+		for (std::size_t i = 0; i < n; i++)
+		{
+			vv1[k] = vv[i];
+			sh1[k] = sh[i];
+			std::size_t kz = k*z;
+			std::size_t iz = i*z;
+			for (std::size_t j = 0; j < z; j++)
+				rr1[kz + j] = rr[hr->evient ? j*n + i : iz + j];
+			k++;
+		}
+	}
 	return hr1;
 }
 
