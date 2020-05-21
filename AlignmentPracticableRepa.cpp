@@ -369,3 +369,56 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(xx2), s);
 }
 
+// systemsHistoryRepasApplicationsHistoryHistoryPartitionedRepa_u ::
+//   HistoryRepa -> ApplicationRepa ->
+//   (SystemRepa, HistoryRepa)
+std::unique_ptr<HistoryRepa> Alignment::systemsHistoryRepasApplicationsHistoryHistoryPartitionedRepa_u(const HistoryRepa& hr, const ApplicationRepa& dr, SystemRepa& ur)
+{
+	auto frmul = historyRepasFudRepasMultiply_u;
+
+	auto& llu1 = ur.listVarSizePair;	
+	auto hr2 = frmul(hr, *dr.fud);
+	
+	auto sl = treesLeafElements(*dr.slices);
+	auto m = sl->size();
+	auto z = hr2->size;
+	auto& mvv2 = hr2->mapVarInt();
+	SizeList pvv2;
+	for (auto v : *sl)
+		pvv2.push_back(mvv2[v]);
+	auto hr3 = std::make_unique<HistoryRepa>();
+	std::size_t n3 = 2;
+	std::size_t s0 = (m-1)/256 + 1;
+	std::size_t s1 = m > 256 ? 256 : m;
+	llu1.push_back(VarSizePair(std::make_shared<Variable>("partition0"), s0));
+	llu1.push_back(VarSizePair(std::make_shared<Variable>("partition1"), s1));
+	std::size_t v0 = llu1.size() - 2;
+	std::size_t v1 = llu1.size() - 1;
+	hr3->dimension = n3;
+	hr3->vectorVar = new std::size_t[n3];
+	auto vv3 = hr3->vectorVar;
+	hr3->shape = new std::size_t[n3];
+	auto sh3 = hr3->shape;
+	vv3[0] = v0;
+	sh3[0] = s0;
+	vv3[1] = v1;
+	sh3[1] = s1;
+	hr3->size = z;
+	hr3->evient = false;
+	hr3->arr = new unsigned char[z*n3];
+	auto rr2 = hr2->arr;
+	auto rr3 = hr3->arr;
+	for (std::size_t j = 0; j < z; j++)
+		for (std::size_t i = 0; i < m; i++)
+		{
+			std::size_t u = rr2[pvv2[i]*z + j];
+			if (u)
+			{
+				rr3[j] = (unsigned char)(i/256);
+				rr3[z+j] = (unsigned char)(i%256);
+				break;
+			}
+		}
+	return hr3;
+}
+
