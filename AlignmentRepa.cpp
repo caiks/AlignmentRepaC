@@ -2221,6 +2221,7 @@ std::unique_ptr<ApplicationRepa> Alignment::applicationRepasApplicationRepa_u(co
 std::unique_ptr<ApplicationRepa> Alignment::applicationRepaPairsJoin_u(const ApplicationRepa& dr1, const ApplicationRepa& dr2)
 {
 	auto llfr = setVariablesListTransformRepasFudRepa_u;
+	auto frvars = fudRepasSetVar;
 	auto frdep = fudRepasSetVarsDepends;
 
 	auto dr3 = std::make_unique<ApplicationRepa>();
@@ -2233,6 +2234,13 @@ std::unique_ptr<ApplicationRepa> Alignment::applicationRepaPairsJoin_u(const App
 	fr.layers.reserve(dr1.fud->layers.size() + dr2.fud->layers.size());
 	fr.layers.insert(fr.layers.end(), dr1.fud->layers.begin(), dr1.fud->layers.end());
 	fr.layers.insert(fr.layers.end(), dr2.fud->layers.begin(), dr2.fud->layers.end());
+	auto vv1 = frvars(*dr1.fud);
+	for (auto v : dr2.substrate)
+		if (vv1->find(v) == vv1->end())
+		{
+			vv.insert(v);
+			dr3->substrate.push_back(v);
+		}
 	dr3->fud = std::move(llfr(vv, *frdep(fr, ww)));
 	return dr3;
 }
