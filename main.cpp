@@ -4546,5 +4546,493 @@ int main(int argc, char **argv)
 		EVALL(*hshr(*hs2));
 	}
 
+	if (false)
+	{
+		auto sysreg = systemRegular_u;
+		auto sys = histogramsSystemImplied;
+		auto uunion = pairSystemsUnion;
+		auto uvars = systemsSetVar;
+		auto cart = systemsSetVarsSetStateCartesian_u;
+		auto reframe = histogramsMapVarsFrame_u;
+		auto mul = pairHistogramsMultiply;
+		auto add = pairHistogramsAdd_u;
+		auto resize = histogramsResize;
+		auto scalar = histogramScalar_u;
+		auto regpivot = histogramRegularUnitPivot_u;
+		auto regcart = histogramRegularCartesian_u;
+		auto regdiag = histogramRegularUnitDiagonal_u;
+		typedef std::pair<int, ValList> IntValListPair;
+		typedef std::vector<IntValListPair> IntValListPairList;
+		auto llhh = [](const VarList& vv, const IntValListPairList& ee)
+		{
+			std::vector<IdStatePair> ii;
+			for (auto& pp : ee)
+			{
+				auto i = pp.first;
+				auto& ll = pp.second;
+				auto jj = std::vector<VarValPair>();
+				for (int j = 0; j < ll.size(); j++)
+					jj.push_back(VarValPair(vv[j], ll[j]));
+				ii.push_back(IdStatePair(Id(i), *listsState(jj)));
+			}
+			return listsHistory_u(ii);
+		};
+		auto hhll = historiesList;
+		auto hvars = historiesSetVar;
+		auto hsize = historiesSize;
+		auto hred = [](const History& hh, const VarUSet& vv)
+		{
+			return setVarsHistoriesReduce(vv, hh);
+		};
+		auto hhaa = historiesHistogram;
+		auto aahh = histogramsHistory_u;
+		auto aall = histogramsList;
+		auto vars = histogramsSetVar;
+		auto size = histogramsSize;
+		auto trim = histogramsTrim;
+		auto unit = setStatesHistogramUnit_u;
+		auto norm = [](const Histogram& aa)
+		{
+			return histogramsResize(1, aa);
+		};
+		auto ared = [](const Histogram& aa, const VarUSet& vv)
+		{
+			return setVarsHistogramsReduce(vv, aa);
+		};
+		auto ind = histogramsIndependent;
+		auto cdaa = [](const SizeListList& ll)
+		{
+			auto llss = listsState;
+			auto llaa = listsHistogram_u;
+			std::vector<StateRationalPair> qq;
+			qq.reserve(ll.size());
+			for (auto& mm : ll)
+			{
+				std::vector<VarValPair> ss;
+				ss.reserve(mm.size());
+				for (int i = 0; i < mm.size(); i++)
+					ss.push_back(VarValPair(Variable(i+1), Value((int)mm[i])));
+				qq.push_back(StateRationalPair(*llss(ss), 1));
+			}
+			return llaa(qq);
+		};
+		auto cdtt = [cdaa](const SizeList& pp, const SizeListList& ll)
+		{
+			auto aa = cdaa(ll);
+			auto vv = histogramsSetVar(*aa);
+			VarVarUMap nn;
+			std::size_t i = 0;
+			for (auto& v : *vv)
+			{
+				if (i < pp.size())
+					nn.insert_or_assign(v,Variable((int)pp[i]));
+				i++;
+			}
+			auto bb = histogramsMapVarsFrame_u(*aa, nn);
+			VarUSet ww;
+			if (pp.size())
+				ww.insert(Variable((int)pp.back()));
+			return histogramsSetVarsTransform(*bb, ww);
+		};
+		auto llff = setTransformsFud_u;
+		auto fsys = fudsSystemImplied;
+		auto aarr = systemsHistogramsHistogramRepa_u;
+		auto rraa = systemsHistogramRepasHistogram_u;
+		auto uuur = systemsSystemRepa;
+		auto uruu = systemsRepasSystem;
+		auto araa = systemsHistogramRepasHistogram_u;
+		auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+		{
+			return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa), 1);
+		};
+		auto hraa = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+		{
+			return historiesHistogram(*systemsHistoryRepasHistory_u(uu, ur, hr));
+		};
+		auto hhhr = [](const System& uu, const SystemRepa& ur, const History& hh)
+		{
+			return systemsHistoriesHistoryRepa_u(uu, ur, hh, 1);
+		};
+		auto hrhh = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+		{
+			return systemsHistoryRepasHistory_u(uu, ur, hr);
+		};
+		auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const SizeList& kk)
+		{
+			return setVarsHistoryRepasReduce_u(1.0, kk.size(), kk.data(), hr);
+		};
+		auto hrpr = historyRepasRed;
+		auto hrshuffle = historyRepasShuffle_u;
+		auto frmul = historyRepasFudRepasMultiply_u;
+		auto fffr = systemsFudsFudRepa_u;
+		auto frff = systemsFudRepasFud_u;
+		auto tupler = parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui;
+		auto rrvqqy = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
+		auto parter = parametersSystemsPartitionerMaxRollByMRepa_ui;
+		auto roller = parametersRollerMaximumRollExcludedSelfRepa_i;
+		auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui;
+		auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u;
+
+		cout << endl;
+		{
+			auto uu = sysreg(3, 4);
+			auto ur = uuur(*uu);
+			auto vv = SizeList{ 0,1,2,3 };
+			auto aa = resize(900, *mul(*regpivot(3, 3), *reframe(*regcart(1, 1), VarVarUMap{ { Variable(1), Variable(4) } })));
+			auto hr = aahr(*uu, *ur, *aa);
+			auto rr = add(*hraa(*uu, *ur, *hrshuffle(*hr, 1)), *hraa(*uu, *ur, *hrshuffle(*hr, 2)));
+			auto hrs = aahr(*uu, *ur, *rr);
+			hr->transpose();
+			hrs->transpose();
+			auto t = layerer(27, 3, 27, 2, 2, 2, 9, 1, vv, *hr, *hrs, 1, *ur);
+			auto& fr = std::get<0>(t);
+			auto& mm = std::get<1>(t);
+			if (mm->size())
+			{
+				auto& a = mm->back().first;
+				auto& kk = mm->back().second;
+				VarSet qq;
+				for (std::size_t i = 0; i < kk.size(); i++)
+					qq.insert(*(ur->listVarSizePair[kk[i]]).first);
+				cout << "a = " << a << endl;
+				cout << "kk = " << qq << endl;
+			}
+			uruu(*ur, *uu);
+			auto ff = frff(*uu, *ur, *fr);
+			cout << "ff = " << *ff << endl;
+			/*
+			>>> layerer
+			>>> layer       fud: 1  layer: 1
+			substrate cardinality: 4
+			fud cardinality: 0
+			tupler  searched: 5     rate: 17743.1
+			tupler 0.0002818s
+			tuple cardinality: 1
+			max tuple algn: 588.469
+			layer cardinality: 2
+			parter  searched: 3     rate: 9216.59
+			parter 0.0003255s
+			roller  searched: 158   rate: 728111
+			roller 0.000217s
+			der vars algn density: 154.34
+			dervarser       searched: 2     rate: 124224
+			dervarser 1.61e-05s
+			application 0.0004421s
+			<<< layer 0.0012853s
+			>>> layer       fud: 1  layer: 2
+			substrate cardinality: 4
+			fud cardinality: 2
+			tupler  searched: 25    rate: 173370
+			tupler 0.0001442s
+			tuple cardinality: 1
+			max tuple algn: 607.304
+			layer cardinality: 1
+			parter  searched: 3     rate: 303030
+			parter 9.9e-06s
+			roller  searched: 34    rate: 2.85714e+06
+			roller 1.19e-05s
+			der vars algn density: 154.34
+			dervarser       searched: 3     rate: 160428
+			dervarser 1.87e-05s
+			application 0.0001674s
+			<<< layer 0.0003704s
+			<<< layerer 0.0017068s
+			a = 154.34
+			kk = {<<<0,1>,1>,1>,<<<0,1>,1>,2>}
+			ff = {({({(1,1),(3,1),(<<<0,1>,1>,1>,0)},1 % 1),({(1,1),(3,2),(<<<0,1>,1>,1>,0)},1 % 1),({(1,1),(3,3),(<<<0,1>,1>,1>,0)},1 % 1),({(1,2),(3,1),(<<<0,1>,1>,1>,1)},1 % 1),({(1,2),(3,2),(<<<0,1>,1>,1>,1)},1 % 1),({(1,2),(3,3),(<<<0,1>,1>,1>,1)},1 % 1),({(1,3),(3,1),(<<<0,1>,1>,1>,1)},1 % 1),({(1,3),(3,2),(<<<0,1>,1>,1>,1)},1 % 1),({(1,3),(3,3),(<<<0,1>,1>,1>,1)},1 % 1)},{<<<0,1>,1>,1>}),({({(2,1),(<<<0,1>,1>,2>,0)},1 % 1),({(2,2),(<<<0,1>,1>,2>,1)},1 % 1),({(2,3),(<<<0,1>,1>,2>,1)},1 % 1)},{<<<0,1>,1>,2>})}
+*/
+		}
+		cout << endl;
+		{
+			auto uu = sysreg(3, 4);
+			auto ur = uuur(*uu);
+			auto vv = SizeList{ 0,1,2,3 };
+			auto aa = resize(150, *regdiag(3, 4));
+			auto hr = aahr(*uu, *ur, *aa);
+			// auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+			auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 17));
+			aa = add(*resize(1500, *regdiag(3, 4)), *rr);
+			hr = aahr(*uu, *ur, *aa);
+			// rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+			rr = hraa(*uu, *ur, *hrshuffle(*hr, 17));
+			auto hrs = aahr(*uu, *ur, *rr);
+			hr->transpose();
+			hrs->transpose();
+			auto t = layerer(27, 3, 27, 2, 2, 2, 9, 1, vv, *hr, *hrs, 1, *ur);
+			auto& fr = std::get<0>(t);
+			auto& mm = std::get<1>(t);
+			if (mm->size())
+			{
+				auto& a = mm->back().first;
+				auto& kk = mm->back().second;
+				VarSet qq;
+				for (std::size_t i = 0; i < kk.size(); i++)
+					qq.insert(*(ur->listVarSizePair[kk[i]]).first);
+				cout << "a = " << a << endl;
+				cout << "kk = " << qq << endl;
+			}
+			uruu(*ur, *uu);
+			auto ff = frff(*uu, *ur, *fr);
+			cout << "ff = " << *ff << endl;
+			/*
+			>>> layerer
+			>>> layer       fud: 1  layer: 1
+			substrate cardinality: 4
+			fud cardinality: 0
+			tupler  searched: 10    rate: 130548
+			tupler 7.66e-05s
+			tuple cardinality: 1
+			max tuple algn: 2882.52
+			layer cardinality: 1
+			parter  searched: 3     rate: 209790
+			parter 1.43e-05s
+			roller  searched: 143   rate: 1.63242e+06
+			roller 8.76e-05s
+			no der vars sets
+			dervarser       searched: 0     rate: 0
+			dervarser 3.5e-06s
+			application 0.0001355s
+			<<< layer 0.0003209s
+			<<< layerer 0.0003933s
+			ff = {}
+			*/
+		}
+	}
+	
+	if (true)
+	{
+		auto sysreg = systemRegular_u;
+		auto sys = histogramsSystemImplied;
+		auto uunion = pairSystemsUnion;
+		auto uvars = systemsSetVar;
+		auto cart = systemsSetVarsSetStateCartesian_u;
+		auto reframe = histogramsMapVarsFrame_u;
+		auto mul = pairHistogramsMultiply;
+		auto add = pairHistogramsAdd_u;
+		auto resize = histogramsResize;
+		auto scalar = histogramScalar_u;
+		auto regpivot = histogramRegularUnitPivot_u;
+		auto regcart = histogramRegularCartesian_u;
+		auto regdiag = histogramRegularUnitDiagonal_u;
+		typedef std::pair<int, ValList> IntValListPair;
+		typedef std::vector<IntValListPair> IntValListPairList;
+		auto llhh = [](const VarList& vv, const IntValListPairList& ee)
+		{
+			std::vector<IdStatePair> ii;
+			for (auto& pp : ee)
+			{
+				auto i = pp.first;
+				auto& ll = pp.second;
+				auto jj = std::vector<VarValPair>();
+				for (int j = 0; j < ll.size(); j++)
+					jj.push_back(VarValPair(vv[j], ll[j]));
+				ii.push_back(IdStatePair(Id(i), *listsState(jj)));
+			}
+			return listsHistory_u(ii);
+		};
+		auto hhll = historiesList;
+		auto hvars = historiesSetVar;
+		auto hsize = historiesSize;
+		auto hred = [](const History& hh, const VarUSet& vv)
+		{
+			return setVarsHistoriesReduce(vv, hh);
+		};
+		auto hhaa = historiesHistogram;
+		auto aahh = histogramsHistory_u;
+		auto aall = histogramsList;
+		auto vars = histogramsSetVar;
+		auto size = histogramsSize;
+		auto trim = histogramsTrim;
+		auto unit = setStatesHistogramUnit_u;
+		auto norm = [](const Histogram& aa)
+		{
+			return histogramsResize(1, aa);
+		};
+		auto ared = [](const Histogram& aa, const VarUSet& vv)
+		{
+			return setVarsHistogramsReduce(vv, aa);
+		};
+		auto ind = histogramsIndependent;
+		auto cdaa = [](const SizeListList& ll)
+		{
+			auto llss = listsState;
+			auto llaa = listsHistogram_u;
+			std::vector<StateRationalPair> qq;
+			qq.reserve(ll.size());
+			for (auto& mm : ll)
+			{
+				std::vector<VarValPair> ss;
+				ss.reserve(mm.size());
+				for (int i = 0; i < mm.size(); i++)
+					ss.push_back(VarValPair(Variable(i+1), Value((int)mm[i])));
+				qq.push_back(StateRationalPair(*llss(ss), 1));
+			}
+			return llaa(qq);
+		};
+		auto cdtt = [cdaa](const SizeList& pp, const SizeListList& ll)
+		{
+			auto aa = cdaa(ll);
+			auto vv = histogramsSetVar(*aa);
+			VarVarUMap nn;
+			std::size_t i = 0;
+			for (auto& v : *vv)
+			{
+				if (i < pp.size())
+					nn.insert_or_assign(v,Variable((int)pp[i]));
+				i++;
+			}
+			auto bb = histogramsMapVarsFrame_u(*aa, nn);
+			VarUSet ww;
+			if (pp.size())
+				ww.insert(Variable((int)pp.back()));
+			return histogramsSetVarsTransform(*bb, ww);
+		};
+		auto llff = setTransformsFud_u;
+		auto fsys = fudsSystemImplied;
+		auto aarr = systemsHistogramsHistogramRepa_u;
+		auto rraa = systemsHistogramRepasHistogram_u;
+		auto uuur = systemsSystemRepa;
+		auto uruu = systemsRepasSystem;
+		auto araa = systemsHistogramRepasHistogram_u;
+		auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+		{
+			return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa), 1);
+		};
+		auto hraa = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+		{
+			return historiesHistogram(*systemsHistoryRepasHistory_u(uu, ur, hr));
+		};
+		auto hhhr = [](const System& uu, const SystemRepa& ur, const History& hh)
+		{
+			return systemsHistoriesHistoryRepa_u(uu, ur, hh, 1);
+		};
+		auto hrhh = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+		{
+			return systemsHistoryRepasHistory_u(uu, ur, hr);
+		};
+		auto hrred = [](const HistoryRepa& hr, const SystemRepa& ur, const SizeList& kk)
+		{
+			return setVarsHistoryRepasReduce_u(1.0, kk.size(), kk.data(), hr);
+		};
+		auto hrpr = historyRepasRed;
+		auto hrshuffle = historyRepasShuffle_u;
+		auto frmul = historyRepasFudRepasMultiply_u;
+		auto fffr = systemsFudsFudRepa_u;
+		auto frff = systemsFudRepasFud_u;
+		auto tupler = parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_ui;
+		auto rrvqqy = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
+		auto parter = parametersSystemsPartitionerMaxRollByMRepa_ui;
+		auto roller = parametersRollerMaximumRollExcludedSelfRepa_i;
+		auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_ui;
+		auto layerer = parametersSystemsLayererMaxRollByMExcludedSelfHighestLogIORepa_up;
+
+		auto log = [](const std::string& str)
+		{
+			std::cout << str << std::endl;
+			return;
+		};
+		
+		cout << endl;
+		{
+			auto uu = sysreg(3, 4);
+			auto ur = uuur(*uu);
+			auto vv = SizeList{ 0,1,2,3 };
+			auto aa = resize(900, *mul(*regpivot(3, 3), *reframe(*regcart(1, 1), VarVarUMap{ { Variable(1), Variable(4) } })));
+			auto hr = aahr(*uu, *ur, *aa);
+			auto rr = add(*hraa(*uu, *ur, *hrshuffle(*hr, 1)), *hraa(*uu, *ur, *hrshuffle(*hr, 2)));
+			auto hrs = aahr(*uu, *ur, *rr);
+			hr->transpose();
+			hrs->transpose();
+			auto t = layerer(27, 3, 27, 2, 2, 2, 9, 1, 1, vv, *hr, *hrs, 1, log, *ur);
+			auto& fr = std::get<0>(t);
+			auto& mm = std::get<1>(t);
+			if (mm->size())
+			{
+				auto& a = mm->back().first;
+				auto& kk = mm->back().second;
+				VarSet qq;
+				for (std::size_t i = 0; i < kk.size(); i++)
+					qq.insert(*(ur->listVarSizePair[kk[i]]).first);
+				cout << "a = " << a << endl;
+				cout << "kk = " << qq << endl;
+			}
+			uruu(*ur, *uu);
+			auto ff = frff(*uu, *ur, *fr);
+			cout << "ff = " << *ff << endl;
+			/*
+			layerer status: begin
+			layer   status: begin   fud: 1  layer: 1        substrate cardinality: 4        fud cardinality: 0
+			tupler  searched: 5     rate: 11739.8   time 0.0004259s tuple cardinality: 1
+			layer   max tuple algn: 588.469 layer cardinality: 2
+			parter  searched: 3     rate: 126582    time 2.37e-05s
+			roller  searched: 158   rate: 3.62385e+06       time 4.36e-05s
+			layer   der vars algn density: 154.34
+			dervarser       searched: 2     rate: 9350.16   time 0.0002139s
+			application     time 0.0001708s
+			layer   status: end     time 0.0008824s
+			layer   status: begin   fud: 1  layer: 2        substrate cardinality: 4        fud cardinality: 2
+			tupler  searched: 25    rate: 54229.9   time 0.000461s  tuple cardinality: 1
+			layer   max tuple algn: 607.304 layer cardinality: 1
+			parter  searched: 3     rate: 252101    time 1.19e-05s
+			roller  searched: 34    rate: 2.5e+06   time 1.36e-05s
+			layer   der vars algn density: 154.34
+			dervarser       searched: 3     rate: 14910.5   time 0.0002012s
+			application     time 0.0001902s
+			layer   status: end     time 0.0008948s
+			layerer status: end     time 0.0018519s
+			a = 154.34
+			kk = {<<<0,1>,1>,1>,<<<0,1>,1>,2>}
+			ff = {({({(1,1),(3,1),(<<<0,1>,1>,1>,0)},1 % 1),({(1,1),(3,2),(<<<0,1>,1>,1>,0)},1 % 1),({(1,1),(3,3),(<<<0,1>,1>,1>,0)},1 % 1),({(1,2),(3,1),(<<<0,1>,1>,1>,1)},1 % 1),({(1,2),(3,2),(<<<0,1>,1>,1>,1)},1 % 1),({(1,2),(3,3),(<<<0,1>,1>,1>,1)},1 % 1),({(1,3),(3,1),(<<<0,1>,1>,1>,1)},1 % 1),({(1,3),(3,2),(<<<0,1>,1>,1>,1)},1 % 1),({(1,3),(3,3),(<<<0,1>,1>,1>,1)},1 % 1)},{<<<0,1>,1>,1>}),({({(2,1),(<<<0,1>,1>,2>,0)},1 % 1),({(2,2),(<<<0,1>,1>,2>,1)},1 % 1),({(2,3),(<<<0,1>,1>,2>,1)},1 % 1)},{<<<0,1>,1>,2>})}
+			*/
+		}
+		cout << endl;
+		{
+			auto uu = sysreg(3, 4);
+			auto ur = uuur(*uu);
+			auto vv = SizeList{ 0,1,2,3 };
+			auto aa = resize(150, *regdiag(3, 4));
+			auto hr = aahr(*uu, *ur, *aa);
+			// auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+			auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 17));
+			aa = add(*resize(1500, *regdiag(3, 4)), *rr);
+			hr = aahr(*uu, *ur, *aa);
+			// rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+			rr = hraa(*uu, *ur, *hrshuffle(*hr, 17));
+			auto hrs = aahr(*uu, *ur, *rr);
+			hr->transpose();
+			hrs->transpose();
+			auto t = layerer(27, 3, 27, 2, 2, 2, 9, 1, 1, vv, *hr, *hrs, 1, log, *ur);
+			auto& fr = std::get<0>(t);
+			auto& mm = std::get<1>(t);
+			if (mm->size())
+			{
+				auto& a = mm->back().first;
+				auto& kk = mm->back().second;
+				VarSet qq;
+				for (std::size_t i = 0; i < kk.size(); i++)
+					qq.insert(*(ur->listVarSizePair[kk[i]]).first);
+				cout << "a = " << a << endl;
+				cout << "kk = " << qq << endl;
+			}
+			uruu(*ur, *uu);
+			auto ff = frff(*uu, *ur, *fr);
+			cout << "ff = " << *ff << endl;
+			/*
+			layerer status: begin
+			layer   status: begin   fud: 1  layer: 1        substrate cardinality: 4        fud cardinality: 0
+			tupler  searched: 10    rate: 27367.3   time 0.0003654s tuple cardinality: 1
+			layer   max tuple algn: 2882.52 layer cardinality: 1
+			parter  searched: 3     rate: 223881    time 1.34e-05s
+			roller  searched: 143   rate: 2.31392e+06       time 6.18e-05s
+			layer   no der vars sets
+			dervarser       searched: 0     rate: 0 time 0.0001175s
+			application     time 0.0001846s
+			layer   status: end     time 0.0007611s
+			layerer status: end     time 0.0008309s
+			ff = {}
+			*/
+		}
+	}
+	
 	return 0;
 }

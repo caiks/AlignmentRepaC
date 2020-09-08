@@ -17,6 +17,12 @@ namespace Alignment
 	//   IO (SystemRepa, FudRepa, [(Double, [VariableRepa]])
 	std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_up(std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistoryRepa&, std::size_t, SystemRepa&);
 
+	// parametersSystemsLayererMaxRollByMExcludedSelfHighestLogIORepa_up ::
+	//   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
+	//   [VariableRepa] -> HistoryRepa -> HistoryRepa-> Integer ->
+	//   IO (SystemRepa, FudRepa, [(Double, [VariableRepa]])
+	std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> parametersSystemsLayererMaxRollByMExcludedSelfHighestLogIORepa_up(std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, std::size_t, const SizeList&, const HistoryRepa&, const HistoryRepa&, std::size_t, void (*log)(const std::string&), SystemRepa&);
+
 	// parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
 	//   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
 	//   Integer -> Integer ->
