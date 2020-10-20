@@ -1331,7 +1331,57 @@ std::unique_ptr<HistoryRepa> Alignment::historySparsesHistoryRepa(const HistoryS
 	return hr;
 }
 
+// listSetIntsHistorySparse :: SizeSetList -> HistorySparse
+std::unique_ptr<HistorySparse> Alignment::listSetIntsHistorySparse(const SizeSetList& ll)
+{
+	auto z = ll.size();
+	auto hs = std::make_unique<HistorySparse>();
+	hs->size = z;
+	hs->vectorDimension = new std::size_t[z];
+	auto dd = hs->vectorDimension;
+	std::size_t m = 0;
+	std::size_t j = 0;
+	for (auto& qq : ll)
+	{
+		std::size_t k = qq.size();
+		dd[j] = k;
+		m += k;
+		j++;
+	}
+	hs->arr = new std::size_t[m];	
+	auto rr = hs->arr;
+	m = 0;
+	for (auto& qq : ll)
+	{
+		for (auto w : qq)
+		{
+			rr[m] = w;
+			m++;
+		}
+	}
+	return hs;
+}
 
+// historySparsesListSetInt :: HistorySparse -> SizeSetList
+std::unique_ptr<SizeSetList> Alignment::historySparsesListSetInt(const HistorySparse& hs)
+{
+	auto z = hs.size;
+	auto dd = hs.vectorDimension;
+	auto rr = hs.arr;
+	auto ll = std::make_unique<SizeSetList>(z);
+	std::size_t m = 0;
+	for (std::size_t j = 0; j < z; j++)
+	{
+		auto& qq = (*ll)[j];
+		auto k = dd[j];
+		for (std::size_t i = 0; i < k; i++)
+		{
+			qq.insert(rr[m]);
+			m++;
+		}
+	}
+	return ll;
+}
 
 TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
 {
@@ -5341,3 +5391,26 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s1);
 }
 
+std::ostream& operator<<(std::ostream& out, const DecompFudSlicedRepa& dr)
+{
+	out << "[";
+	bool first = true;
+	for (auto& sl : dr.slices)
+	{
+		if (first)
+			first = false;
+		else
+			out << ",";		
+		out << "(" << sl.var 
+			<< "," << sl.parent 
+			<< "," << sl.children;
+		if (sl.fud)
+			out << "," << *sl.fud;
+		else
+			out << ",null";
+		out << "," << sl.fudSize 
+			<< "," << sl.fudUnderlying << ")";		
+	}
+	out << "]";
+	return out;
+}

@@ -25,6 +25,7 @@ namespace Alignment
 	typedef std::vector<DoubleSizeListPair> DoubleSizeListPairList;
 	typedef std::unordered_set<std::size_t> SizeUSet;
 	typedef std::set<std::size_t> SizeSet;
+	typedef std::vector<SizeSet> SizeSetList;
 	typedef std::set<SizeSet> SizeSetSet;
 	typedef std::map<std::size_t, SizeSet> SizeSizeSetMap;
 	typedef std::vector<SizeSizeSetMap> SizeSizeSetMapList;
@@ -233,6 +234,12 @@ namespace Alignment
 
 	// historySparsesHistoryRepa :: HistorySparse -> HistoryRepa
 	std::unique_ptr<HistoryRepa> historySparsesHistoryRepa(const HistorySparse&);
+	
+	// listSetIntsHistorySparse :: SizeSetList -> HistorySparse
+	std::unique_ptr<HistorySparse> listSetIntsHistorySparse(const SizeSetList&);
+
+	// historySparsesListSetInt :: HistorySparse -> SizeSetList
+	std::unique_ptr<SizeSetList> historySparsesListSetInt(const HistorySparse&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistorySparse&);
@@ -414,6 +421,30 @@ namespace Alignment
 	std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> parametersSetVarsSetSetVarsHistoryRepasSetSetVarsAlignedExcludeHiddenDenseTop_up(std::size_t, std::size_t, std::size_t, const SizeSizePairList&, const SizeList&, const SizeListList&, const HistoryRepa&, const HistogramRepaRed&, const HistoryRepa&, const HistogramRepaRed&);
 
 }
+
+namespace Alignment
+{
+	struct SliceStruct
+	{
+		std::size_t var;
+		std::size_t parent;
+		SizeList children;
+		std::shared_ptr<FudRepa> fud;
+		std::size_t fudSize;
+		SizeUSet fudUnderlying;
+	};
+	
+	struct DecompFudSlicedRepa
+	{
+		std::vector<SliceStruct> slices;
+	};
+
+	// applicationRepasDecompFudSlicedRepa_u :: ApplicationRepa -> DecompFudSlicedRepa
+	std::unique_ptr<DecompFudSlicedRepa> applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa&);
+
+}
+
+std::ostream& operator<<(std::ostream& out, const Alignment::DecompFudSlicedRepa&);
 
 
 #endif

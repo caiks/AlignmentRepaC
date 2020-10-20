@@ -4520,7 +4520,9 @@ int main(int argc, char **argv)
 		};
 		auto hrhs = historyRepasHistorySparse;
 		auto hshr = historySparsesHistoryRepa;
-
+		auto llhs = listSetIntsHistorySparse;
+		auto hsll = historySparsesListSetInt;
+		
 		auto aa = regdiag(2, 3);
 		EVALL(*aa);
 
@@ -4533,6 +4535,10 @@ int main(int argc, char **argv)
 		EVALL(*hs);
 
 		EVALL(*hshr(*hs));
+		
+		EVALL(*hsll(*hs));
+		
+		EVALL(*llhs(*hsll(*hs)));
 
 		std::string filename = "test.bin";
 		std::ofstream out(filename, std::ios::binary);
