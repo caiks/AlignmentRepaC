@@ -424,26 +424,38 @@ namespace Alignment
 
 namespace Alignment
 {
-	struct SliceStruct
+	struct FudSlicedStruct
 	{
-		std::size_t var;
 		std::size_t parent;
 		SizeList children;
-		std::shared_ptr<FudRepa> fud;
-		std::size_t fudSize;
-		SizeUSet fudUnderlying;
+		TransformRepaPtrList fud;
 	};
 	
-	struct DecompFudSlicedRepa
+	class DecompFudSlicedRepa
 	{
-		std::vector<SliceStruct> slices;
-	};
+	public: DecompFudSlicedRepa(std::size_t listFudRepaSizeExpectedA = 0);
+	private: DecompFudSlicedRepa(const DecompFudSlicedRepa &);
+	public: ~DecompFudSlicedRepa();
 
+	private: DecompFudSlicedRepa& operator=(const DecompFudSlicedRepa&);
+
+	public: std::size_t listFudRepaSizeExpected;
+	public: std::vector<FudSlicedStruct> fuds;
+	public: std::size_t fudRepasSize;
+
+	public: SizeSizeUMap& mapVarInt() const;
+	private: SizeSizeUMap* _mapVarInt;
+	};
+	
 	// applicationRepasDecompFudSlicedRepa_u :: ApplicationRepa -> DecompFudSlicedRepa
 	std::unique_ptr<DecompFudSlicedRepa> applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa&);
+	
+	// decompFudSlicedRepasApplicationRepa_u :: DecompFudSlicedRepa -> ApplicationRepa
+	std::unique_ptr<ApplicationRepa> decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa&);
 
 }
 
+std::ostream& operator<<(std::ostream& out, const Alignment::FudSlicedStruct&);
 std::ostream& operator<<(std::ostream& out, const Alignment::DecompFudSlicedRepa&);
 
 

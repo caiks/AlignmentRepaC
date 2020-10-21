@@ -5391,26 +5391,60 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s1);
 }
 
-std::ostream& operator<<(std::ostream& out, const DecompFudSlicedRepa& dr)
+DecompFudSlicedRepa::DecompFudSlicedRepa(std::size_t listFudRepaSizeExpectedA) : _mapVarInt(0), fudRepasSize(0), listFudRepaSizeExpected(listFudRepaSizeExpectedA)
 {
-	out << "[";
+	if (listFudRepaSizeExpected > 0)
+		fuds.reserve(listFudRepaSizeExpected);
+}
+
+DecompFudSlicedRepa::~DecompFudSlicedRepa()
+{
+	delete _mapVarInt;
+}
+
+std::ostream& operator<<(std::ostream& out, const FudSlicedStruct& fr)
+{
+	out << "(" << fr.parent << ",[" << fr.children << "],[";	
 	bool first = true;
-	for (auto& sl : dr.slices)
+	for (auto& tr : fr.fud)
 	{
 		if (first)
 			first = false;
 		else
 			out << ",";		
-		out << "(" << sl.var 
-			<< "," << sl.parent 
-			<< "," << sl.children;
-		if (sl.fud)
-			out << "," << *sl.fud;
-		else
-			out << ",null";
-		out << "," << sl.fudSize 
-			<< "," << sl.fudUnderlying << ")";		
+		out << *tr;		
 	}
-	out << "]";
+	out << "])";
 	return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const DecompFudSlicedRepa& dr)
+{
+	out << "(" << dr.listFudRepaSizeExpected << ",[";	
+
+	bool first = true;
+	for (auto& fr : dr.fuds)
+	{
+		if (first)
+			first = false;
+		else
+			out << ",";		
+		out << fr;				
+	}
+	out << "],"  << dr.fudRepasSize << ")";
+	return out;
+}
+
+SizeSizeUMap& Alignment::DecompFudSlicedRepa::mapVarInt() const
+{
+	if (!_mapVarInt)
+	{
+		auto fudsSize = fuds.size();
+		const_cast<DecompFudSlicedRepa*>(this)->_mapVarInt = new SizeSizeUMap(listFudRepaSizeExpected > fudsSize ? listFudRepaSizeExpected : fudsSize);
+		for (std::size_t i = 0; i < fudsSize; i++)
+		{	
+			const_cast<DecompFudSlicedRepa*>(this)->_mapVarInt->insert_or_assign(fuds[i].parent, i);			
+		}
+	}
+	return *_mapVarInt;
 }
