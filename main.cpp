@@ -4509,6 +4509,73 @@ int main(int argc, char **argv)
 
 	if (true)
 	{
+		auto sysreg = systemRegular_u;
+		auto sys = histogramsSystemImplied;
+		auto uunion = pairSystemsUnion;
+		auto uvars = systemsSetVar;
+		auto cart = systemsSetVarsSetStateCartesian_u;
+		auto reframe = histogramsMapVarsFrame_u;
+		auto mul = pairHistogramsMultiply;
+		auto add = pairHistogramsAdd_u;
+		auto resize = histogramsResize;
+		auto scalar = histogramScalar_u;
+		auto regpivot = histogramRegularUnitPivot_u;
+		auto regcart = histogramRegularCartesian_u;
+		auto regdiag = histogramRegularUnitDiagonal_u;
+		auto uuur = systemsSystemRepa;
+		auto uruu = systemsRepasSystem;
+		auto araa = systemsHistogramRepasHistogram_u;
+		auto aahr = [](const System& uu, const SystemRepa& ur, const Histogram& aa)
+		{
+			return systemsHistoriesHistoryRepa_u(uu, ur, *histogramsHistory_u(aa), 1);
+		};
+		auto hraa = [](const System& uu, const SystemRepa& ur, const HistoryRepa& hr)
+		{
+			return historiesHistogram(*systemsHistoryRepasHistory_u(uu, ur, hr));
+		};
+
+		auto hrshuffle = historyRepasShuffle_u;
+		auto erdr = applicationRepasDecompFudSlicedRepa_u;
+		auto drer = decompFudSlicedRepasApplicationRepa_u;
+		auto applicationer = parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa;
+
+		{
+			auto uu = sysreg(3, 5);
+			auto ur = uuur(*uu);
+			auto vv = SizeList{ 0,1,2,3,4 };
+			auto aa = resize(150, *regdiag(3, 5));
+			auto hr = aahr(*uu, *ur, *aa);
+			auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+			aa = add(*resize(1500, *regdiag(3, 5)), *rr);
+			hr = aahr(*uu, *ur, *aa);
+			hr->transpose();
+			auto er = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 1, 2, 17, vv, *hr, *ur);
+			EVALL(*er);
+			EVALL(*erdr(*er));
+			EVALL(*drer(*erdr(*er)));
+		}
+
+		cout << endl;
+		{
+			auto uu = sysreg(3, 5);
+			auto ur = uuur(*uu);
+			auto vv = SizeList{ 0,1,2,3,4 };
+			auto aa = resize(150, *regdiag(3, 5));
+			auto hr = aahr(*uu, *ur, *aa);
+			auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
+			aa = add(*resize(1500, *regdiag(3, 5)), *rr);
+			hr = aahr(*uu, *ur, *aa);
+			hr->transpose();
+			auto er = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 15, 2, 17, vv, *hr, *ur);
+			EVALL(*er);
+			EVALL(*erdr(*er));
+			EVALL(*drer(*erdr(*er)));
+		}
+
+	}
+	
+	if (false)
+	{
 		auto regcart = histogramRegularCartesian_u;
 		auto regsing = histogramRegularUnitSingleton_u;
 		auto regdiag = histogramRegularUnitDiagonal_u;

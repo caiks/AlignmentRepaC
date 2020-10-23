@@ -447,10 +447,8 @@ namespace Alignment
 	private: SizeSizeUMap* _mapVarInt;
 	};
 	
-	// applicationRepasDecompFudSlicedRepa_u :: ApplicationRepa -> DecompFudSlicedRepa
 	std::unique_ptr<DecompFudSlicedRepa> applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa&);
 	
-	// decompFudSlicedRepasApplicationRepa_u :: DecompFudSlicedRepa -> ApplicationRepa
 	std::unique_ptr<ApplicationRepa> decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa&);
 
 }

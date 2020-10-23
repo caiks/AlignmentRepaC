@@ -7,6 +7,11 @@
 
 using namespace Alignment;
 
+#define ECHO(x) std::cout << #x << std::endl; x
+#define EVAL(x) std::cout << #x << ": " << (x) << std::endl
+#define EVALL(x) std::cout << #x << ": " << std::endl << (x) << std::endl
+#define TRUTH(x) std::cout << #x << ": " << ((x) ? "true" : "false") << std::endl
+
 SystemRepa::SystemRepa() : _mapVarSize(0)
 {
 }
@@ -1828,7 +1833,7 @@ std::unique_ptr<SizeTransformRepaPtrMap> Alignment::fudRepasDefinitions(const Fu
 }
 
 // fudRepasSetVarsDepends :: FudRepa -> [VariableRepa] -> FudRepa
-	std::unique_ptr<TransformRepaPtrList> Alignment::fudRepasSetVarsDepends(const FudRepa& fr, const SizeUSet& kk)
+std::unique_ptr<TransformRepaPtrList> Alignment::fudRepasSetVarsDepends(const FudRepa& fr, const SizeUSet& kk)
 {
 	auto mm = fudRepasDefinitions(fr);
 	auto ll = std::make_unique<TransformRepaPtrList>();
@@ -5447,4 +5452,83 @@ SizeSizeUMap& Alignment::DecompFudSlicedRepa::mapVarInt() const
 		}
 	}
 	return *_mapVarInt;
+}
+
+std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa& er)
+{	
+	auto dr = std::make_unique<DecompFudSlicedRepa>(treesSize(*er.slices));
+	dr->fuds.resize(1);
+	auto& vi = dr->mapVarInt();
+	SizeSizeTreePairList nodesA {SizeSizeTreePair(0,er.slices)};
+	SizeSizeTreePairList nodesB;
+	while (nodesA.size())
+	{
+		for (auto sl : nodesA)
+		{
+			auto& fs = dr->fuds[vi[sl.first]];
+			fs.children.reserve(sl.second->_list.size());
+			for (auto& pp : sl.second->_list)
+				fs.children.push_back(pp.first);
+			TransformRepaPtrList kk;
+			SizeSet vv(fs.children.begin(),fs.children.end());
+			for (auto ll = er.fud->layers.rbegin(); ll != er.fud->layers.rend(); ll++) 
+				for (auto& tr : *ll)
+				{
+					auto w = tr->derived;
+					if (vv.find(w) != vv.end())
+					{
+						kk.push_back(tr);
+						auto n = tr->dimension;
+						auto xx = tr->vectorVar;
+						for (std::size_t i = 0; i < n; i++)
+						{
+							auto x = xx[i];
+							if (x != fs.parent)
+								vv.insert(x);
+						}					
+					}
+				}
+			fs.fud.insert(fs.fud.end(),kk.rbegin(),kk.rend());
+			for (auto& pp : sl.second->_list)
+			{
+				if (pp.second && pp.second->_list.size())
+				{
+					dr->fuds.resize(dr->fuds.size()+1);
+					vi[pp.first] = dr->fuds.size()-1;
+					dr->fuds.back().parent = pp.first;
+					nodesB.push_back(pp);
+				}
+			}			
+		}		
+		nodesA = nodesB;
+		nodesB.clear();
+	}
+	return dr;
+}
+
+std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa& dr)
+{
+	auto er = std::make_unique<ApplicationRepa>();
+	if (!dr.fuds.size())
+		return er;		
+	er->fud = std::make_shared<FudRepa>();
+	er->slices = std::make_shared<SizeTree>();
+	std::vector<std::shared_ptr<SizeTree>> nodes;
+	nodes.push_back(er->slices);
+	std::map<std::size_t, std::size_t> mm;
+	auto& vi = dr.mapVarInt();
+	for (auto& fs : dr.fuds)
+	{
+		auto ss = nodes[mm[fs.parent]];	
+		for (auto tr : fs.fud)
+			er->fud->layers.push_back(TransformRepaPtrList {tr});
+		for (auto sl : fs.children)
+		{
+			auto tt = std::make_shared<SizeTree>();
+			ss->_list.push_back(SizeSizeTreePair(sl, tt));
+			nodes.push_back(tt);
+			mm[sl] = nodes.size()-1;
+		}
+	}
+	return er;
 }
