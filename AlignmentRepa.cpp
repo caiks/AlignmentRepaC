@@ -1718,6 +1718,40 @@ std::unique_ptr<FudRepa> Alignment::setVariablesListTransformRepasFudRepa_u(cons
 	return fr;
 }
 
+std::unique_ptr<FudRepa> Alignment::listTransformRepasFudRepa_u(const TransformRepaPtrList& ff)
+{
+	auto fr = std::make_unique<FudRepa>();
+	fr->layers.reserve(50);
+	SizeUSet vv;
+	vv.reserve(ff.size());
+	for (auto& tr : ff)
+		vv.insert(tr->derived);
+	TransformRepaPtrList ll;
+	ll.reserve(ff.size());
+	while (vv.size())
+	{
+		for (auto& tr : ff)
+		{
+			if (vv.find(tr->derived) != vv.end())
+			{			
+				auto n = tr->dimension;
+				auto ww = tr->vectorVar;
+				bool found = false;
+				for (std::size_t i = 0; !found && i < n; i++)
+					found = vv.find(ww[i]) != vv.end();
+				if (!found)
+					ll.push_back(tr);
+			}
+		}
+		for (auto& tr : ll)
+			vv.erase(tr->derived);
+		if (ll.size())
+			fr->layers.push_back(ll);
+		ll.clear();
+	}
+	return fr;
+}
+
 // systemsFudsFudRepa_u :: System -> Fud -> FudRepa
 std::unique_ptr<FudRepa> Alignment::systemsFudsFudRepa_u(const System& uu, const SystemRepa& ur, const Fud& ff)
 {
@@ -5488,7 +5522,8 @@ std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedR
 						}					
 					}
 				}
-			fs.fud.insert(fs.fud.end(),kk.rbegin(),kk.rend());
+			fs.fud.reserve(kk.size());
+			fs.fud.assign(kk.rbegin(),kk.rend());
 			for (auto& pp : sl.second->_list)
 			{
 				if (pp.second && pp.second->_list.size())
@@ -5508,20 +5543,21 @@ std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedR
 
 std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa& dr)
 {
+	auto llfr = listTransformRepasFudRepa_u;
+
 	auto er = std::make_unique<ApplicationRepa>();
 	if (!dr.fuds.size())
 		return er;		
-	er->fud = std::make_shared<FudRepa>();
 	er->slices = std::make_shared<SizeTree>();
 	std::vector<std::shared_ptr<SizeTree>> nodes;
 	nodes.push_back(er->slices);
 	std::map<std::size_t, std::size_t> mm;
 	auto& vi = dr.mapVarInt();
+	std::size_t l = 0;
 	for (auto& fs : dr.fuds)
 	{
+		l += fs.fud.size();
 		auto ss = nodes[mm[fs.parent]];	
-		for (auto tr : fs.fud)
-			er->fud->layers.push_back(TransformRepaPtrList {tr});
 		for (auto sl : fs.children)
 		{
 			auto tt = std::make_shared<SizeTree>();
@@ -5530,5 +5566,10 @@ std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_
 			mm[sl] = nodes.size()-1;
 		}
 	}
+	TransformRepaPtrList ll;
+	ll.reserve(l);
+	for (auto& fs : dr.fuds)
+		ll.insert(ll.end(),fs.fud.begin(),fs.fud.end());
+	er->fud = std::move(llfr(ll));
 	return er;
 }
