@@ -4507,7 +4507,7 @@ int main(int argc, char **argv)
 
 	}
 
-	if (true)
+	if (false)
 	{
 		auto sysreg = systemRegular_u;
 		auto sys = histogramsSystemImplied;
@@ -4574,7 +4574,7 @@ int main(int argc, char **argv)
 
 	}
 	
-	if (false)
+	if (true)
 	{
 		auto regcart = histogramRegularCartesian_u;
 		auto regsing = histogramRegularUnitSingleton_u;
@@ -4589,6 +4589,8 @@ int main(int argc, char **argv)
 		auto hshr = historySparsesHistoryRepa;
 		auto llhs = listSetIntsHistorySparse;
 		auto hsll = historySparsesListSetInt;
+		auto hahs = historyArraysHistorySparse;
+		auto hsha = historySparsesHistoryArray;
 		
 		auto aa = regdiag(2, 3);
 		EVALL(*aa);
@@ -4597,8 +4599,15 @@ int main(int argc, char **argv)
 		auto ur = uuur(*uu);
 		auto hr = aahr(*uu, *ur, *aa);
 		EVALL(*hr);
+		{
+			auto n = hr->dimension;
+			auto vv = hr->vectorVar;
+			for (std::size_t i = 0; i < n; i++)
+				vv[i] += 100;
+		}
+		EVALL(*hr);
 
-		auto hs = hrhs(*hr);
+		ECHO(auto hs = hrhs(*hr));
 		EVALL(*hs);
 
 		EVALL(*hshr(*hs));
@@ -4606,7 +4615,20 @@ int main(int argc, char **argv)
 		EVALL(*hsll(*hs));
 		
 		EVALL(*llhs(*hsll(*hs)));
+		
+		ECHO(auto ha = hsha(*hs));
 
+		EVALL(*ha);
+		
+		EVALL(*hahs(*ha));
+		
+		ECHO(ha->resize(5,5));	
+		EVALL(*ha);
+		ECHO(ha->resize(2,1));	
+		EVALL(*ha);
+		ECHO(ha->resize(1,0));	
+		EVALL(*ha);
+		
 		std::string filename = "test.bin";
 		std::ofstream out(filename, std::ios::binary);
 		ECHO(historySparsesPersistent(*hs, out));

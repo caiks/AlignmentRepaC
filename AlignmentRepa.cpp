@@ -1208,11 +1208,11 @@ HistorySparse::~HistorySparse()
 std::ostream& operator<<(std::ostream& out, const HistorySparse& hr)
 {
 	auto z = hr.size;
+	auto rr = hr.arr;
 	out << "(" << z;
-	if (z)
+	if (rr)
 	{
 		auto nn = hr.vectorDimension;
-		auto rr = hr.arr;
 		std::size_t k = 0;
 		for (std::size_t j = 0; j < z; j++)
 		{
@@ -1278,17 +1278,20 @@ std::unique_ptr<HistorySparse> Alignment::historyRepasHistorySparse(const Histor
 			}
 			dd[j] = k;
 		}
-	hs->arr = new std::size_t[rr1.size()];
-	memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));
+	if (rr1.size())
+	{
+		hs->arr = new std::size_t[rr1.size()];
+		memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));		
+	}
 	return hs;
 }
 
 // historySparsesHistoryRepa :: HistorySparse -> HistoryRepa
 std::unique_ptr<HistoryRepa> Alignment::historySparsesHistoryRepa(const HistorySparse& hs)
 {
-	auto z = hs.size;
-	auto dd = hs.vectorDimension;
 	auto rr = hs.arr;
+	auto z = rr ? hs.size : 0;
+	auto dd = hs.vectorDimension;
 	std::set<std::size_t> ww;
 	std::size_t m = 0;
 	for (std::size_t j = 0; j < z; j++)
@@ -1301,36 +1304,39 @@ std::unique_ptr<HistoryRepa> Alignment::historySparsesHistoryRepa(const HistoryS
 		}
 	}
 	auto hr = std::make_unique<HistoryRepa>();
-	hr->dimension = ww.size();
-	auto n = hr->dimension;
-	hr->vectorVar = new std::size_t[n];
-	auto vv = hr->vectorVar;
-	hr->shape = new std::size_t[n];
-	auto sh = hr->shape;
-	hr->size = z;
+	if (ww.size())
 	{
-		std::size_t i = 0;
-		for (auto w : ww)
+		hr->dimension = ww.size();
+		auto n = hr->dimension;
+		hr->vectorVar = new std::size_t[n];
+		auto vv = hr->vectorVar;
+		hr->shape = new std::size_t[n];
+		auto sh = hr->shape;
+		hr->size = z;
 		{
-			vv[i] = w;
-			sh[i] = 2;
-			i++;
+			std::size_t i = 0;
+			for (auto w : ww)
+			{
+				vv[i] = w;
+				sh[i] = 2;
+				i++;
+			}
 		}
-	}
-	auto& mvv = hr->mapVarInt();
-	hr->evient = true;
-	hr->arr = new unsigned char[z*n];
-	auto rr1 = hr->arr;
-	memset(rr1, 0, z*n);
-	m = 0;
-	for (std::size_t j = 0; j < z; j++)
-	{
-		std::size_t jn = j*n;
-		auto k = dd[j];
-		for (std::size_t i = 0; i < k; i++)
+		auto& mvv = hr->mapVarInt();
+		hr->evient = true;
+		hr->arr = new unsigned char[z*n];
+		auto rr1 = hr->arr;
+		memset(rr1, 0, z*n);
+		m = 0;
+		for (std::size_t j = 0; j < z; j++)
 		{
-			rr1[jn + mvv[rr[m]]] = 1;
-			m++;
+			std::size_t jn = j*n;
+			auto k = dd[j];
+			for (std::size_t i = 0; i < k; i++)
+			{
+				rr1[jn + mvv[rr[m]]] = 1;
+				m++;
+			}
 		}
 	}
 	return hr;
@@ -1353,16 +1359,19 @@ std::unique_ptr<HistorySparse> Alignment::listSetIntsHistorySparse(const SizeSet
 		m += k;
 		j++;
 	}
-	hs->arr = new std::size_t[m];	
-	auto rr = hs->arr;
-	m = 0;
-	for (auto& qq : ll)
+	if (m)
 	{
-		for (auto w : qq)
+		hs->arr = new std::size_t[m];	
+		auto rr = hs->arr;
+		m = 0;
+		for (auto& qq : ll)
 		{
-			rr[m] = w;
-			m++;
-		}
+			for (auto w : qq)
+			{
+				rr[m] = w;
+				m++;
+			}
+		}		
 	}
 	return hs;
 }
@@ -1370,9 +1379,9 @@ std::unique_ptr<HistorySparse> Alignment::listSetIntsHistorySparse(const SizeSet
 // historySparsesListSetInt :: HistorySparse -> SizeSetList
 std::unique_ptr<SizeSetList> Alignment::historySparsesListSetInt(const HistorySparse& hs)
 {
-	auto z = hs.size;
-	auto dd = hs.vectorDimension;
 	auto rr = hs.arr;
+	auto z = rr ? hs.size : 0;
+	auto dd = hs.vectorDimension;
 	auto ll = std::make_unique<SizeSetList>(z);
 	std::size_t m = 0;
 	for (std::size_t j = 0; j < z; j++)
@@ -1386,6 +1395,176 @@ std::unique_ptr<SizeSetList> Alignment::historySparsesListSetInt(const HistorySp
 		}
 	}
 	return ll;
+}
+
+HistoryArray::HistoryArray(std::size_t sizeA, std::size_t capacityA) : size(0), capacity(0), arr(0)
+{
+	if (sizeA*capacityA)
+	{
+		size = sizeA;
+		capacity = capacityA;
+		arr = new std::size_t[size*capacity];
+		memset(arr, 0, size*capacity*sizeof(std::size_t));
+	}
+}
+
+HistoryArray::HistoryArray() : size(0), capacity(0), arr(0)
+{
+}
+
+HistoryArray::~HistoryArray()
+{
+	delete[] arr;
+}
+
+void Alignment::HistoryArray::resize(std::size_t sizeA, std::size_t capacityA)
+{
+	if (sizeA*capacityA)
+	{
+		auto z = size;
+		auto n = capacity;
+		auto z1 = sizeA;
+		auto n1 = capacityA;
+		auto rr = arr;
+		auto rr1 = new std::size_t[z1*n1];
+		for (std::size_t j = 0; j < z1; j++)
+		{
+			auto jn = j*n;
+			auto jn1 = j*n1;
+			for (std::size_t i = 0; i < n1; i++)
+			{
+				if (j < z && i < n)
+					rr1[jn1+i] = rr[jn+i];
+				else
+					rr1[jn1+i] = 0;
+			}	
+		}	
+		delete[] rr;
+		arr = rr1;
+		capacity = n1;
+		size = z1;
+	}
+	else
+	{
+		delete[] arr;
+		arr = 0;
+		capacity = 0;
+		size = 0;		
+	}
+}
+
+std::ostream& operator<<(std::ostream& out, const HistoryArray& hr)
+{
+	auto z = hr.size;
+	auto n = hr.capacity;
+	auto rr = hr.arr;
+	out << "(" << z << "," << n;
+	for (std::size_t j = 0; j < z; j++)
+	{
+		out << ",[";
+		auto jn = j*n;
+		for (std::size_t i = 0; i < n; i++)
+		{
+			auto r = rr[jn+i];
+			if (r)
+			{
+				if (i) out << ",";
+				out << r;
+			}
+			else
+				break;
+		}
+		out << "]";
+	}
+	out << ")";
+	return out;
+}
+
+// historyArraysHistorySparse :: HistoryArray -> HistorySparse
+std::unique_ptr<HistorySparse> Alignment::historyArraysHistorySparse(const HistoryArray& hr)
+{
+	auto z = hr.size;
+	auto n = hr.capacity;
+	auto rr = hr.arr;
+	auto hs = std::make_unique<HistorySparse>();
+	if (z*n)
+	{
+		hs->size = z;
+		hs->vectorDimension = new std::size_t[z];
+		auto dd = hs->vectorDimension;
+		std::size_t m = 0;
+		for (std::size_t j = 0; j < z; j++)
+		{
+			auto jn = j*n;
+			std::size_t i = 0;
+			for (; i < n; i++)
+				if (!rr[jn+i])
+					break;
+			dd[j] = i;
+			m += i;		
+		}
+		if (m)
+		{
+			hs->arr = new std::size_t[m];	
+			auto rs = hs->arr;
+			m = 0;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				auto jn = j*n;
+				for (std::size_t i = 0; i < n; i++)
+				{
+					auto r = rr[jn+i];
+					if (r)
+					{
+						rs[m] = r;
+						m++;
+					}
+					else
+						break;
+				}	
+			}				
+		}	
+	}
+	return hs;
+}
+
+// historySparsesHistoryArray :: HistorySparse -> HistoryArray
+std::unique_ptr<HistoryArray> Alignment::historySparsesHistoryArray(const HistorySparse& hs)
+{
+	auto rs = hs.arr;
+	auto z = rs ? hs.size : 0;
+	auto dd = hs.vectorDimension;
+	std::size_t n = 0;
+	for (std::size_t j = 0; j < z; j++)
+	{
+		auto k = dd[j];
+		if (k>n)
+			n = k;
+	}
+	auto hr = std::make_unique<HistoryArray>();
+	if (!(z*n))
+		return hr;
+	hr->size = z;
+	hr->capacity = n;
+	hr->arr = new std::size_t[z*n];
+	auto rr = hr->arr;
+	std::size_t m = 0;
+	for (std::size_t j = 0; j < z; j++)
+	{
+		auto jn = j*n;
+		auto k = dd[j];		
+		for (std::size_t i = 0; i < n; i++)
+		{
+			if (i < k)
+			{
+				rr[jn+i] = rs[m];
+				m++;		
+			}
+			else
+				rr[jn+i] = 0;
+		}	
+	}	
+	return hr;
 }
 
 TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
@@ -1904,9 +2083,9 @@ std::unique_ptr<TransformRepaPtrList> Alignment::fudRepasSetVarsDepends(const Fu
 }
 
 
-	// historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
-	// cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
-	std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
+// historyRepasFudRepasMultiply_u :: HistoryRepa -> FudRepa -> HistoryRepa
+// cf historyRepasListTransformRepasApply_u :: HistoryRepa -> V.Vector TransformRepa -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::historyRepasFudRepasMultiply_u(const HistoryRepa& hr, const FudRepa& fr)
 	{
 		auto n = hr.dimension;
 		auto vv = hr.vectorVar;
@@ -5572,4 +5751,74 @@ std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_
 		ll.insert(ll.end(),fs.fud.begin(),fs.fud.end());
 	er->fud = std::move(llfr(ll));
 	return er;
+}
+
+std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList& hrs, const HistoryArrayPtrList& has, const DecompFudSlicedRepa& dr, std::size_t event, std::size_t mapCapacity)
+{
+	auto ll = std::make_unique<SizeList>();
+	if (!dr.fuds.size())
+		return ll;	
+	if (!mapCapacity)
+		mapCapacity = 2;
+	std::size_t mapSize = 0;
+	for (std::size_t i = 0; i < hrs.size(); i++)	
+		if (hrs[i])
+			mapSize += hrs[i]->dimension;
+	for (std::size_t i = 0; i < has.size(); i++)	
+		if (has[i])
+			mapSize += has[i]->capacity;
+	if (!mapSize)
+		return ll;	
+	if (dr.fuds.size() >= 2)
+		mapSize += (std::size_t)((double)dr.fudRepasSize * std::log(dr.fuds.size()) / (double)dr.fuds.size() / std::log(2.0) + 1.0);
+	else 
+		mapSize += dr.fudRepasSize;
+	if (!mapSize)
+		return ll;
+	SizeUCharStruct* map = new SizeUCharStruct[mapSize*mapCapacity];
+	memset(map, 0, mapSize*mapCapacity*sizeof(SizeUCharStruct));
+	std::unordered_map<std::size_t, unsigned char> mapOverflow;
+	for (std::size_t i = 0; i < hrs.size(); i++)	
+		if (hrs[i])
+		{
+			auto& hr = *hrs[i];
+			auto n = hr.dimension;
+			auto vv = hr.vectorVar;
+			auto z = hr.size;
+			auto rr = hr.arr;	
+			if (event >= z)
+				break;
+			for (std::size_t i = 0; i < n; i++)
+			{
+				auto u = rr[hr.evient ? i*z + event : event*n + i];			
+				if (u)
+				{
+					auto v = vv[i];
+					auto x = (v % mapSize) * mapCapacity;
+					std::size_t k = 0;
+					for (; k < mapCapacity; k++)
+					{
+						auto& pp = map[x+k];
+						if (!pp.size)
+						{
+							pp.size = v;
+							pp.uchar = u;
+							break;
+						}
+						else if (pp.size == v)
+						{
+							pp.uchar = u;
+							break;
+						}
+					}	
+					if (k == mapCapacity)
+						mapOverflow.insert_or_assign(v,u);
+				}
+			}
+		}
+		
+	auto& vi = dr.mapVarInt();
+
+	delete[] map;
+	return ll;
 }

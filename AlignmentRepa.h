@@ -34,6 +34,7 @@ namespace Alignment
 	typedef Tree<std::size_t> SizeTree;
 	typedef std::pair<std::size_t, std::shared_ptr<SizeTree>> SizeSizeTreePair;
 	typedef std::vector<std::pair<std::size_t, std::shared_ptr<SizeTree>>> SizeSizeTreePairList;
+	struct SizeUCharStruct{std::size_t size;unsigned char uchar;};
 }
 
 namespace Alignment
@@ -244,6 +245,36 @@ namespace Alignment
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistorySparse&);
 
+namespace Alignment
+{
+	class HistoryArray
+	{
+	public: HistoryArray(std::size_t, std::size_t);
+	public: HistoryArray();
+	private: HistoryArray(const HistoryArray &);
+	public: ~HistoryArray();
+
+	private: HistoryArray& operator=(const HistoryArray &);
+
+	public: std::size_t size;
+	public: std::size_t capacity;
+
+	public: std::size_t* arr;
+	
+	public: void resize(std::size_t, std::size_t);
+	};
+
+	typedef std::shared_ptr<HistoryArray> HistoryArrayPtr;
+	typedef std::vector<HistoryArrayPtr> HistoryArrayPtrList;
+	
+	// historyArraysHistorySparse :: HistoryArray -> HistorySparse
+	std::unique_ptr<HistorySparse> historyArraysHistorySparse(const HistoryArray&);
+
+	// historySparsesHistoryArray :: HistorySparse -> HistoryArray
+	std::unique_ptr<HistoryArray> historySparsesHistoryArray(const HistorySparse&);
+}
+
+std::ostream& operator<<(std::ostream& out, const Alignment::HistoryArray&);
 
 namespace Alignment
 {
@@ -452,6 +483,8 @@ namespace Alignment
 	std::unique_ptr<DecompFudSlicedRepa> applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa&);
 	
 	std::unique_ptr<ApplicationRepa> decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa&);
+	
+	std::unique_ptr<SizeList> historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList&, const HistoryArrayPtrList&, const DecompFudSlicedRepa&, std::size_t, std::size_t);
 
 }
 
