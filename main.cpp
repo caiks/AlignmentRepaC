@@ -4507,7 +4507,7 @@ int main(int argc, char **argv)
 
 	}
 
-	if (false)
+	if (true)
 	{
 		auto sysreg = systemRegular_u;
 		auto sys = histogramsSystemImplied;
@@ -4535,8 +4535,13 @@ int main(int argc, char **argv)
 		};
 
 		auto hrshuffle = historyRepasShuffle_u;
+		auto hrhs = historyRepasHistorySparse;
+		auto hshr = historySparsesHistoryRepa;
+		auto hahs = historyArraysHistorySparse;
+		auto hsha = historySparsesHistoryArray;
 		auto erdr = applicationRepasDecompFudSlicedRepa_u;
 		auto drer = decompFudSlicedRepasApplicationRepa_u;
+		auto drmul = historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u;
 		auto applicationer = parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa;
 
 		{
@@ -4544,15 +4549,26 @@ int main(int argc, char **argv)
 			auto ur = uuur(*uu);
 			auto vv = SizeList{ 0,1,2,3,4 };
 			auto aa = resize(150, *regdiag(3, 5));
-			auto hr = aahr(*uu, *ur, *aa);
+			std::shared_ptr<HistoryRepa> hr = std::move(aahr(*uu, *ur, *aa));
 			auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
 			aa = add(*resize(1500, *regdiag(3, 5)), *rr);
 			hr = aahr(*uu, *ur, *aa);
 			hr->transpose();
+			std::shared_ptr<HistoryArray> ha = std::move(hsha(*hrhs(*hr)));
 			auto er = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 1, 2, 17, vv, *hr, *ur);
 			EVALL(*er);
-			EVALL(*erdr(*er));
-			EVALL(*drer(*erdr(*er)));
+			ECHO(auto dr = erdr(*er));
+			EVALL(*dr);
+			EVALL(*drer(*dr));
+			EVAL(*drmul(HistoryRepaPtrList{hr},HistoryArrayPtrList{},*dr,0,2));		
+			EVAL(*drmul(HistoryRepaPtrList{hr},HistoryArrayPtrList{},*dr,0,1));
+			for (std::size_t j = 0; j < hr->size; j++)
+			{
+				std::cout << "drmul: " << j 
+					<< " " << *drmul(HistoryRepaPtrList{hr},HistoryArrayPtrList{},*dr,j,2)
+					<< " " << *drmul(HistoryRepaPtrList{},HistoryArrayPtrList{ha},*dr,j,2)
+					<< std::endl;		
+			}
 		}
 
 		cout << endl;
@@ -4561,20 +4577,31 @@ int main(int argc, char **argv)
 			auto ur = uuur(*uu);
 			auto vv = SizeList{ 0,1,2,3,4 };
 			auto aa = resize(150, *regdiag(3, 5));
-			auto hr = aahr(*uu, *ur, *aa);
+			std::shared_ptr<HistoryRepa> hr = std::move(aahr(*uu, *ur, *aa));
 			auto rr = hraa(*uu, *ur, *hrshuffle(*hr, 1));
 			aa = add(*resize(1500, *regdiag(3, 5)), *rr);
 			hr = aahr(*uu, *ur, *aa);
 			hr->transpose();
+			std::shared_ptr<HistoryArray> ha = std::move(hsha(*hrhs(*hr)));
 			auto er = applicationer(27, 3, 81, 2, 2, 2, 9, 1, 15, 2, 17, vv, *hr, *ur);
 			EVALL(*er);
-			EVALL(*erdr(*er));
-			EVALL(*drer(*erdr(*er)));
+			ECHO(auto dr = erdr(*er));
+			EVALL(*dr);
+			EVALL(*drer(*dr));
+			EVAL(*drmul(HistoryRepaPtrList{hr},HistoryArrayPtrList{},*dr,0,2));		
+			EVAL(*drmul(HistoryRepaPtrList{hr},HistoryArrayPtrList{},*dr,0,1));
+			for (std::size_t j = 0; j < hr->size; j++)
+			{
+				std::cout << "drmul: " << j 
+					<< " " << *drmul(HistoryRepaPtrList{hr},HistoryArrayPtrList{},*dr,j,2) 
+					<< " " << *drmul(HistoryRepaPtrList{},HistoryArrayPtrList{ha},*dr,j,2)
+					<< std::endl;		
+			}
 		}
 
 	}
 	
-	if (true)
+	if (false)
 	{
 		auto regcart = histogramRegularCartesian_u;
 		auto regsing = histogramRegularUnitSingleton_u;

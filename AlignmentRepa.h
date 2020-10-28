@@ -484,7 +484,7 @@ namespace Alignment
 	
 	std::unique_ptr<ApplicationRepa> decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa&);
 	
-	std::unique_ptr<SizeList> historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList&, const HistoryArrayPtrList&, const DecompFudSlicedRepa&, std::size_t, std::size_t);
+	std::unique_ptr<SizeList> historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList&, const HistoryArrayPtrList&, const DecompFudSlicedRepa&, std::size_t, unsigned char);
 
 }
 

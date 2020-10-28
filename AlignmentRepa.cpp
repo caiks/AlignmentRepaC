@@ -5703,6 +5703,7 @@ std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedR
 				}
 			fs.fud.reserve(kk.size());
 			fs.fud.assign(kk.rbegin(),kk.rend());
+			dr->fudRepasSize += kk.size();
 			for (auto& pp : sl.second->_list)
 			{
 				if (pp.second && pp.second->_list.size())
@@ -5753,7 +5754,7 @@ std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_
 	return er;
 }
 
-std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList& hrs, const HistoryArrayPtrList& has, const DecompFudSlicedRepa& dr, std::size_t event, std::size_t mapCapacity)
+std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList& hrs, const HistoryArrayPtrList& has, const DecompFudSlicedRepa& dr, std::size_t event, unsigned char mapCapacity)
 {
 	auto ll = std::make_unique<SizeList>();
 	if (!dr.fuds.size())
@@ -5770,13 +5771,19 @@ std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistoryArrayPtrListsDeco
 	if (!mapSize)
 		return ll;	
 	if (dr.fuds.size() >= 2)
-		mapSize += (std::size_t)((double)dr.fudRepasSize * std::log(dr.fuds.size()) / (double)dr.fuds.size() / std::log(2.0) + 1.0);
+	{
+		std::size_t pathLen = (std::size_t)(std::log(dr.fuds.size()) / std::log(2.0)) + 1;
+		mapSize += dr.fudRepasSize * pathLen / dr.fuds.size();	
+		ll->reserve(pathLen*2);
+	}
 	else 
 		mapSize += dr.fudRepasSize;
 	if (!mapSize)
 		return ll;
-	SizeUCharStruct* map = new SizeUCharStruct[mapSize*mapCapacity];
-	memset(map, 0, mapSize*mapCapacity*sizeof(SizeUCharStruct));
+	auto map = new SizeUCharStruct[mapSize*mapCapacity];
+	auto index = new unsigned char[mapSize];
+	for (std::size_t i = 0; i < mapSize; i++)	
+		index[i] = 0;
 	std::unordered_map<std::size_t, unsigned char> mapOverflow;
 	for (std::size_t i = 0; i < hrs.size(); i++)	
 		if (hrs[i])
@@ -5794,31 +5801,241 @@ std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistoryArrayPtrListsDeco
 				if (u)
 				{
 					auto v = vv[i];
-					auto x = (v % mapSize) * mapCapacity;
-					std::size_t k = 0;
-					for (; k < mapCapacity; k++)
+					auto j = v % mapSize;
+					auto& m = index[j];
+					if (m)
 					{
-						auto& pp = map[x+k];
-						if (!pp.size)
+						if (m == mapCapacity)
+							mapOverflow.insert_or_assign(v,u);							
+						else
 						{
-							pp.size = v;
-							pp.uchar = u;
-							break;
-						}
-						else if (pp.size == v)
-						{
-							pp.uchar = u;
-							break;
-						}
-					}	
-					if (k == mapCapacity)
-						mapOverflow.insert_or_assign(v,u);
+							auto x = j * mapCapacity;
+							std::size_t k = 0;
+							for (; k < m; k++)
+							{
+								auto& pp = map[x+k];
+								if (pp.size == v)
+								{
+									pp.uchar = u;
+									break;
+								}
+							}	
+							if (k == m)
+							{
+								m++;
+								auto& pp = map[x+k];
+								pp.size = v;
+								pp.uchar = u;
+							}
+						}					
+					}
+					else
+					{
+						m++;
+						auto& pp = map[j * mapCapacity];
+						pp.size = v;
+						pp.uchar = u;
+					}
 				}
 			}
 		}
 		
-	auto& vi = dr.mapVarInt();
+	for (std::size_t i = 0; i < has.size(); i++)	
+		if (has[i])
+		{
+			auto& hr = *has[i];
+			auto n = hr.capacity;
+			auto z = hr.size;
+			auto rr = hr.arr;	
+			if (event >= z)
+				break;
+			for (std::size_t i = 0; i < n; i++)
+			{
+				auto v = rr[event*n+i];
+				if (v)
+				{
+					auto j = v % mapSize;
+					auto& m = index[j];
+					if (m)
+					{
+						if (m == mapCapacity)
+							mapOverflow.insert_or_assign(v,1);							
+						else
+						{
+							auto x = j * mapCapacity;
+							std::size_t k = 0;
+							for (; k < m; k++)
+							{
+								auto& pp = map[x+k];
+								if (pp.size == v)
+									break;
+							}	
+							if (k == m)
+							{
+								m++;
+								auto& pp = map[x+k];
+								pp.size = v;
+								pp.uchar = 1;
+							}
+						}					
+					}
+					else
+					{
+						m++;
+						auto& pp = map[j * mapCapacity];
+						pp.size = v;
+						pp.uchar = 1;
+					}
 
+				}
+				else
+					break;
+			}
+		}
+		
+	auto& vi = dr.mapVarInt();
+	std::size_t intFud = 0;
+	while (true)
+	{
+		auto& fs = dr.fuds[intFud];
+		for (auto& tr : fs.fud)
+		{
+			auto w = tr->derived;
+			auto n = tr->dimension;
+			auto xx = tr->vectorVar;
+			auto sh = tr->shape;
+			auto ar = tr->arr;	
+			std::size_t r = 0;			
+			for (std::size_t i = 0; i < n; i++)
+			{
+				r = sh[i] * r;
+				auto v = xx[i];
+				auto j = v % mapSize;
+				auto& m = index[j];
+				if (m)
+				{
+					auto x = j * mapCapacity;
+					std::size_t k = 0;
+					for (; k < m; k++)
+					{
+						auto& pp = map[x+k];
+						if (pp.size == v)
+						{
+							r += pp.uchar;
+							break;
+						}
+					}	
+					if (k == mapCapacity)	
+					{
+						auto it = mapOverflow.find(v);
+						if (it != mapOverflow.end())
+							r += it->second;
+					}							
+				}
+			}	
+			auto u = ar[r];
+			if (u)
+			{
+				auto j = w % mapSize;
+				auto& m = index[j];
+				if (m)
+				{
+					if (m == mapCapacity)
+						mapOverflow.insert_or_assign(w,u);							
+					else
+					{
+						auto x = j * mapCapacity;
+						std::size_t k = 0;
+						for (; k < m; k++)
+						{
+							auto& pp = map[x+k];
+							if (pp.size == w)
+							{
+								pp.uchar = u;
+								break;
+							}
+						}	
+						if (k == m)
+						{
+							m++;
+							auto& pp = map[x+k];
+							pp.size = w;
+							pp.uchar = u;
+						}
+					}					
+				}
+				else
+				{
+					m++;
+					auto& pp = map[j * mapCapacity];
+					pp.size = w;
+					pp.uchar = u;
+				}				
+			}		
+		}
+		std::size_t sliceIn = 0;
+		for (auto v : fs.children)
+		{	
+			unsigned char u = 0;
+			auto j = v % mapSize;
+			auto& m = index[j];
+			if (m)
+			{
+				auto x = j * mapCapacity;
+				std::size_t k = 0;
+				for (; k < m; k++)
+				{
+					auto& pp = map[x+k];
+					if (pp.size == v)
+					{
+						u = pp.uchar;
+						break;
+					}
+				}	
+				if (k == mapCapacity)	
+				{
+					auto it = mapOverflow.find(v);
+					if (it != mapOverflow.end())
+						u = it->second;
+				}							
+			}
+			if (u)
+			{
+				sliceIn = v;
+				break;
+			}
+		}	
+		if (sliceIn)
+		{
+			ll->push_back(sliceIn);
+			auto it = vi.find(sliceIn);	
+			if (it != vi.end())
+				intFud = it->second;
+			else
+				break;
+		}
+		else
+			break;
+	}
+
+// {
+	// EVAL(mapSize);
+	// EVAL((std::size_t)mapCapacity);
+	// std::unordered_map<std::size_t, std::size_t> mapTest;
+	// for (std::size_t j = 0; j < mapSize; j++)	
+	// {
+		// auto m = index[j];	
+		// for (std::size_t k = 0; k < m; k++)
+		// {
+			// auto pp = map[j*mapCapacity+k];
+			// mapTest[pp.size] = pp.uchar;
+		// }
+	// }
+	// EVAL(mapTest);
+	// EVAL(mapOverflow);	
+// }
+
+	delete[] index;
 	delete[] map;
 	return ll;
 }
