@@ -247,14 +247,14 @@ std::ostream& operator<<(std::ostream& out, const Alignment::HistorySparse&);
 
 namespace Alignment
 {
-	class HistoryArray
+	class HistorySparseArray
 	{
-	public: HistoryArray(std::size_t, std::size_t);
-	public: HistoryArray();
-	private: HistoryArray(const HistoryArray &);
-	public: ~HistoryArray();
+	public: HistorySparseArray(std::size_t, std::size_t);
+	public: HistorySparseArray();
+	private: HistorySparseArray(const HistorySparseArray &);
+	public: ~HistorySparseArray();
 
-	private: HistoryArray& operator=(const HistoryArray &);
+	private: HistorySparseArray& operator=(const HistorySparseArray &);
 
 	public: std::size_t size;
 	public: std::size_t capacity;
@@ -264,17 +264,17 @@ namespace Alignment
 	public: void resize(std::size_t, std::size_t);
 	};
 
-	typedef std::shared_ptr<HistoryArray> HistoryArrayPtr;
-	typedef std::vector<HistoryArrayPtr> HistoryArrayPtrList;
+	typedef std::shared_ptr<HistorySparseArray> HistorySparseArrayPtr;
+	typedef std::vector<HistorySparseArrayPtr> HistorySparseArrayPtrList;
 	
-	// historyArraysHistorySparse :: HistoryArray -> HistorySparse
-	std::unique_ptr<HistorySparse> historyArraysHistorySparse(const HistoryArray&);
+	// historySparseArraysHistorySparse :: HistorySparseArray -> HistorySparse
+	std::unique_ptr<HistorySparse> historySparseArraysHistorySparse(const HistorySparseArray&);
 
-	// historySparsesHistoryArray :: HistorySparse -> HistoryArray
-	std::unique_ptr<HistoryArray> historySparsesHistoryArray(const HistorySparse&);
+	// historySparsesHistorySparseArray :: HistorySparse -> HistorySparseArray
+	std::unique_ptr<HistorySparseArray> historySparsesHistorySparseArray(const HistorySparse&);
 }
 
-std::ostream& operator<<(std::ostream& out, const Alignment::HistoryArray&);
+std::ostream& operator<<(std::ostream& out, const Alignment::HistorySparseArray&);
 
 namespace Alignment
 {
@@ -484,7 +484,7 @@ namespace Alignment
 	
 	std::unique_ptr<ApplicationRepa> decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa&);
 	
-	std::unique_ptr<SizeList> historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList&, const HistoryArrayPtrList&, const DecompFudSlicedRepa&, std::size_t, unsigned char);
+	std::unique_ptr<SizeList> historyRepaPtrListsHistorySparseArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList&, const HistorySparseArrayPtrList&, const DecompFudSlicedRepa&, std::size_t, unsigned char);
 
 }
 

@@ -1238,12 +1238,14 @@ std::unique_ptr<HistorySparse> Alignment::historyRepasHistorySparse(const Histor
 	auto vv = hr.vectorVar;
 	auto z = hr.size;
 	auto rr = hr.arr;
+	auto hs = std::make_unique<HistorySparse>();
+	if (!z)
+		return hs;
+	hs->size = z;
+	hs->vectorDimension = new std::size_t[z];
 	std::map<std::size_t, std::size_t> ww;
 	for (std::size_t i = 0; i < n; i++)
 		ww.insert_or_assign(vv[i],i);
-	auto hs = std::make_unique<HistorySparse>();
-	hs->size = z;
-	hs->vectorDimension = new std::size_t[z];
 	auto dd = hs->vectorDimension;
 	SizeList rr1;
 	rr1.reserve(n*z);
@@ -1347,6 +1349,8 @@ std::unique_ptr<HistorySparse> Alignment::listSetIntsHistorySparse(const SizeSet
 {
 	auto z = ll.size();
 	auto hs = std::make_unique<HistorySparse>();
+	if (!z)
+		return hs;	
 	hs->size = z;
 	hs->vectorDimension = new std::size_t[z];
 	auto dd = hs->vectorDimension;
@@ -1397,7 +1401,7 @@ std::unique_ptr<SizeSetList> Alignment::historySparsesListSetInt(const HistorySp
 	return ll;
 }
 
-HistoryArray::HistoryArray(std::size_t sizeA, std::size_t capacityA) : size(0), capacity(0), arr(0)
+HistorySparseArray::HistorySparseArray(std::size_t sizeA, std::size_t capacityA) : size(0), capacity(0), arr(0)
 {
 	if (sizeA*capacityA)
 	{
@@ -1408,16 +1412,16 @@ HistoryArray::HistoryArray(std::size_t sizeA, std::size_t capacityA) : size(0), 
 	}
 }
 
-HistoryArray::HistoryArray() : size(0), capacity(0), arr(0)
+HistorySparseArray::HistorySparseArray() : size(0), capacity(0), arr(0)
 {
 }
 
-HistoryArray::~HistoryArray()
+HistorySparseArray::~HistorySparseArray()
 {
 	delete[] arr;
 }
 
-void Alignment::HistoryArray::resize(std::size_t sizeA, std::size_t capacityA)
+void Alignment::HistorySparseArray::resize(std::size_t sizeA, std::size_t capacityA)
 {
 	if (sizeA*capacityA)
 	{
@@ -1453,7 +1457,7 @@ void Alignment::HistoryArray::resize(std::size_t sizeA, std::size_t capacityA)
 	}
 }
 
-std::ostream& operator<<(std::ostream& out, const HistoryArray& hr)
+std::ostream& operator<<(std::ostream& out, const HistorySparseArray& hr)
 {
 	auto z = hr.size;
 	auto n = hr.capacity;
@@ -1480,8 +1484,8 @@ std::ostream& operator<<(std::ostream& out, const HistoryArray& hr)
 	return out;
 }
 
-// historyArraysHistorySparse :: HistoryArray -> HistorySparse
-std::unique_ptr<HistorySparse> Alignment::historyArraysHistorySparse(const HistoryArray& hr)
+// historySparseArraysHistorySparse :: HistorySparseArray -> HistorySparse
+std::unique_ptr<HistorySparse> Alignment::historySparseArraysHistorySparse(const HistorySparseArray& hr)
 {
 	auto z = hr.size;
 	auto n = hr.capacity;
@@ -1525,14 +1529,22 @@ std::unique_ptr<HistorySparse> Alignment::historyArraysHistorySparse(const Histo
 			}				
 		}	
 	}
+	else if (z)
+	{
+		hs->size = z;
+		hs->vectorDimension = new std::size_t[z];
+		auto dd = hs->vectorDimension;
+		for (std::size_t j = 0; j < z; j++)
+			dd[j] = 0;
+	}
 	return hs;
 }
 
-// historySparsesHistoryArray :: HistorySparse -> HistoryArray
-std::unique_ptr<HistoryArray> Alignment::historySparsesHistoryArray(const HistorySparse& hs)
+// historySparsesHistorySparseArray :: HistorySparse -> HistorySparseArray
+std::unique_ptr<HistorySparseArray> Alignment::historySparsesHistorySparseArray(const HistorySparse& hs)
 {
 	auto rs = hs.arr;
-	auto z = rs ? hs.size : 0;
+	auto z = hs.size;
 	auto dd = hs.vectorDimension;
 	std::size_t n = 0;
 	for (std::size_t j = 0; j < z; j++)
@@ -1541,7 +1553,7 @@ std::unique_ptr<HistoryArray> Alignment::historySparsesHistoryArray(const Histor
 		if (k>n)
 			n = k;
 	}
-	auto hr = std::make_unique<HistoryArray>();
+	auto hr = std::make_unique<HistorySparseArray>();
 	if (!(z*n))
 		return hr;
 	hr->size = z;
@@ -5754,7 +5766,7 @@ std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_
 	return er;
 }
 
-std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistoryArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList& hrs, const HistoryArrayPtrList& has, const DecompFudSlicedRepa& dr, std::size_t event, unsigned char mapCapacity)
+std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistorySparseArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList& hrs, const HistorySparseArrayPtrList& has, const DecompFudSlicedRepa& dr, std::size_t event, unsigned char mapCapacity)
 {
 	auto ll = std::make_unique<SizeList>();
 	if (!dr.fuds.size())
