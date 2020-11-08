@@ -5809,7 +5809,7 @@ std::unique_ptr<SizeList> Alignment::historyRepaPtrListsHistorySparseArrayPtrLis
 				break;
 			for (std::size_t i = 0; i < n; i++)
 			{
-				auto u = rr[hr.evient ? i*z + event : event*n + i];			
+				auto u = rr[hr.evient ? event*n + i : i*z + event];			
 				if (u)
 				{
 					auto v = vv[i];
