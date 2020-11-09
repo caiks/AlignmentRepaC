@@ -629,6 +629,198 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	return std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>>(std::move(fr), std::move(mm));
 }
 
+// parametersLayererMaxRollByMExcludedSelfHighestLogIORepa_up ::
+//   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
+//   [VariableRepa] -> HistoryRepa -> HistoryRepa-> Integer ->
+//   IO (FudRepa, [(Double, [VariableRepa]])
+std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Alignment::parametersLayererMaxRollByMExcludedSelfHighestLogIORepa_up(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t tint, const SizeList& vv, const HistoryRepa& hr, const HistoryRepa& hrs, std::size_t f, void (*log)(const std::string&), std::size_t& ur)
+{
+	auto hrred = [](double f, const HistoryRepa& hr, const SizeList& kk)
+	{
+		return setVarsHistoryRepasReduce_u(f, kk.size(), kk.data(), hr);
+	};
+	auto hrpr = historyRepasRed;
+	auto frmul = historyRepasFudRepasMultiply_u;
+	auto tupler = parametersSystemsBuilderTupleNoSumlayerMultiEffectiveRepa_uip;
+	auto parter = parametersHistogramRepaVecsSetTuplePartitionTopByM_u;
+	auto roller = histogramRepaVecsRollMax;
+	auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_uip;
+
+	auto t0 = clk::now();
+	LOG "layerer\tstatus: begin" UNLOG
+	unsigned char ucmax = std::numeric_limits<unsigned char>::max();
+	auto z = (double)hr.size;
+	auto zr = (double)hrs.size;
+	auto vd = std::make_shared<Variable>(0);
+	auto vf = std::make_shared<Variable>((int)f);
+	auto vdf = std::make_shared<Variable>(vd, vf);
+	auto fr = std::make_unique<FudRepa>();
+	auto mm = std::make_unique<DoubleSizeListPairList>();
+	auto hr1 = frmul(hr, *fr);
+	auto hrs1 = frmul(hrs, *fr);
+	auto pr1 = hrpr(*hr1);
+	auto prs1 = hrpr(*hrs1);
+	std::size_t l = 1;
+	bool layering = true;
+	while (layering && l <= lmax)
+	{
+		std::map<std::string, double> time;
+		std::map<std::string, std::size_t> steps;
+		auto t1 = clk::now();
+		auto& mvv1 = hr1->mapVarInt();
+		auto sh1 = hr1->shape;
+		layering = false;
+		LOG "layer\tstatus: begin\tfud: " << f << "\tlayer: " << l << "\tsubstrate cardinality: " << vv.size()<< "\tfud cardinality: " << fudRepasSize(*fr) UNLOG
+		auto mark = clk::now();
+		auto tt2 = tupler(xmax, omax, bmax, mmax, tint, vv, *fr, *hr1, *pr1, *hrs1, *prs1);
+		time["tupler"] += ((sec)(clk::now() - mark)).count();
+		steps["tupler"] += std::get<1>(tt2);
+		auto& x2 = std::get<0>(tt2);
+		LOG "tupler\tsearched: " << steps["tupler"] << "\trate: " << ((double)steps["tupler"]) / time["tupler"] << "\ttime " << time["tupler"] << "s" << "\ttuple cardinality: " << x2->size() UNLOG
+		if (!x2->size())
+			break;
+		std::vector<SizeSet> qq;
+		qq.reserve(x2->size() * mmax * pmax);
+		FudRepa gr;
+		gr.layers.push_back(TransformRepaPtrList());
+		auto& ll = gr.layers.back();
+		ll.reserve(x2->size() * mmax * pmax);
+		double ymax = 0.0;
+		for (auto& kk : *x2)
+		{
+			auto ar = hrred(1.0, *hr1, kk);
+			auto ars = hrred(z / zr, *hrs1, kk);
+			double y1 = ar->facLn() - ars->facLn();
+			if (!ll.size() || y1 > ymax)
+				ymax = y1;
+			mark = clk::now();
+			auto tt3 = parter(mmax, umax, pmax, *ar, *ars, z, y1);
+			time["parter"] += ((sec)(clk::now() - mark)).count();
+			steps["parter"] += std::get<1>(tt3);
+			auto& x3 = std::get<0>(tt3);
+			for (auto& nn : *x3)
+			{
+				mark = clk::now();
+				auto m = nn.size();
+				auto tt4 = roller(nn, *ar, *ars, z);
+				time["roller"] += ((sec)(clk::now() - mark)).count();
+				steps["roller"] += std::get<1>(tt4);
+				auto& x4 = std::get<0>(tt4);
+				if (x4->size() != m)
+					continue;
+				bool any = false;
+				for (auto& rr1 : *x4)
+				{
+					auto sz = rr1.size();
+					std::size_t s = 1;
+					for (std::size_t j = 0; j < sz; j++)
+					{
+						auto u = rr1[j];
+						if (u > s)
+							s = u;
+					}
+					if (s < sz - 1)
+					{
+						any = true;
+						break;
+					}
+				}
+				if (!any)
+					continue;
+				for (std::size_t i = 0; i < m; i++)
+				{
+					auto& cc = nn[i];
+					auto e = cc.size();
+					SizeList jj;
+					jj.reserve(e);
+					for (std::size_t j = 0; j < e; j++)
+						jj.push_back(kk[cc[j]]);
+					auto tr = std::make_shared<TransformRepa>();
+					tr->dimension = e;
+					tr->vectorVar = new std::size_t[e];
+					auto ww = tr->vectorVar;
+					tr->shape = new std::size_t[e];
+					auto sh = tr->shape;
+					for (std::size_t j = 0; j < e; j++)
+					{
+						auto& v = jj[j];
+						ww[j] = v;
+						sh[j] = sh1[mvv1[v]];
+					}
+					auto& rr1 = (*x4)[i];
+					auto sz = rr1.size();
+					std::size_t s = 0;
+					tr->arr = new unsigned char[sz];
+					auto rr = tr->arr;
+					for (std::size_t j = 0; j < sz; j++)
+					{
+						auto u = rr1[j];
+						rr[j] = (unsigned char)u;
+						if (u > s)
+							s = u;
+					}
+					s++;
+					if (s == 1)
+						continue;
+					if (e == 1 && s == sz)
+						continue;
+					if (s > ucmax + 1)
+						throw std::out_of_range("parametersSystemsLayererMaxRollByMExcludedSelfHighestIORepa_u");
+					SizeSet jj1(jj.begin(), jj.end());
+					bool dup = false;
+					for (auto& jj2 : qq)
+						if (jj2 == jj1)
+						{
+							dup = true;
+							break;
+						}
+					if (dup)
+						continue;
+					qq.push_back(jj1);
+					tr->valency = s;
+					tr->derived = ur;
+					ur++;
+					ll.push_back(tr);
+				}
+			}
+		}
+		LOG "layer\tmax tuple algn: " << ymax << "\tlayer cardinality: " << ll.size() UNLOG
+		LOG "parter\tsearched: " << steps["parter"] << "\trate: " << ((double)steps["parter"]) / time["parter"] << "\ttime " << time["parter"] << "s" UNLOG
+		LOG "roller\tsearched: " << steps["roller"] << "\trate: " << ((double)steps["roller"]) / time["roller"] << "\ttime " << time["roller"] << "s" UNLOG
+		if (ll.size())
+		{
+			hr1 = frmul(*hr1, gr);
+			hrs1 = frmul(*hrs1, gr);
+			pr1 = hrpr(*hr1);
+			prs1 = hrpr(*hrs1);
+			fr->layers.push_back(ll);
+			mark = clk::now();
+			auto tt5 = deriveder(wmax, omax, tint, *fr, *hr1, *pr1, *hrs1, *prs1);
+			time["dervarser"] += ((sec)(clk::now() - mark)).count();
+			steps["dervarser"] += std::get<1>(tt5);
+			auto& mm1 = std::get<0>(tt5);
+			if (mm1->size())
+				LOG "layer\tder vars algn density: " << mm1->back().first UNLOG
+			else
+				LOG "layer\tno der vars sets" UNLOG
+			LOG "dervarser\tsearched: " << steps["dervarser"] << "\trate: " << ((double)steps["dervarser"]) / time["dervarser"] << "\ttime " << time["dervarser"] << "s" UNLOG
+			if (mm1->size() && (!mm->size() || mm1->back().first > mm->back().first + repaRounding))
+			{
+				mm = std::move(mm1);
+				layering = true;
+			}
+			else
+				fr->layers.pop_back();
+		}
+		time["application"] = ((sec)(clk::now() - t1)).count() - time["tupler"] - time["parter"] - time["roller"] - time["dervarser"];
+		LOG "application\ttime " << time["application"] << "s" UNLOG
+		LOG "layer\tstatus: end\ttime " << ((sec)(clk::now() - t1)).count() << "s" UNLOG
+		l++;
+	}
+	LOG "layerer\tstatus: end\ttime " << ((sec)(clk::now() - t0)).count() << "s" UNLOG
+	return std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>>(std::move(fr), std::move(mm));
+}
+
 
 // parametersSystemsHistoryRepasApplicationerMaxRollByMExcludedSelfHighestFmaxIORepa ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
