@@ -272,6 +272,12 @@ namespace Alignment
 
 	// historySparsesHistorySparseArray :: HistorySparse -> HistorySparseArray
 	std::unique_ptr<HistorySparseArray> historySparsesHistorySparseArray(const HistorySparse&);
+	
+	// historyRepasHistorySparseArray :: HistoryRepa -> HistorySparseArray
+	std::unique_ptr<HistorySparseArray> historyRepasHistorySparseArray(const HistoryRepa&);
+
+	// historySparseArraysHistoryRepa :: HistorySparseArray -> HistoryRepa
+	std::unique_ptr<HistoryRepa> historySparseArraysHistoryRepa(const HistorySparseArray&);
 }
 
 std::ostream& operator<<(std::ostream& out, const Alignment::HistorySparseArray&);

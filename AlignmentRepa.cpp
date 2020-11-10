@@ -1579,6 +1579,107 @@ std::unique_ptr<HistorySparseArray> Alignment::historySparsesHistorySparseArray(
 	return hr;
 }
 
+// historyRepasHistorySparseArray :: HistoryRepa -> HistorySparseArray
+std::unique_ptr<HistorySparseArray> Alignment::historyRepasHistorySparseArray(const HistoryRepa& hr)
+{
+	auto n = hr.dimension;
+	auto vv = hr.vectorVar;
+	auto z = hr.size;
+	auto rr = hr.arr;
+	auto ha = std::make_unique<HistorySparseArray>();
+	if (!z || !n)
+		return ha;
+	ha->size = z;
+	ha->capacity = n;
+	ha->arr = new std::size_t[z*n];
+	auto ra = ha->arr;
+	memset(ra, 0, z*n*sizeof(std::size_t));
+	if (hr.evient)
+		for (std::size_t j = 0; j < z; j++)
+		{
+			std::size_t jn = j*n;
+			for (std::size_t i = 0; i < n; i++)
+			{
+				std::size_t u = rr[jn + i];
+				if (u)
+				{
+					ra[jn + i] = vv[i];
+				}
+			}
+		}
+	else
+		for (std::size_t i = 0; i < n; i++)
+		{
+			std::size_t iz = i*z;
+			for (std::size_t j = 0; j < z; j++)
+			{
+				std::size_t u = rr[iz + j];
+				if (u)
+				{
+					ra[j*n + i] = vv[i];
+				}
+			}
+		}
+	return ha;
+}
+
+// historySparseArraysHistoryRepa :: HistorySparseArray -> HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::historySparseArraysHistoryRepa(const HistorySparseArray& ha)
+{
+	auto z = ha.size;
+	auto m = ha.capacity;
+	auto ra = ha.arr;
+	auto hr = std::make_unique<HistoryRepa>();
+	if (!(z*m) || !ra)
+		return hr;
+	std::set<std::size_t> ww;
+	for (std::size_t j = 0; j < z; j++)
+	{
+		std::size_t jm = j*m;
+		for (std::size_t i = 0; i < m; i++)
+		{
+			auto x = ra[jm + i];
+			if (x)
+				ww.insert(x);
+		}
+	}
+	if (!ww.size())
+		return hr;
+	hr->dimension = ww.size();
+	auto n = hr->dimension;
+	hr->vectorVar = new std::size_t[n];
+	auto vv = hr->vectorVar;
+	hr->shape = new std::size_t[n];
+	auto sh = hr->shape;
+	hr->size = z;
+	{
+		std::size_t i = 0;
+		for (auto w : ww)
+		{
+			vv[i] = w;
+			sh[i] = 2;
+			i++;
+		}
+	}
+	auto& mvv = hr->mapVarInt();
+	hr->evient = true;
+	hr->arr = new unsigned char[z*n];
+	auto rr1 = hr->arr;
+	memset(rr1, 0, z*n);
+	for (std::size_t j = 0; j < z; j++)
+	{
+		std::size_t jm = j*m;
+		std::size_t jn = j*n;
+		for (std::size_t i = 0; i < m; i++)
+		{
+			auto x = ra[jm + i];
+			if (x)
+				rr1[jn + mvv[x]] = 1;
+		}
+	}
+	return hr;
+}
+
 TransformRepa::TransformRepa() : _mapVarInt(0), dimension(0), vectorVar(0), derived(0), valency(0), shape(0), arr(0)
 {
 }
