@@ -428,8 +428,8 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	return std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>>(std::move(fr), std::move(mm));
 }
 
-#define UNLOG ; log_str.flush(); log(log_str.str());}
-#define LOG { std::ostringstream log_str; log_str <<
+#define UNLOG ; log_str.flush(); log(log_str.str());}}
+#define LOG { if (logging) { std::ostringstream log_str; log_str <<
 
 // parametersSystemsLayererMaxRollByMExcludedSelfHighestLogIORepa_up ::
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
@@ -448,6 +448,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	auto roller = histogramRepaVecsRollMax;
 	auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_uip;
 
+	bool logging = true;
 	auto t0 = clk::now();
 	LOG "layerer\tstatus: begin" UNLOG
 	auto& llu = ur.listVarSizePair;
@@ -633,7 +634,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
 //   [VariableRepa] -> HistoryRepa -> HistoryRepa-> Integer ->
 //   IO (FudRepa, [(Double, [VariableRepa]])
-std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Alignment::parametersLayererMaxRollByMExcludedSelfHighestLogIORepa_up(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t tint, const SizeList& vv, const HistoryRepa& hr, const HistoryRepa& hrs, std::size_t f, void (*log)(const std::string&), std::size_t& ur)
+std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Alignment::parametersLayererMaxRollByMExcludedSelfHighestLogIORepa_up(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t tint, const SizeList& vv, const HistoryRepa& hr, const HistoryRepa& hrs, std::size_t f, void (*log)(const std::string&), bool logging, std::size_t& ur)
 {
 	auto hrred = [](double f, const HistoryRepa& hr, const SizeList& kk)
 	{
@@ -646,7 +647,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	auto roller = histogramRepaVecsRollMax;
 	auto deriveder = parametersSystemsBuilderDerivedVarsHighestNoSumlayerRepa_uip;
 
-	auto t0 = clk::now();
+	auto t0 = logging ? clk::now() : std::chrono::time_point<clk>();
 	LOG "layerer\tstatus: begin" UNLOG
 	unsigned char ucmax = std::numeric_limits<unsigned char>::max();
 	auto z = (double)hr.size;
@@ -671,10 +672,10 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 		auto sh1 = hr1->shape;
 		layering = false;
 		LOG "layer\tstatus: begin\tfud: " << f << "\tlayer: " << l << "\tsubstrate cardinality: " << vv.size()<< "\tfud cardinality: " << fudRepasSize(*fr) UNLOG
-		auto mark = clk::now();
+		auto mark = logging ? clk::now() : std::chrono::time_point<clk>();
 		auto tt2 = tupler(xmax, omax, bmax, mmax, tint, vv, *fr, *hr1, *pr1, *hrs1, *prs1);
-		time["tupler"] += ((sec)(clk::now() - mark)).count();
-		steps["tupler"] += std::get<1>(tt2);
+		if (logging)  time["tupler"] += ((sec)(clk::now() - mark)).count();
+		if (logging)  steps["tupler"] += std::get<1>(tt2);
 		auto& x2 = std::get<0>(tt2);
 		LOG "tupler\tsearched: " << steps["tupler"] << "\trate: " << ((double)steps["tupler"]) / time["tupler"] << "\ttime " << time["tupler"] << "s" << "\ttuple cardinality: " << x2->size() UNLOG
 		if (!x2->size())
@@ -693,18 +694,18 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 			double y1 = ar->facLn() - ars->facLn();
 			if (!ll.size() || y1 > ymax)
 				ymax = y1;
-			mark = clk::now();
+			if (logging) mark = clk::now();
 			auto tt3 = parter(mmax, umax, pmax, *ar, *ars, z, y1);
-			time["parter"] += ((sec)(clk::now() - mark)).count();
-			steps["parter"] += std::get<1>(tt3);
+			if (logging) time["parter"] += ((sec)(clk::now() - mark)).count();
+			if (logging) steps["parter"] += std::get<1>(tt3);
 			auto& x3 = std::get<0>(tt3);
 			for (auto& nn : *x3)
 			{
-				mark = clk::now();
+				if (logging) mark = clk::now();
 				auto m = nn.size();
 				auto tt4 = roller(nn, *ar, *ars, z);
-				time["roller"] += ((sec)(clk::now() - mark)).count();
-				steps["roller"] += std::get<1>(tt4);
+				if (logging) time["roller"] += ((sec)(clk::now() - mark)).count();
+				if (logging) steps["roller"] += std::get<1>(tt4);
 				auto& x4 = std::get<0>(tt4);
 				if (x4->size() != m)
 					continue;
@@ -794,10 +795,10 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 			pr1 = hrpr(*hr1);
 			prs1 = hrpr(*hrs1);
 			fr->layers.push_back(ll);
-			mark = clk::now();
+			if (logging) mark = clk::now();
 			auto tt5 = deriveder(wmax, omax, tint, *fr, *hr1, *pr1, *hrs1, *prs1);
-			time["dervarser"] += ((sec)(clk::now() - mark)).count();
-			steps["dervarser"] += std::get<1>(tt5);
+			if (logging) time["dervarser"] += ((sec)(clk::now() - mark)).count();
+			if (logging) steps["dervarser"] += std::get<1>(tt5);
 			auto& mm1 = std::get<0>(tt5);
 			if (mm1->size())
 				LOG "layer\tder vars algn density: " << mm1->back().first UNLOG
@@ -812,7 +813,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 			else
 				fr->layers.pop_back();
 		}
-		time["application"] = ((sec)(clk::now() - t1)).count() - time["tupler"] - time["parter"] - time["roller"] - time["dervarser"];
+		if (logging) time["application"] = ((sec)(clk::now() - t1)).count() - time["tupler"] - time["parter"] - time["roller"] - time["dervarser"];
 		LOG "application\ttime " << time["application"] << "s" UNLOG
 		LOG "layer\tstatus: end\ttime " << ((sec)(clk::now() - t1)).count() << "s" UNLOG
 		l++;
