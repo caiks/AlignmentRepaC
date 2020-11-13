@@ -539,7 +539,8 @@ std::unique_ptr<DoubleSizePairList> Alignment::histogramRepaRedsListEntropy(cons
 		for (std::size_t k = 0; k < s; k++)
 		{
 			auto a = rr[j];
-			e -= a * log(a);
+			if (a > 0.0)
+				e -= a * log(a);
 			j++;
 		}
 		if (e > 0.0)
