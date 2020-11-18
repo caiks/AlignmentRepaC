@@ -12,6 +12,7 @@ namespace Alignment
 	typedef std::pair<VarPtr, std::size_t> VarSizePair;
 	typedef std::vector<VarSizePair> VarSizePairList;
 	typedef std::unordered_map<std::size_t, std::size_t> SizeSizeUMap;
+	typedef std::map<std::size_t, std::size_t> SizeSizeMap;
 	typedef std::unordered_map<Variable, std::size_t> VarSizeUMap;
 	typedef std::unordered_map<Value, std::size_t> ValSizeUMap;
 	typedef std::vector<std::size_t> SizeList;
@@ -484,6 +485,11 @@ namespace Alignment
 
 	public: SizeSizeUMap& mapVarInt() const;
 	private: SizeSizeUMap* _mapVarInt;
+	
+	public: SizeSizeUMap& mapVarParent() const;
+	private: SizeSizeUMap* _mapVarParent;
+	
+	public: std::size_t varMax() const;
 	};
 	
 	std::unique_ptr<DecompFudSlicedRepa> applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa&);

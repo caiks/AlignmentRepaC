@@ -5723,7 +5723,7 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	return std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t>(std::move(qq), s1);
 }
 
-DecompFudSlicedRepa::DecompFudSlicedRepa(std::size_t listFudRepaSizeExpectedA) : _mapVarInt(0), fudRepasSize(0), listFudRepaSizeExpected(listFudRepaSizeExpectedA)
+DecompFudSlicedRepa::DecompFudSlicedRepa(std::size_t listFudRepaSizeExpectedA) : _mapVarInt(0), _mapVarParent(0), fudRepasSize(0), listFudRepaSizeExpected(listFudRepaSizeExpectedA)
 {
 	if (listFudRepaSizeExpected > 0)
 		fuds.reserve(listFudRepaSizeExpected);
@@ -5732,6 +5732,7 @@ DecompFudSlicedRepa::DecompFudSlicedRepa(std::size_t listFudRepaSizeExpectedA) :
 DecompFudSlicedRepa::~DecompFudSlicedRepa()
 {
 	delete _mapVarInt;
+	delete _mapVarParent;
 }
 
 std::ostream& operator<<(std::ostream& out, const FudSlicedStruct& fr)
@@ -5781,6 +5782,39 @@ SizeSizeUMap& Alignment::DecompFudSlicedRepa::mapVarInt() const
 	return *_mapVarInt;
 }
 
+SizeSizeUMap& Alignment::DecompFudSlicedRepa::mapVarParent() const
+{
+	if (!_mapVarParent)
+	{
+		auto sizeA = listFudRepaSizeExpected > fuds.size() ? listFudRepaSizeExpected : fuds.size();
+		const_cast<DecompFudSlicedRepa*>(this)->_mapVarParent = new SizeSizeUMap(sizeA * 9);
+		for (auto& fs : this->fuds)
+			for (auto sl : fs.children)
+				const_cast<DecompFudSlicedRepa*>(this)->_mapVarParent->insert_or_assign(sl, fs.parent);			
+	}
+	return *_mapVarParent;
+}
+
+std::size_t Alignment::DecompFudSlicedRepa::varMax() const
+{
+	std::size_t v = 0;
+	for (auto& fs : this->fuds)
+		for (auto& tr : fs.fud)	
+		{
+			auto w = tr->derived;
+			if (w > v)
+				v = w;
+			auto n = tr->dimension;
+			auto xx = tr->vectorVar;
+			for (std::size_t i = 0; i < n; i++)
+			{
+				auto x = xx[i];
+				if (x > v)
+					v = x;
+			}							
+		}			
+	return v;
+}
 std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa& er)
 {	
 	auto dr = std::make_unique<DecompFudSlicedRepa>(treesSize(*er.slices));

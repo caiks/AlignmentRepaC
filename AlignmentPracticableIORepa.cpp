@@ -634,7 +634,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 //   Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer -> Integer ->
 //   [VariableRepa] -> HistoryRepa -> HistoryRepa-> Integer ->
 //   IO (FudRepa, [(Double, [VariableRepa]])
-std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Alignment::parametersLayererMaxRollByMExcludedSelfHighestLogIORepa_up(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t tint, const SizeList& vv, const HistoryRepa& hr, const HistoryRepa& hrs, std::size_t f, void (*log)(const std::string&), bool logging, std::size_t& ur)
+std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Alignment::parametersLayererMaxRollByMExcludedSelfHighestLogIORepa_up(std::size_t wmax, std::size_t lmax, std::size_t xmax, std::size_t omax, std::size_t bmax, std::size_t mmax, std::size_t umax, std::size_t pmax, std::size_t tint, const SizeList& vv, const HistoryRepa& hr, const HistoryRepa& hrs, void (*log)(const std::string&), bool logging, std::size_t& ur)
 {
 	auto hrred = [](double f, const HistoryRepa& hr, const SizeList& kk)
 	{
@@ -652,9 +652,6 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 	unsigned char ucmax = std::numeric_limits<unsigned char>::max();
 	auto z = (double)hr.size;
 	auto zr = (double)hrs.size;
-	auto vd = std::make_shared<Variable>(0);
-	auto vf = std::make_shared<Variable>((int)f);
-	auto vdf = std::make_shared<Variable>(vd, vf);
 	auto fr = std::make_unique<FudRepa>();
 	auto mm = std::make_unique<DoubleSizeListPairList>();
 	auto hr1 = frmul(hr, *fr);
@@ -671,7 +668,7 @@ std::tuple<std::unique_ptr<FudRepa>, std::unique_ptr<DoubleSizeListPairList>> Al
 		auto& mvv1 = hr1->mapVarInt();
 		auto sh1 = hr1->shape;
 		layering = false;
-		LOG "layer\tstatus: begin\tfud: " << f << "\tlayer: " << l << "\tsubstrate cardinality: " << vv.size()<< "\tfud cardinality: " << fudRepasSize(*fr) UNLOG
+		LOG "layer\tstatus: begin\tlayer: " << l << "\tsubstrate cardinality: " << vv.size()<< "\tfud cardinality: " << fudRepasSize(*fr) UNLOG
 		auto mark = logging ? clk::now() : std::chrono::time_point<clk>();
 		auto tt2 = tupler(xmax, omax, bmax, mmax, tint, vv, *fr, *hr1, *pr1, *hrs1, *prs1);
 		if (logging)  time["tupler"] += ((sec)(clk::now() - mark)).count();
