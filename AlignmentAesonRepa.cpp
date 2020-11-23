@@ -92,6 +92,53 @@ std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in)
 	return hr;
 }
 
+// historyRepasPersistentInitial :: HistoryRepa -> Int -> HistoryRepaPersistentInitial
+// assumes evient
+void Alignment::historyRepasPersistentInitial(const HistoryRepa& hr, std::size_t y, std::ostream& out)
+{
+	auto n = hr.dimension;
+	auto vv = hr.vectorVar;
+	auto sh = hr.shape;
+	auto z = hr.size;
+	auto rr = hr.arr;
+	out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+	for (std::size_t i = 0; i < n; i++)
+	{
+		out.write(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+		out.write(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
+	}
+	out.write(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(&y), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(hr.arr), y*n);
+}
+
+// persistentInitialsHistoryRepa :: HistoryRepaPersistentInitial -> Maybe HistoryRepa
+std::unique_ptr<HistoryRepa> Alignment::persistentInitialsHistoryRepa(std::istream& in)
+{
+	auto hr = std::make_unique<HistoryRepa>();
+	std::size_t n;
+	in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+	hr->dimension = n;
+	hr->vectorVar = new std::size_t[n];
+	auto vv = hr->vectorVar;
+	hr->shape = new std::size_t[n];
+	auto sh = hr->shape;
+	for (std::size_t i = 0; i < n; i++)
+	{
+		in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+		in.read(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
+	}
+	std::size_t z;
+	in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+	std::size_t y;
+	in.read(reinterpret_cast<char*>(&y), sizeof(std::size_t));
+	hr->size = z;
+	hr->evient = true;
+	hr->arr = new unsigned char[z*n];
+	in.read(reinterpret_cast<char*>(hr->arr), y*n);
+	return hr;
+}
+
 // historySparsesPersistent :: HistorySparse -> HistorySparsePersistent
 void Alignment::historySparsesPersistent(const HistorySparse& hs, std::ostream& out)
 {
@@ -142,6 +189,60 @@ std::unique_ptr<HistorySparse> Alignment::persistentsHistorySparse(std::istream&
 	return hs;
 }
 
+// historySparseArraysPersistent :: HistorySparseArray -> HistorySparseArrayPersistent
+void Alignment::historySparseArraysPersistent(const HistorySparseArray& hr, std::ostream& out)
+{
+	auto n = hr.capacity;
+	auto z = hr.size;
+	auto rr = hr.arr;
+	out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(hr.arr), z*n*sizeof(std::size_t));
+}
+
+// persistentsHistorySparseArray :: HistorySparseArrayPersistent -> Maybe HistorySparseArray
+std::unique_ptr<HistorySparseArray> Alignment::persistentsHistorySparseArray(std::istream& in)
+{
+	auto hr = std::make_unique<HistorySparseArray>();
+	std::size_t n;
+	in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+	hr->capacity = n;
+	std::size_t z;
+	in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+	hr->size = z;
+	hr->arr = new std::size_t[z*n];
+	in.read(reinterpret_cast<char*>(hr->arr), z*n*sizeof(std::size_t));
+	return hr;
+}
+
+// historySparseArraysPersistentInitial :: HistorySparseArray -> HistorySparseArrayPersistentInitial
+void Alignment::historySparseArraysPersistentInitial(const HistorySparseArray& hr, std::size_t y, std::ostream& out)
+{
+	auto n = hr.capacity;
+	auto z = hr.size;
+	auto rr = hr.arr;
+	out.write(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(&y), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>(hr.arr), y*n*sizeof(std::size_t));
+}
+
+// persistentInitialsHistorySparseArray :: HistorySparseArrayPersistentInitial -> Maybe HistorySparseArray
+std::unique_ptr<HistorySparseArray> Alignment::persistentInitialsHistorySparseArray(std::istream& in)
+{
+	auto hr = std::make_unique<HistorySparseArray>();
+	std::size_t n;
+	in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
+	hr->capacity = n;
+	std::size_t z;
+	in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
+	std::size_t y;
+	in.read(reinterpret_cast<char*>(&y), sizeof(std::size_t));
+	hr->size = z;
+	hr->arr = new std::size_t[z*n];
+	in.read(reinterpret_cast<char*>(hr->arr), y*n*sizeof(std::size_t));
+	return hr;
+}
 
 // transformRepasPersistent :: TransformRepa -> TransformRepaPersistent
 void Alignment::transformRepasPersistent(const TransformRepa& tr, std::ostream& out)
@@ -369,3 +470,56 @@ std::unique_ptr<ApplicationRepa> Alignment::persistentsApplicationRepa(std::istr
 }
 
 
+// decompFudSlicedRepasPersistent :: DecompFudSlicedRepa -> DecompFudSlicedRepaPersistent
+void Alignment::decompFudSlicedRepasPersistent(const DecompFudSlicedRepa& dr, std::ostream& out)
+{
+	out.write(reinterpret_cast<char*>((std::size_t*)&dr.listFudRepaSizeExpected), sizeof(std::size_t));
+	out.write(reinterpret_cast<char*>((std::size_t*)&dr.fudRepasSize), sizeof(std::size_t));
+	auto& ll = dr.fuds;
+	std::size_t l = ll.size();
+	out.write(reinterpret_cast<char*>(&l), sizeof(std::size_t));
+	for (auto& fs : ll)
+	{
+		out.write(reinterpret_cast<char*>((std::size_t*)&fs.parent), sizeof(std::size_t));
+		std::size_t c = fs.children.size();
+		out.write(reinterpret_cast<char*>(&c), sizeof(std::size_t));
+		for (auto sl : fs.children)
+			out.write(reinterpret_cast<char*>(&sl), sizeof(std::size_t));
+		std::size_t m = fs.fud.size();
+		out.write(reinterpret_cast<char*>(&m), sizeof m);
+		for (auto& tr : fs.fud)
+			transformRepasPersistent(*tr,out);
+	}
+}
+
+// persistentsDecompFudSlicedRepa :: DecompFudSlicedRepaPersistent -> Maybe DecompFudSlicedRepa
+std::unique_ptr<DecompFudSlicedRepa> Alignment::persistentsDecompFudSlicedRepa(std::istream& in)
+{
+	auto dr = std::make_unique<DecompFudSlicedRepa>();
+	in.read(reinterpret_cast<char*>(&dr->listFudRepaSizeExpected), sizeof(std::size_t));
+	in.read(reinterpret_cast<char*>(&dr->fudRepasSize), sizeof(std::size_t));
+	auto& ll = dr->fuds;
+	std::size_t l;
+	in.read(reinterpret_cast<char*>(&l), sizeof(std::size_t));
+	ll.resize(l);
+	for (auto& fs : ll)
+	{
+		in.read(reinterpret_cast<char*>(&fs.parent), sizeof(std::size_t));
+		std::size_t c;
+		in.read(reinterpret_cast<char*>(&c), sizeof(std::size_t));
+		for (std::size_t i = 0; i < c; i++)
+		{
+			std::size_t sl;
+			in.read(reinterpret_cast<char*>(&sl), sizeof(std::size_t));
+			fs.children.push_back(sl);
+		}		
+		std::size_t m;
+		in.read(reinterpret_cast<char*>(&m), sizeof(std::size_t));
+		for (std::size_t i = 0; i < m; i++)
+		{
+			auto tr = persistentsTransformRepa(in);
+			fs.fud.push_back(std::move(tr));
+		}
+	}
+	return dr;
+}
