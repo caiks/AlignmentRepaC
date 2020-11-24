@@ -74,21 +74,27 @@ std::unique_ptr<HistoryRepa> Alignment::persistentsHistoryRepa(std::istream& in)
 	std::size_t n;
 	in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
 	hr->dimension = n;
-	hr->vectorVar = new std::size_t[n];
-	auto vv = hr->vectorVar;
-	hr->shape = new std::size_t[n];
-	auto sh = hr->shape;
-	for (std::size_t i = 0; i < n; i++)
+	if (n)
 	{
-		in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
-		in.read(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
+		hr->vectorVar = new std::size_t[n];
+		auto vv = hr->vectorVar;
+		hr->shape = new std::size_t[n];
+		auto sh = hr->shape;
+		for (std::size_t i = 0; i < n; i++)
+		{
+			in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+			in.read(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
+		}		
 	}
 	std::size_t z;
 	in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
 	in.read(reinterpret_cast<char*>(&hr->evient), 1);
 	hr->size = z;
-	hr->arr = new unsigned char[z*n];
-	in.read(reinterpret_cast<char*>(hr->arr), z*n);
+	if (z && n)
+	{
+		hr->arr = new unsigned char[z*n];
+		in.read(reinterpret_cast<char*>(hr->arr), z*n);		
+	}
 	return hr;
 }
 
@@ -119,14 +125,17 @@ std::unique_ptr<HistoryRepa> Alignment::persistentInitialsHistoryRepa(std::istre
 	std::size_t n;
 	in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
 	hr->dimension = n;
-	hr->vectorVar = new std::size_t[n];
-	auto vv = hr->vectorVar;
-	hr->shape = new std::size_t[n];
-	auto sh = hr->shape;
-	for (std::size_t i = 0; i < n; i++)
+	if (n)
 	{
-		in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
-		in.read(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
+		hr->vectorVar = new std::size_t[n];
+		auto vv = hr->vectorVar;
+		hr->shape = new std::size_t[n];
+		auto sh = hr->shape;
+		for (std::size_t i = 0; i < n; i++)
+		{
+			in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+			in.read(reinterpret_cast<char*>(&sh[i]), sizeof(std::size_t));
+		}		
 	}
 	std::size_t z;
 	in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
@@ -134,8 +143,11 @@ std::unique_ptr<HistoryRepa> Alignment::persistentInitialsHistoryRepa(std::istre
 	in.read(reinterpret_cast<char*>(&y), sizeof(std::size_t));
 	hr->size = z;
 	hr->evient = true;
-	hr->arr = new unsigned char[z*n];
-	in.read(reinterpret_cast<char*>(hr->arr), y*n);
+	if (z && n)
+	{
+		hr->arr = new unsigned char[z*n];
+		in.read(reinterpret_cast<char*>(hr->arr), y*n);
+	}
 	return hr;
 }
 
@@ -181,11 +193,14 @@ std::unique_ptr<HistorySparse> Alignment::persistentsHistorySparse(std::istream&
 	}
 	auto hs = std::make_unique<HistorySparse>();
 	hs->size = z;
-	hs->vectorDimension = new std::size_t[z];
-	auto dd = hs->vectorDimension;
-	std::memcpy(dd, dd1.data(), dd1.size() * sizeof(std::size_t));
-	hs->arr = new std::size_t[rr1.size()];
-	std::memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));
+	if (z)
+	{
+		hs->vectorDimension = new std::size_t[z];
+		auto dd = hs->vectorDimension;
+		std::memcpy(dd, dd1.data(), dd1.size() * sizeof(std::size_t));
+		hs->arr = new std::size_t[rr1.size()];
+		std::memcpy(hs->arr, rr1.data(), rr1.size() * sizeof(std::size_t));		
+	}
 	return hs;
 }
 
@@ -210,8 +225,11 @@ std::unique_ptr<HistorySparseArray> Alignment::persistentsHistorySparseArray(std
 	std::size_t z;
 	in.read(reinterpret_cast<char*>(&z), sizeof(std::size_t));
 	hr->size = z;
-	hr->arr = new std::size_t[z*n];
-	in.read(reinterpret_cast<char*>(hr->arr), z*n*sizeof(std::size_t));
+	if (z && n)
+	{
+		hr->arr = new std::size_t[z*n];
+		in.read(reinterpret_cast<char*>(hr->arr), z*n*sizeof(std::size_t));		
+	}
 	return hr;
 }
 
@@ -239,8 +257,11 @@ std::unique_ptr<HistorySparseArray> Alignment::persistentInitialsHistorySparseAr
 	std::size_t y;
 	in.read(reinterpret_cast<char*>(&y), sizeof(std::size_t));
 	hr->size = z;
-	hr->arr = new std::size_t[z*n];
-	in.read(reinterpret_cast<char*>(hr->arr), y*n*sizeof(std::size_t));
+	if (z && n)
+	{
+		hr->arr = new std::size_t[z*n];
+		in.read(reinterpret_cast<char*>(hr->arr), y*n*sizeof(std::size_t));
+	}
 	return hr;
 }
 
@@ -274,27 +295,30 @@ std::unique_ptr<TransformRepa> Alignment::persistentsTransformRepa(std::istream&
 	std::size_t n;
 	in.read(reinterpret_cast<char*>(&n), sizeof(std::size_t));
 	tr->dimension = n;
-	tr->vectorVar = new std::size_t[n];
-	auto vv = tr->vectorVar;
-	tr->shape = new std::size_t[n];
-	auto sh = tr->shape;
-	std::size_t sz = 1;
-	for (std::size_t i = 0; i < n; i++)
+	if (n)
 	{
-		in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
-		unsigned char s;
-		in.read(reinterpret_cast<char*>(&s), sizeof(std::size_t));
-		sz *= s;
-		sh[i] = s;
+		tr->vectorVar = new std::size_t[n];
+		auto vv = tr->vectorVar;
+		tr->shape = new std::size_t[n];
+		auto sh = tr->shape;
+		std::size_t sz = 1;
+		for (std::size_t i = 0; i < n; i++)
+		{
+			in.read(reinterpret_cast<char*>(&vv[i]), sizeof(std::size_t));
+			unsigned char s;
+			in.read(reinterpret_cast<char*>(&s), sizeof(std::size_t));
+			sz *= s;
+			sh[i] = s;
+		}
+		std::size_t w;
+		in.read(reinterpret_cast<char*>(&w), sizeof(std::size_t));
+		tr->derived = w;
+		std::size_t u;
+		in.read(reinterpret_cast<char*>(&u), sizeof(std::size_t));
+		tr->valency = u;
+		tr->arr = new unsigned char[sz];
+		in.read(reinterpret_cast<char*>(tr->arr), sz);		
 	}
-	std::size_t w;
-	in.read(reinterpret_cast<char*>(&w), sizeof(std::size_t));
-	tr->derived = w;
-	std::size_t u;
-	in.read(reinterpret_cast<char*>(&u), sizeof(std::size_t));
-	tr->valency = u;
-	tr->arr = new unsigned char[sz];
-	in.read(reinterpret_cast<char*>(tr->arr), sz);
 	return tr;
 }
 

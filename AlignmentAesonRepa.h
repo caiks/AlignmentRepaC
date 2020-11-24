@@ -72,8 +72,6 @@ namespace Alignment
 
 	// persistentsDecompFudSlicedRepa :: DecompFudSlicedRepaPersistent -> Maybe DecompFudSlicedRepa
 	std::unique_ptr<DecompFudSlicedRepa> persistentsDecompFudSlicedRepa(std::istream&);
-
-
 }
 
 
