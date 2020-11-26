@@ -36,6 +36,7 @@ namespace Alignment
 	typedef std::pair<std::size_t, std::shared_ptr<SizeTree>> SizeSizeTreePair;
 	typedef std::vector<std::pair<std::size_t, std::shared_ptr<SizeTree>>> SizeSizeTreePairList;
 	struct SizeUCharStruct{std::size_t size;unsigned char uchar;};
+	typedef std::vector<SizeUCharStruct> SizeUCharStructList;
 }
 
 namespace Alignment
@@ -497,6 +498,8 @@ namespace Alignment
 	std::unique_ptr<ApplicationRepa> decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa&);
 	
 	std::unique_ptr<SizeList> historyRepaPtrListsHistorySparseArrayPtrListsDecompFudSlicedRepasEventsPathSlice_u(const HistoryRepaPtrList&, const HistorySparseArrayPtrList&, const DecompFudSlicedRepa&, std::size_t, unsigned char);
+
+	std::unique_ptr<SizeList> listVarValuesDecompFudSlicedRepasPathSlice_u(const SizeUCharStructList&, const DecompFudSlicedRepa&, unsigned char);
 
 }
 
