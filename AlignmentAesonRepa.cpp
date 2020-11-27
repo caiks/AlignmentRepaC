@@ -498,7 +498,6 @@ std::unique_ptr<ApplicationRepa> Alignment::persistentsApplicationRepa(std::istr
 void Alignment::decompFudSlicedRepasPersistent(const DecompFudSlicedRepa& dr, std::ostream& out)
 {
 	out.write(reinterpret_cast<char*>((std::size_t*)&dr.listFudRepaSizeExpected), sizeof(std::size_t));
-	out.write(reinterpret_cast<char*>((std::size_t*)&dr.fudRepasSize), sizeof(std::size_t));
 	auto& ll = dr.fuds;
 	std::size_t l = ll.size();
 	out.write(reinterpret_cast<char*>(&l), sizeof(std::size_t));
@@ -521,7 +520,6 @@ std::unique_ptr<DecompFudSlicedRepa> Alignment::persistentsDecompFudSlicedRepa(s
 {
 	auto dr = std::make_unique<DecompFudSlicedRepa>();
 	in.read(reinterpret_cast<char*>(&dr->listFudRepaSizeExpected), sizeof(std::size_t));
-	in.read(reinterpret_cast<char*>(&dr->fudRepasSize), sizeof(std::size_t));
 	auto& ll = dr->fuds;
 	std::size_t l;
 	in.read(reinterpret_cast<char*>(&l), sizeof(std::size_t));
@@ -544,6 +542,7 @@ std::unique_ptr<DecompFudSlicedRepa> Alignment::persistentsDecompFudSlicedRepa(s
 			auto tr = persistentsTransformRepa(in);
 			fs.fud.push_back(std::move(tr));
 		}
+		dr->fudRepasSize += m;
 	}
 	return dr;
 }
