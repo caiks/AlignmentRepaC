@@ -2599,6 +2599,37 @@ std::unique_ptr<ApplicationRepa> Alignment::applicationRepasApplicationRepa_u(co
 	return dr1;
 }
 
+// vectorApplicationRepasConcat_u :: V.Vector ApplicationRepa -> ApplicationRepa
+std::unique_ptr<ApplicationRepa> Alignment::vectorApplicationRepasConcat_u(const std::vector<std::shared_ptr<ApplicationRepa>>& ll)
+{
+	auto llfr = setVariablesListTransformRepasFudRepa_u;
+	auto frvars = fudRepasSetVar;
+	auto frdep = fudRepasSetVarsDepends;
+
+	auto dr = std::make_unique<ApplicationRepa>();
+	if (!ll.size())
+		return dr;
+	dr->slices = std::make_shared<SizeTree>();
+	dr->slices->_list.reserve(ll.front()->slices->_list.size() * ll.size());
+	dr->fud = std::make_shared<FudRepa>();
+	dr->fud->layers.reserve(ll.front()->fud->layers.size());
+	dr->substrate.reserve(ll.front()->substrate.size() * ll.size());
+		
+	for (auto& dr2 : ll)
+	{
+		dr->slices->_list.insert(dr->slices->_list.end(), dr2->slices->_list.begin(), dr2->slices->_list.end());
+		for (std::size_t l = 0; l < dr2->fud->layers.size(); l++)
+		{
+			if (l < dr->fud->layers.size())
+				dr->fud->layers[l].insert(dr->fud->layers[l].end(), dr2->fud->layers[l].begin(), dr2->fud->layers[l].end());
+			else
+				dr->fud->layers.push_back(dr2->fud->layers[l]);
+		}
+		dr->substrate.insert(dr->substrate.end(), dr2->substrate.begin(), dr2->substrate.end());
+	}
+	return dr;
+}
+
 // applicationRepaPairsJoin :: ApplicationRepa -> ApplicationRepa -> ApplicationRepa
 std::unique_ptr<ApplicationRepa> Alignment::applicationRepaPairsJoin_u(const ApplicationRepa& dr1, const ApplicationRepa& dr2)
 {
@@ -5871,6 +5902,7 @@ std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedR
 
 std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_u(const DecompFudSlicedRepa& dr)
 {
+	auto frund = fudRepasUnderlying;
 	auto llfr = listTransformRepasFudRepa_u;
 
 	auto er = std::make_unique<ApplicationRepa>();
@@ -5899,6 +5931,9 @@ std::unique_ptr<ApplicationRepa> Alignment::decompFudSlicedRepasApplicationRepa_
 	for (auto& fs : dr.fuds)
 		ll.insert(ll.end(),fs.fud.begin(),fs.fud.end());
 	er->fud = std::move(llfr(ll));
+	auto vv = frund(*er->fud);
+	er->substrate.reserve(vv->size());
+	er->substrate.insert(er->substrate.end(),vv->begin(),vv->end());
 	return er;
 }
 

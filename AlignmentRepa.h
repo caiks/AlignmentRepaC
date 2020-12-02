@@ -426,6 +426,9 @@ namespace Alignment
 	// applicationRepasApplicationRepa_u :: ApplicationRepa -> ApplicationRepa
 	std::unique_ptr<ApplicationRepa> applicationRepasApplicationRepa_u(const ApplicationRepa&);
 
+	// vectorApplicationRepasConcat_u :: V.Vector ApplicationRepa -> ApplicationRepa
+	std::unique_ptr<ApplicationRepa> vectorApplicationRepasConcat_u(const std::vector<std::shared_ptr<ApplicationRepa>>&);
+
 	// applicationRepaPairsJoin :: ApplicationRepa -> ApplicationRepa -> ApplicationRepa
 	std::unique_ptr<ApplicationRepa> applicationRepaPairsJoin_u(const ApplicationRepa&, const ApplicationRepa&);
 
