@@ -6230,9 +6230,7 @@ std::unique_ptr<SizeList> Alignment::listVarValuesDecompFudSlicedRepasPathSlice_
 		return ll;	
 	if (!mapCapacity)
 		mapCapacity = 2;
-	std::size_t mapSize = jj.size();
-	if (!mapSize)
-		return ll;	
+	std::size_t mapSize = 1 + jj.size();
 	if (dr.fuds.size() >= 2)
 	{
 		std::size_t pathLen = (std::size_t)(std::log(dr.fuds.size()) / std::log(2.0)) + 1;
