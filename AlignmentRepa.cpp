@@ -5846,6 +5846,7 @@ std::size_t Alignment::DecompFudSlicedRepa::varMax() const
 		}			
 	return v;
 }
+
 std::unique_ptr<DecompFudSlicedRepa> Alignment::applicationRepasDecompFudSlicedRepa_u(const ApplicationRepa& er)
 {	
 	auto dr = std::make_unique<DecompFudSlicedRepa>(treesSize(*er.slices));
