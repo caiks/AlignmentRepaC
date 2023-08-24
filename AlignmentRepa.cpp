@@ -6251,39 +6251,15 @@ std::unique_ptr<SizeList> Alignment::listVarValuesDecompFudSlicedRepasPathSlice_
 		{
 			auto j = qq.size % mapSize;
 			auto& m = index[j];
-			if (m)
-			{
-				if (m == mapCapacity)
-					mapOverflow.insert_or_assign(qq.size,qq.uchar);							
-				else
-				{
-					auto x = j * mapCapacity;
-					std::size_t k = 0;
-					for (; k < m; k++)
-					{
-						auto& pp = map[x+k];
-						if (pp.size == qq.size)
-						{
-							pp.uchar = qq.uchar;
-							break;
-						}
-					}	
-					if (k == m)
-					{
-						m++;
-						auto& pp = map[x+k];
-						pp.size = qq.size;
-						pp.uchar = qq.uchar;
-					}
-				}					
-			}
+			if (m == mapCapacity)
+				mapOverflow.insert_or_assign(qq.size,qq.uchar);							
 			else
 			{
-				m++;
-				auto& pp = map[j * mapCapacity];
+				auto& pp = map[j*mapCapacity+m];
 				pp.size = qq.size;
 				pp.uchar = qq.uchar;
-			}
+				m++;
+			}					
 		}
 	}
 	auto& vi = dr.mapVarInt();
@@ -6331,39 +6307,15 @@ std::unique_ptr<SizeList> Alignment::listVarValuesDecompFudSlicedRepasPathSlice_
 			{
 				auto j = w % mapSize;
 				auto& m = index[j];
-				if (m)
-				{
-					if (m == mapCapacity)
-						mapOverflow.insert_or_assign(w,u);							
-					else
-					{
-						auto x = j * mapCapacity;
-						std::size_t k = 0;
-						for (; k < m; k++)
-						{
-							auto& pp = map[x+k];
-							if (pp.size == w)
-							{
-								pp.uchar = u;
-								break;
-							}
-						}	
-						if (k == m)
-						{
-							m++;
-							auto& pp = map[x+k];
-							pp.size = w;
-							pp.uchar = u;
-						}
-					}					
-				}
+				if (m == mapCapacity)
+					mapOverflow.insert_or_assign(w,u);							
 				else
 				{
-					m++;
-					auto& pp = map[j * mapCapacity];
+					auto& pp = map[j*mapCapacity+m];
 					pp.size = w;
 					pp.uchar = u;
-				}				
+					m++;
+				}			
 			}		
 		}
 		std::size_t sliceIn = 0;
