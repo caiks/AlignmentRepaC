@@ -3205,16 +3205,25 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	double* ts1 = new double[tint1*omax];
 	std::size_t* s = new std::size_t[tint1];
 	std::size_t* t = new std::size_t[tint1];
-	std::vector<std::thread> threads;
-	threads.reserve(tint1);
-	for (std::size_t h = 0; h < tint1; h++)
+	if (tint1 > 1)
 	{
-		s[h] = 0;
-		t[h] = 0;
-		threads.push_back(std::thread(listVarsArrayHistoryVarientAlignedTop_up, xmax, omax, tint1, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+		std::vector<std::thread> threads;
+		threads.reserve(tint1);
+		for (std::size_t h = 0; h < tint1; h++)
+		{
+			s[h] = 0;
+			t[h] = 0;
+			threads.push_back(std::thread(listVarsArrayHistoryVarientAlignedTop_up, xmax, omax, tint1, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+		}
+		for (auto& h : threads)
+			h.join();		
 	}
-	for (auto& h : threads)
-		h.join();
+	else
+	{
+		s[0] = 0;
+		t[0] = 0;
+		listVarsArrayHistoryVarientAlignedTop_up(xmax, omax, 1, n, svv, m, z, zrr, pww, phh1, pxx1, phh2, pxx2, 0, tww1, tww2, ts1, t, s);		
+	}
 	std::size_t s1 = 0;
 	DoubleSizePairList qq1;
 	qq1.reserve(tint1*omax);
@@ -4087,16 +4096,25 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	double* ts1 = new double[tint1*omax];
 	std::size_t* s = new std::size_t[tint1];
 	std::size_t* t = new std::size_t[tint1];
-	std::vector<std::thread> threads;
-	threads.reserve(tint1);
-	for (std::size_t h = 0; h < tint1; h++)
+	if (tint1 > 1)
 	{
-		s[h] = 0;
-		t[h] = 0;
-		threads.push_back(std::thread(listVarsListTuplesArrayHistoryVarientsAlignedTop_up, 0, xmax, omax, tint1, n, svv, m, d, e, z, zrr, pww, pdd, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+		std::vector<std::thread> threads;
+		threads.reserve(tint1);
+		for (std::size_t h = 0; h < tint1; h++)
+		{
+			s[h] = 0;
+			t[h] = 0;
+			threads.push_back(std::thread(listVarsListTuplesArrayHistoryVarientsAlignedTop_up, 0, xmax, omax, tint1, n, svv, m, d, e, z, zrr, pww, pdd, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+		}
+		for (auto& h : threads)
+			h.join();
 	}
-	for (auto& h : threads)
-		h.join();
+	else
+	{
+		s[0] = 0;
+		t[0] = 0;
+		listVarsListTuplesArrayHistoryVarientsAlignedTop_up(0, xmax, omax, 1, n, svv, m, d, e, z, zrr, pww, pdd, phh1, pxx1, phh2, pxx2, 0, tww1, tww2, ts1, t, s);		
+	}
 	std::size_t s1 = 0;
 	DoubleSizePairList qq1;
 	qq1.reserve(tint1*omax);
@@ -5702,16 +5720,25 @@ std::tuple<std::unique_ptr<DoubleSizeListPairList>, std::size_t> Alignment::para
 	double* ts1 = new double[tint1*omax];
 	std::size_t* s = new std::size_t[tint1];
 	std::size_t* t = new std::size_t[tint1];
-	std::vector<std::thread> threads;
-	threads.reserve(tint1);
-	for (std::size_t h = 0; h < tint1; h++)
+	if (tint1 > 1)
 	{
-		s[h] = 0;
-		t[h] = 0;
-		threads.push_back(std::thread(listVarsListTuplesArrayHistoryVarientsAlignedExcludeHiddenTop_up, 1, wmax, omax, tint1, n, svv, m, d, e, z, zrr, ccl, pccd, pccu, pww, pdd, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+		std::vector<std::thread> threads;
+		threads.reserve(tint1);
+		for (std::size_t h = 0; h < tint1; h++)
+		{
+			s[h] = 0;
+			t[h] = 0;
+			threads.push_back(std::thread(listVarsListTuplesArrayHistoryVarientsAlignedExcludeHiddenTop_up, 1, wmax, omax, tint1, n, svv, m, d, e, z, zrr, ccl, pccd, pccu, pww, pdd, phh1, pxx1, phh2, pxx2, h, tww1, tww2, ts1, t, s));
+		}
+		for (auto& h : threads)
+			h.join();
 	}
-	for (auto& h : threads)
-		h.join();
+	else
+	{
+		s[0] = 0;
+		t[0] = 0;
+		listVarsListTuplesArrayHistoryVarientsAlignedExcludeHiddenTop_up(1, wmax, omax, 1, n, svv, m, d, e, z, zrr, ccl, pccd, pccu, pww, pdd, phh1, pxx1, phh2, pxx2, 0, tww1, tww2, ts1, t, s);		
+	}
 	std::size_t s1 = 0;
 	DoubleSizePairList qq1;
 	qq1.reserve(tint1*omax);
